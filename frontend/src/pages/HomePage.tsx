@@ -29,7 +29,7 @@ export default function HomePage() {
                 <div className="card">
                     <h2>✍️ Add a Recipe</h2>
                     <p>Got something delicious to share? Add it to the collection!</p>
-                    <Link to="/add" className="homepage-button">Add new recipe</Link>
+                    <Link to="/add-recipe" className="homepage-button">Add new recipe</Link>
                 </div>
 
             </div>

@@ -4,6 +4,12 @@
   padding: 2rem;
 }
 
+header nav {
+  font-size: 1.2rem;
+  color: #f4a261;
+}
+
+
 .homepage-container {
   padding: 2rem;
   text-align: center;
@@ -36,7 +42,6 @@
   transition: transform 0.2s ease;
 }
 
-
 .card:hover {
   transform: translateY(-4px);
 }
@@ -48,6 +53,37 @@
 
 .card p {
   color: #1a1a1a;
+}
+
+.recipe-card {
+  background-color: #f8e8d6;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgb(209, 200, 196);
+  text-align: left;
+  transition: transform 0.2s ease;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #ddd;
+}
+
+.recipe-card:hover {
+  transform: translateY(-2px);
+}
+
+.recipe-card small {
+  display: block;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.recipes-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
 }
 
 .homepage-button {

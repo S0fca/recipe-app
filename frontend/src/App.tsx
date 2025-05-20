@@ -12,15 +12,7 @@ import RecipeDetailPage from "./pages/RecipeDetailPage";
 import RegisterPage from "./pages/RegisterPage.tsx";
 
 function App() {
-    // const [number, setNumber] = useState<number | null>(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    // useEffect(() => {
-    //     fetch("http://localhost:8080/api/number")
-    //         .then((res) => res.json())
-    //         .then((data) => setNumber(data.value))
-    //         .catch((err) => console.error(err));
-    // }, []);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);//false
 
     return (
         <Router>
@@ -45,13 +37,6 @@ function App() {
                     )}
 
             </Routes>
-
-            {/*{isLoggedIn && (*/}
-            {/*    <div>*/}
-            {/*        <h2>Number from backend:</h2>*/}
-            {/*        {number !== null ? <p>{number}</p> : <p>Loading...</p>}*/}
-            {/*    </div>*/}
-            {/*)}*/}
         </Router>
     );
 }
