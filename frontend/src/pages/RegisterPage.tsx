@@ -10,14 +10,27 @@ export default function RegisterPage() {
 
     const handleRegister = async () => {
         setError(null);
+
+        if (!username || username.trim().length === 0) {
+            setError('Username cannot be empty');
+            return;
+        }
+        if (!password || password.length < 6) {
+            setError('Password must be at least 6 characters long');
+            return;
+        }
+
         try {
-            const response = await fetch('http://localhost:8080/api/users', {
+            const response = await fetch('http://localhost:8080/api/users/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
             });
             if (!response.ok) {
                 const message = await response.text();
+                if (response.status === 409) {
+                    throw new Error('Username already exists');
+                }
                 throw new Error(message);
             }
             navigate('/login');

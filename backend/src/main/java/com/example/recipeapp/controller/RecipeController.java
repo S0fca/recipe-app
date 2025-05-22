@@ -2,9 +2,6 @@ package com.example.recipeapp.controller;
 
 import com.example.recipeapp.dto.IngredientDTO;
 import com.example.recipeapp.dto.RecipeDTO;
-import com.example.recipeapp.model.Ingredient;
-import com.example.recipeapp.model.Recipe;
-import com.example.recipeapp.model.Tag;
 import com.example.recipeapp.repository.RecipeRepository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.yaml.snakeyaml.tokens.Token.ID.Tag;
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -40,8 +35,8 @@ public class RecipeController {
                     recipe.getRecipeIngredients().stream()
                             .map(ri -> {
                                 IngredientDTO ingredient = new IngredientDTO();
-                                ingredient.setId(ri.getIngredient().getId());
-                                ingredient.setName(ri.getIngredient().getName());
+                                //ingredient.setId(ri.getIngredient().getId());
+                                ingredient.setName(ri.getIngredient());
                                 ingredient.setQuantity(ri.getQuantity());
                                 return ingredient;
                             })

@@ -12,7 +12,7 @@ import RecipeDetailPage from "./pages/RecipeDetailPage";
 import RegisterPage from "./pages/RegisterPage.tsx";
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);//false
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     return (
         <Router>

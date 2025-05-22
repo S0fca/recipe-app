@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 
 type RecipeIngredient = {
-    id: number;
+    //id: number;
     name: string;
     quantity: string;
 };
@@ -16,20 +16,23 @@ type Recipe = {
     ingredients: RecipeIngredient[];
 };
 
-type UserRecipes = {
-    username: string;
-    recipe: Recipe[];
-}
-
 const FavoritesPage = () => {
-    const [recipes, setRecipes] = useState<UserRecipes[]>([]);
+    const [recipes, setRecipes] = useState<Recipe[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/users/favourites/${"name"}`);
+                const token = localStorage.getItem('token');
+
+                const response = await fetch(`http://localhost:8080/api/users/favourites/${"name"}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
                 if (!response.ok) {
                     throw new Error('Failed to fetch recipes');
                 }
@@ -52,8 +55,8 @@ const FavoritesPage = () => {
                 {loading && <p>Loading...</p>}
                 {error && <p style={{color: 'red'}}>{error}</p>}
                 <div className="recipes-container">
-                    {recipes.map((userRecipe) =>
-                            userRecipe.recipe.map((recipe) => (
+                    {recipes.map((recipe) =>
+
                                 <div key={recipe.id} className="recipe-card">
                                     <h2>{recipe.title}</h2>
                                     <h3>{recipe.description}</h3>
@@ -68,7 +71,7 @@ const FavoritesPage = () => {
                                         <h4>Ingredients:</h4>
                                         <ul>
                                             {recipe.ingredients.map((ri) => (
-                                                <li key={ri.id}>
+                                                <li key={ri.name}>
                                                     {ri.name} – {ri.quantity}
                                                 </li>
                                             ))}
@@ -95,7 +98,7 @@ const FavoritesPage = () => {
                                         </div>
                                     </div>
                                 </div>
-                            ))
+
                     )}
                 </div>
 

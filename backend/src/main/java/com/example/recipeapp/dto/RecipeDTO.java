@@ -1,7 +1,5 @@
 package com.example.recipeapp.dto;
 
-import com.example.recipeapp.model.Ingredient;
-
 import java.util.List;
 
 public class RecipeDTO {

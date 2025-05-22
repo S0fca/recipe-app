@@ -17,9 +17,11 @@ public class RecipeIngredient {
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
-    @ManyToOne
-    @JoinColumn(name = "ingredient_id")
-    private Ingredient ingredient;
+//    @ManyToOne
+//    @JoinColumn(name = "ingredient_id")
+//    private Ingredient ingredient;
+
+    private String ingredient;
 
     public Long getId() {
         return id;
@@ -45,11 +47,19 @@ public class RecipeIngredient {
         this.recipe = recipe;
     }
 
-    public Ingredient getIngredient() {
+//    public Ingredient getIngredient() {
+//        return ingredient;
+//    }
+//
+//    public void setIngredient(Ingredient ingredient) {
+//        this.ingredient = ingredient;
+//    }
+
+    public String getIngredient() {
         return ingredient;
     }
 
-    public void setIngredient(Ingredient ingredient) {
+    public void setIngredient(String ingredient) {
         this.ingredient = ingredient;
     }
 }

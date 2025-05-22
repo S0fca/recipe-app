@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 
 type RecipeIngredient = {
-    id: number;
+   // id: number;
     name: string;
     quantity: string;
 };
@@ -25,12 +25,20 @@ const RecipesPage = () => {
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/recipes');
+                const token = localStorage.getItem('token');
+                console.log("poslany token recipe page; TOKEN:", token);
+
+                const response = await fetch('http://localhost:8080/api/recipes', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
                 if (!response.ok) {
                     throw new Error('Failed to fetch recipes');
                 }
                 const data = await response.json();
-                console.log(data)
                 setRecipes(data);
             } catch (err) {
                 setError('Could not load recipes');
@@ -38,7 +46,6 @@ const RecipesPage = () => {
                 setLoading(false);
             }
         };
-
         fetchRecipes();
     }, []);
 
@@ -50,7 +57,26 @@ const RecipesPage = () => {
                 <div className="recipes-container">
                     {recipes.map((recipe) => (
                         <div key={recipe.id} className="recipe-card">
-                            <h2>{recipe.title}</h2>
+                            <div style={{  display: "flex"}}>
+                                <h2>{recipe.title}</h2>
+                                {/*<button*/}
+                                {/*    onClick={() => toggleFavourite(recipe.id)}*/}
+                                {/*    style={{*/}
+                                {/*        marginTop: '8px',*/}
+                                {/*        backgroundColor: true ? 'tomato' : 'lightgreen',*/}
+                                {/*        padding: '4px 8px',*/}
+                                {/*        border: 'none',*/}
+                                {/*        borderRadius: '4px',*/}
+                                {/*        cursor: 'pointer',*/}
+                                {/*        display: "block",*/}
+                                {/*        textAlign: "right"*/}
+
+                                {/*    }}*/}
+                                {/*>*/}
+                                {/*    {true ? 'Odebrat z oblíbených' : 'Přidat do oblíbených'}*/}
+                                {/*</button>*/}
+                            </div>
+
                             <h3>{recipe.description}</h3>
 
                             <div>
@@ -63,7 +89,7 @@ const RecipesPage = () => {
                                 <h4>Ingredients:</h4>
                                 <ul>
                                     {recipe.ingredients?.map((ri) => (
-                                        <li key={ri.id}>
+                                        <li key={ri.name}>
                                             {ri.name} – {ri.quantity}
                                         </li>
                                     ))}
