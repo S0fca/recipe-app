@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import RecipeCard from "./RecipeCard.tsx";
+import {useNavigate} from "react-router-dom";
 
 type RecipeIngredient = {
     id: number;
@@ -18,8 +19,11 @@ type Recipe = {
     favourite: boolean;
 };
 
-const FavoritesPage = () => {
-        const [recipes, setRecipes] = useState<Recipe[]>([]);
+const ManageRecipes = () => {
+    const navigate = useNavigate();
+
+
+    const [recipes, setRecipes] = useState<Recipe[]>([]);
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState<string | null>(null);
 
@@ -28,7 +32,7 @@ const FavoritesPage = () => {
                 try {
                     const token = localStorage.getItem('token');
 
-                    const response = await fetch(`http://localhost:8080/api/users/favourites`, {
+                    const response = await fetch(`http://localhost:8080/api/recipes/user`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json',
@@ -54,10 +58,18 @@ const FavoritesPage = () => {
 
         return (
             <div>
-                <h1>Favorites</h1>
+                <h1>Manage recipes</h1>
+
+                <nav>
+                    <button onClick={() => navigate('/add-recipe')}>
+                        Add Recipe
+                    </button>
+                </nav>
+
+                <h2>Your recipes</h2>
                 {loading && <p>Loading...</p>}
                 {error && <p style={{color: 'red'}}>{error}</p>}
-                {!loading && !error && recipes.length === 0 && <p>You have no favorite recipes yet.</p>}
+                {!loading && !error && recipes.length === 0 && <p>You created no recipes yet.</p>}
 
                 <div className="recipes-container">
                     {recipes.map((recipe) =>
@@ -65,9 +77,8 @@ const FavoritesPage = () => {
                     )}
                 </div>
 
-
             </div>
         )
     }
 ;
-export default FavoritesPage;
+export default ManageRecipes;

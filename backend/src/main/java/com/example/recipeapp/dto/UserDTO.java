@@ -1,13 +1,14 @@
 package com.example.recipeapp.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * UserDTO - id, username, token
+ */
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Data
 public class UserDTO {
 

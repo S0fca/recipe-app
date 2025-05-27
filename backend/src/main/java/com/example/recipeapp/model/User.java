@@ -2,10 +2,16 @@ package com.example.recipeapp.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * User - id, username, password, favoriteRecipes
+ * ManyToMany - favoriteRecipes
+ */
 @Entity
 @Table(name = "users")
 @JsonIgnoreProperties({"recipes"})
@@ -16,6 +22,7 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String username;
+
     @Column(nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
@@ -28,18 +35,6 @@ public class User {
     )
     private Set<Recipe> favoriteRecipes = new HashSet<>();
 
-
-    // Constructors
-    public User() {}
-
-    public User(Long id, String username, String password, Set<Recipe> favoriteRecipes) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.favoriteRecipes = favoriteRecipes;
-    }
-
-    // Getters & Setters
     public Long getId() { return id; }
 
     public String getUsername() { return username; }

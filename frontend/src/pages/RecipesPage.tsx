@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
+import RecipeCard from "./RecipeCard.tsx";
 
 type RecipeIngredient = {
-   // id: number;
-    name: string;
+    id: number;
+    ingredient: string;
     quantity: string;
 };
 
@@ -14,6 +15,7 @@ type Recipe = {
     createdByUsername: string;
     tags: string[];
     ingredients: RecipeIngredient[];
+    favourite: boolean;
 };
 
 
@@ -33,7 +35,7 @@ const RecipesPage = () => {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
-                    credentials: 'include',
+
                 });
                 if (!response.ok) {
                     throw new Error('Failed to fetch recipes');
@@ -56,69 +58,9 @@ const RecipesPage = () => {
                 {error && <p style={{color: 'red'}}>{error}</p>}
                 <div className="recipes-container">
                     {recipes.map((recipe) => (
-                        <div key={recipe.id} className="recipe-card">
-                            <div style={{  display: "flex"}}>
-                                <h2>{recipe.title}</h2>
-                                {/*<button*/}
-                                {/*    onClick={() => toggleFavourite(recipe.id)}*/}
-                                {/*    style={{*/}
-                                {/*        marginTop: '8px',*/}
-                                {/*        backgroundColor: true ? 'tomato' : 'lightgreen',*/}
-                                {/*        padding: '4px 8px',*/}
-                                {/*        border: 'none',*/}
-                                {/*        borderRadius: '4px',*/}
-                                {/*        cursor: 'pointer',*/}
-                                {/*        display: "block",*/}
-                                {/*        textAlign: "right"*/}
-
-                                {/*    }}*/}
-                                {/*>*/}
-                                {/*    {true ? 'Odebrat z oblíbených' : 'Přidat do oblíbených'}*/}
-                                {/*</button>*/}
-                            </div>
-
-                            <h3>{recipe.description}</h3>
-
-                            <div>
-                                {recipe.instructions.split(';').map((line, index) => (
-                                    <p key={index}>{line}</p>
-                                ))}
-                            </div>
-
-                            <div>
-                                <h4>Ingredients:</h4>
-                                <ul>
-                                    {recipe.ingredients?.map((ri) => (
-                                        <li key={ri.name}>
-                                            {ri.name} – {ri.quantity}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            <div style={{marginTop: '4px'}}>
-                                <small>Created by: {recipe.createdByUsername}</small>
-
-                                <div>
-                                    {/*<h4>Tags:</h4>*/}
-                                    {recipe.tags.map((tag) => (
-                                        <span key={tag} style={{
-                                            marginRight: '8px',
-                                            padding: '2px 6px',
-                                            border: '1px solid #ccc',
-                                            borderRadius: '4px'
-                                        }}>
-                                        {tag}
-                                    </span>
-                                    ))}
-                                </div>
-
-                            </div>
-
-                        </div>
+                        <RecipeCard key={recipe.id} recipe={recipe}/>
                     ))}
                 </div>
-
 
             </div>
         )

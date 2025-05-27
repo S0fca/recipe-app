@@ -1,32 +1,19 @@
 package com.example.recipeapp.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * IngredientDTO - id, ingredient, quantity
+ */
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class IngredientDTO {
 
-   // private Long id;
-    private String name;
+    private Long id;
+    private String ingredient;
     private String quantity;
 
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
-    }
 }

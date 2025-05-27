@@ -1,7 +1,20 @@
 package com.example.recipeapp.dto;
 
+import com.example.recipeapp.model.Recipe;
+import com.example.recipeapp.model.Tag;
+import com.example.recipeapp.model.User;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+/**
+ * RecipeDTO - id, title, description, instructions, List<IngredientDTO> ingredients, String createdByUsername, tags, isFavourite
+ */
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class RecipeDTO {
 
     private Long id;
@@ -11,62 +24,31 @@ public class RecipeDTO {
     private List<IngredientDTO> ingredients;
     private String createdByUsername;
     private List<String> tags;
+    private boolean isFavourite;
 
-    // Gettery a settery
+    public static RecipeDTO GetRecipeDTO(Recipe recipe, User user) {
+        RecipeDTO dto = new RecipeDTO();
 
-    public Long getId() {
-        return id;
-    }
+        dto.setId(recipe.getId());
+        dto.setTitle(recipe.getTitle());
+        dto.setDescription(recipe.getDescription());
+        dto.setInstructions(recipe.getInstructions());
+        dto.setCreatedByUsername(recipe.getCreatedBy().getUsername());
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+        dto.setIngredients( //RecipeIngredients -> IngredientDTO
+                recipe.getRecipeIngredients().stream()
+                        .map(ri -> new IngredientDTO(ri.getId(), ri.getIngredientName(), ri.getQuantity()))
+                        .toList()
+        );
 
-    public String getTitle() {
-        return title;
-    }
+        dto.setTags(recipe.getTags().stream().map(Tag::getName).toList());
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+        if (user != null) {
+            dto.setFavourite(user.getFavoriteRecipes().contains(recipe));
+        } else {
+            dto.setFavourite(false);
+        }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getInstructions() {
-        return instructions;
-    }
-
-    public void setInstructions(String instructions) {
-        this.instructions = instructions;
-    }
-
-    public String getCreatedByUsername() {
-        return createdByUsername;
-    }
-
-    public void setCreatedByUsername(String createdByUsername) {
-        this.createdByUsername = createdByUsername;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
-
-    public List<IngredientDTO> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(List<IngredientDTO> ingredients) {
-        this.ingredients = ingredients;
+        return dto;
     }
 }

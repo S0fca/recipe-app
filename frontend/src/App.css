@@ -7,8 +7,9 @@
 header nav {
   font-size: 1.2rem;
   color: #f4a261;
+  display: flex;
+  justify-content: space-between;
 }
-
 
 .homepage-container {
   padding: 2rem;
@@ -111,7 +112,7 @@ header nav {
   width: auto;
 }
 
-.login input {
+input, textarea {
   padding: 10px;
   margin: 10px;
   background: #f8e8d6;
