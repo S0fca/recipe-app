@@ -24,24 +24,37 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
-    private final UserAuthentificationEntryPoint userAuthentificationEntryPoint;
+    private final UserAuthenticationEntryPoint userAuthenticationEntryPoint;
 
+    /**
+     * Defines security rules and filter chain.
+     *
+     * @param http Spring Security HTTP config
+     * @return security filter chain
+     * @throws Exception configuration error
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/users/register", "/api/users/login").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/users/register", "/api/users/login").permitAll() // Public endpoints
+                        .anyRequest().authenticated() // Others require authentication
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(userAuthentificationEntryPoint))
-                .addFilterBefore(jwtAuthFilter, BasicAuthenticationFilter.class)
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(userAuthenticationEntryPoint)) // Unauthenticated user handler
+                .addFilterBefore(jwtAuthFilter, BasicAuthenticationFilter.class) // JWT filter first
                 .csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults());
+                .cors(Customizer.withDefaults()); // Enable CORS
 
         return http.build();
     }
 
+    /**
+     * Configures CORS to allow requests from frontend
+     *
+     * @return CORS config source
+     */
+    //CORS - Cross-Origin Resource Sharing, umožňuje webovým aplikacím běžícím v jednom doménovém původu (origin) komunikovat s backendem, který je na jiné doméně, portu nebo protokolu.
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -55,6 +68,10 @@ public class SecurityConfig {
         return source;
     }
 
+    /**
+     * Password encoder for encoding and verifying passwords.
+     * @return password encoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
