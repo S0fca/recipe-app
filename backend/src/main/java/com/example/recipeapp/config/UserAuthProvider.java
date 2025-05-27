@@ -16,6 +16,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+/**
+ * handling JWT token operations
+ */
 @RequiredArgsConstructor
 @Component
 public class UserAuthProvider {
@@ -30,17 +33,30 @@ public class UserAuthProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String login) {
+    /**
+     * Creates a JWT token for the given user username.
+     * @param username users username
+     * @return JWT token
+     */
+    public String createToken(String username) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + 1000 * 60 * 60); //1000 * 60 * 60 = 1h
 
-        return JWT.create().withIssuer(login)
+        return JWT.create().withIssuer(username)
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
                 .sign(Algorithm.HMAC256(secretKey));
     }
 
-    public Authentication validateToken(String token) {
+
+
+    /**
+     * Validates a JWT token
+     * @param token JWT token to validate
+     * @return Authentication object with user information
+     * @throws RuntimeException if the user from the token does not exist
+     */
+    public Authentication validateToken(String token) throws RuntimeException {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secretKey))
                 .build();
         DecodedJWT decoded = verifier.verify(token);
