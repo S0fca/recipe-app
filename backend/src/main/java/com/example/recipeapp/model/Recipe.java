@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Recipe Entity - id, title, description, instructions, User createdBy, RecipeIngredient ingredients, Set<Tag> tags (recipe_tag)
+ * Recipe Entity - id, title, description, instructions, User createdBy, RecipeIngredient ingredients, Set-Tag tags (recipe_tag)
  * ManyToOne - User
  * OneToMany - RecipeIngredient
  * ManyToMany - Tag

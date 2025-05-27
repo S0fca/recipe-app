@@ -2,14 +2,12 @@ package com.example.recipeapp.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * User - id, username, password, favoriteRecipes
+ * User - id, username, password, Set-Recipe favoriteRecipes
  * ManyToMany - favoriteRecipes
  */
 @Entity

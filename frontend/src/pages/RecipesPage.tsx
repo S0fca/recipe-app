@@ -3,7 +3,7 @@ import RecipeCard from "./RecipeCard.tsx";
 
 type RecipeIngredient = {
     id: number;
-    ingredient: string;
+    name: string;
     quantity: string;
 };
 

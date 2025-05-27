@@ -28,6 +28,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    /**
+     * registers a user - encodes password, adds to DB
+     * ResponseStatusException when username is taken
+     * @param user user to register
+     * @return registered user DTO
+     */
     public UserDTO register(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username is already taken");
@@ -38,6 +44,11 @@ public class UserService {
         return new UserDTO(savedUser.getId(), savedUser.getUsername(), null);
     }
 
+    /**
+     * logs in a user
+     * @param user user to log in
+     * @return logged in users DTO (id, name, token)
+     */
     public UserDTO login(User user) {
         User foundUser = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials"));
@@ -50,7 +61,12 @@ public class UserService {
         return new UserDTO(foundUser.getId(), foundUser.getUsername(), token);
     }
 
-    public List<RecipeDTO> getUserFavourites(String username) {
+    /**
+     * gets users favourite recipes
+     * @param username users name
+     * @return list of users favourite recipes DTO
+     */
+    public List<RecipeDTO> getUserFavouriteRecipes(String username) {
         Optional<User> userOpt = userRepository.findByUsername(username);
         if (userOpt.isEmpty()) return Collections.emptyList();
 
@@ -58,12 +74,6 @@ public class UserService {
             RecipeDTO dto = RecipeDTO.GetRecipeDTO(recipe, userOpt.get());
             return dto;
         }).collect(Collectors.toList());
-    }
-
-    public UserDTO findByLogin(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown user"));
-        return new UserDTO(user.getId(), user.getUsername(), null);
     }
 
 }

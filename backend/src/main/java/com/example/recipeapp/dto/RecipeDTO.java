@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * RecipeDTO - id, title, description, instructions, List<IngredientDTO> ingredients, String createdByUsername, tags, isFavourite
+ * RecipeDTO - id, title, description, instructions, List-IngredientDTO ingredients, String createdByUsername, tags, isFavourite
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,6 +36,7 @@ public class RecipeDTO {
         dto.setCreatedByUsername(recipe.getCreatedBy().getUsername());
 
         dto.setIngredients( //RecipeIngredients -> IngredientDTO
+
                 recipe.getRecipeIngredients().stream()
                         .map(ri -> new IngredientDTO(ri.getId(), ri.getIngredientName(), ri.getQuantity()))
                         .toList()

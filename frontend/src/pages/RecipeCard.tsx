@@ -2,7 +2,7 @@ import {useState} from "react";
 
 type RecipeIngredient = {
     id: number;
-    ingredient: string;
+    name: string;
     quantity: string;
 };
 
@@ -81,7 +81,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
                     {Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0 ? (
                         recipe.ingredients.map((ri) => (
                             <li key={ri.id}>
-                                {ri.ingredient} – {ri.quantity}
+                                {ri.name} – {ri.quantity}
                             </li>
                         ))
                     ) : (

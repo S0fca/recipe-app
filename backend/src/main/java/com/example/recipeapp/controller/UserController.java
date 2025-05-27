@@ -5,11 +5,9 @@ import com.example.recipeapp.dto.UserDTO;
 import com.example.recipeapp.model.User;
 import com.example.recipeapp.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -26,23 +24,43 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    /**
+     * gets users favourite recipes
+     * @param authentication authenticated user
+     * @return list of favourite recipes
+     */
     @GetMapping("/favourites")
-    public List<RecipeDTO> getUsersFavourites(Authentication authentication) {
+    public List<RecipeDTO> getUserFavouriteRecipes(Authentication authentication) {
         UserDTO user = (UserDTO) authentication.getPrincipal();
-        return userService.getUserFavourites(user.getUsername());
+        return userService.getUserFavouriteRecipes(user.getUsername());
     }
 
+    /**
+     * registers user
+     * @param user user to register
+     * @return registered user DTO
+     */
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@RequestBody User user) {
         UserDTO registeredUser = userService.register(user);
         return ResponseEntity.ok(registeredUser);
     }
 
+    /**
+     * logs in a user
+     * @param user user to log in
+     * @return registered user DTO
+     */
     @PostMapping("/login")
     public ResponseEntity<UserDTO> loginUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.login(user));
     }
 
+    /**
+     * validates a token
+     * @param authentication authenticated user
+     * @return whether token is valid or not
+     */
     @GetMapping("/validate")
     public ResponseEntity<?> validateToken(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {

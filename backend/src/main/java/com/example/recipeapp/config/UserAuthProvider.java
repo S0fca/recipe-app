@@ -7,7 +7,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.recipeapp.dto.UserDTO;
 import com.example.recipeapp.model.User;
 import com.example.recipeapp.repository.UserRepository;
-import com.example.recipeapp.services.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +32,7 @@ public class UserAuthProvider {
 
     public String createToken(String login) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + 1000 * 60 * 60);
+        Date validity = new Date(now.getTime() + 1000 * 60 * 60); //1000 * 60 * 60 = 1h
 
         return JWT.create().withIssuer(login)
                 .withIssuedAt(now)

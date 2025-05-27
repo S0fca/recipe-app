@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 
 type RecipeIngredient = {
     id: number;
-    ingredient: string;
+    name: string;
     quantity: string;
 };
 

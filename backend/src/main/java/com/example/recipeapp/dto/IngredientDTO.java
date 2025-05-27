@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * IngredientDTO - id, ingredient, quantity
+ * IngredientDTO - id, name, quantity
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class IngredientDTO {
 
     private Long id;
-    private String ingredient;
+    private String name;
     private String quantity;
 
 }
