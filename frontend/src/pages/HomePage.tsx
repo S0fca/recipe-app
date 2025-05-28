@@ -15,21 +15,21 @@ export default function HomePage() {
                 </div>
 
                 <div className="card">
-                    <h2>🔍 Search by Ingredients</h2>
-                    <p>Type what you have at home and find recipes you can make.</p>
-                    <Link to="/search" className="homepage-button">Search now</Link>
-                </div>
-
-                <div className="card">
                     <h2>❤️ Your Favorites</h2>
-                    <p>See recipes you've liked and saved.</p>
+                    <p>View and revisit your saved and liked recipes.</p>
                     <Link to="/favorites" className="homepage-button">View favorites</Link>
                 </div>
 
                 <div className="card">
-                    <h2>✍️ Add a Recipe</h2>
-                    <p>Got something delicious to share? Add it to the collection!</p>
-                    <Link to="/add-recipe" className="homepage-button">Add new recipe</Link>
+                    <h2>🔍 Search for recipes</h2>
+                    <p>Find delicious recipes by title or tags.</p>
+                    <Link to="/search" className="homepage-button">Search now</Link>
+                </div>
+
+                <div className="card">
+                    <h2>✍️ Manage Recipes</h2>
+                    <p>Share your own creations or edit your existing recipes.</p>
+                    <Link to="/manage-recipes" className="homepage-button">Add new recipe</Link>
                 </div>
 
             </div>

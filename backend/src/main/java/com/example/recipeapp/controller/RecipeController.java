@@ -112,4 +112,18 @@ public class RecipeController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
     }
 
+    @GetMapping("/search")
+    public List<RecipeDTO> searchRecipes(
+            Authentication authentication,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) List<String> tags,
+            @RequestParam(required = false) String title
+    ) {
+        User user = getAuthenticatedUser(authentication);
+        // Pokud není žádný tag, pošli null
+        if (tags != null && tags.isEmpty()) {
+            tags = null;
+        }
+        return recipeService.search(user, username, title, tags);
+    }
 }

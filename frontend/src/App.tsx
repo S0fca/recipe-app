@@ -12,7 +12,7 @@ import RegisterPage from "./pages/RegisterPage.tsx";
 import ManageRecipesPage from "./pages/ManageRecipesPage.tsx";
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // null = čekáme
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); 
 
     async function isAuthenticated(): Promise<boolean> {
         const token = localStorage.getItem('token');
@@ -51,6 +51,7 @@ function App() {
                         <>
                             <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
                             <Route path="/register" element={<RegisterPage />} />
+                            <Route path="/" element={<HomePage />} />
                             <Route path="*" element={<Navigate to="/login" />} />
                         </>
                     ) : (
@@ -74,7 +75,38 @@ function Layout({ isLoggedIn }: { isLoggedIn: boolean }) {
     const location = useLocation();
     const navigate = useNavigate();
 
-    if (location.pathname === "/login"|| !isLoggedIn) return null;
+    const login = () => {
+        navigate('/login');
+    };
+
+    const register = () => {
+        navigate('/register');
+    };
+
+    if (location.pathname === "/login"){
+        return (
+            <div style={{textAlign: "right"}}>
+                <button onClick={register}>Register</button>
+            </div>
+        )
+    }
+
+    if (location.pathname === "/register"){
+        return (
+            <div style={{textAlign: "right"}}>
+                <button onClick={login}>Login</button>
+            </div>
+        )
+    }
+
+    if (location.pathname === "/" && !isLoggedIn) {
+        return (
+            <div style={{textAlign: "right"}}>
+                <button onClick={login} style={{margin: "4px"}}>Login</button>
+                <button onClick={register} style={{margin: "4px"}}>Register</button>
+            </div>
+        )
+    }
 
     const logout = () => {
         localStorage.removeItem('token');

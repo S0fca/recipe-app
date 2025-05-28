@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -88,6 +89,18 @@ public class RecipeService {
     private Recipe getRecipeById(Long recipeId) {
         return recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found"));
+    }
+
+    public List<RecipeDTO> search(User user, String username, String title, List<String> tags) {
+
+        List<Recipe> recipes = recipeRepository.search(
+                username != null && !username.isBlank() ? username : null,
+                title != null && !title.isBlank() ? title : null,
+                tags != null && !tags.isEmpty() ? tags : null,
+                tags != null && !tags.isEmpty() ? tags.size() : 0
+        );
+        return recipes.stream().map(recipe -> RecipeDTO.GetRecipeDTO(recipe, user)).collect(Collectors.toList());
+
     }
 }
 

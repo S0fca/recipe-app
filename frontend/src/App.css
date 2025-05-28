@@ -68,6 +68,16 @@ header nav {
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid #ddd;
+
+  max-height: 650px;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: #c4b5aa transparent;
+
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
 .recipe-card:hover {

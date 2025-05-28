@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {Link, useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 export default function LoginPage({ setIsLoggedIn }: { setIsLoggedIn: (v: boolean) => void }) {
     const [username, setUsername] = useState('');
@@ -32,7 +32,13 @@ export default function LoginPage({ setIsLoggedIn }: { setIsLoggedIn: (v: boolea
             setIsLoggedIn(true);
             navigate('/');
         } catch (err) {
-            setError((err as Error).message || 'Unknown error');
+            const error = err as Error;
+
+            if (error.message.includes('Failed to fetch')) {
+                setError('Cannot connect to server. ');
+            } else {
+                setError(error.message || 'Unknown error');
+            }
         }
     };
 

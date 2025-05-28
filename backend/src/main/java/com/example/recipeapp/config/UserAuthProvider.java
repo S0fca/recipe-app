@@ -48,8 +48,6 @@ public class UserAuthProvider {
                 .sign(Algorithm.HMAC256(secretKey));
     }
 
-
-
     /**
      * Validates a JWT token
      * @param token JWT token to validate

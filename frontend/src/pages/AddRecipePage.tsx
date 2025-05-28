@@ -107,7 +107,7 @@ const AddRecipePage = () => {
                 <input
                     id="title"
                     type="text"
-                    placeholder="Title"
+                    placeholder="Pancakes"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     style={styles.input}
@@ -116,7 +116,7 @@ const AddRecipePage = () => {
                 <label htmlFor="description">Description:</label>
                 <textarea
                     id="description"
-                    placeholder="Description"
+                    placeholder="A simple quick recipe. "
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     style={styles.textarea}
@@ -125,7 +125,8 @@ const AddRecipePage = () => {
                 <label htmlFor="instructions">Instructions:</label>
                 <textarea
                     id="instructions"
-                    placeholder="Instructions"
+                    placeholder="1. Mix all the ingredients together.
+2. ... "
                     value={instructions}
                     onChange={(e) => setInstructions(e.target.value)}
                     style={styles.textarea}
@@ -139,7 +140,7 @@ const AddRecipePage = () => {
                         <input
                             id={`ingredient-name-${index}`}
                             type="text"
-                            placeholder="Ingredient"
+                            placeholder="Eggs"
                             value={ingredient.name}
                             onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}
                             style={styles.ingredientInput}
@@ -150,7 +151,7 @@ const AddRecipePage = () => {
                         <input
                             id={`ingredient-quantity-${index}`}
                             type="text"
-                            placeholder="Quantity"
+                            placeholder="2 ks"
                             value={ingredient.quantity}
                             onChange={(e) => handleIngredientChange(index, 'quantity', e.target.value)}
                             style={styles.ingredientInput}
@@ -186,13 +187,7 @@ const AddRecipePage = () => {
                         <h2>{title}</h2>
                     </div>
 
-                    <h3>{description}</h3>
-
-                    <div>
-                        {instructions.split('\n').map((line, index) => (
-                            <p key={index}>{line}</p>
-                        ))}
-                    </div>
+                    {description ? (<h3>{description}</h3>) : null}
 
                     <div>
                         <h4>Ingredients:</h4>
@@ -205,6 +200,13 @@ const AddRecipePage = () => {
                                     </li>
                                 ))}
                         </ul>
+                    </div>
+
+                    <h4>Instructions:</h4>
+                    <div>
+                        {instructions.split('\n').map((line, index) => (
+                            <p key={index}>{line}</p>
+                        ))}
                     </div>
 
                     <div style={{marginTop: '4px'}}>
