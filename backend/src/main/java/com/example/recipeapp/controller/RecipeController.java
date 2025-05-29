@@ -126,4 +126,24 @@ public class RecipeController {
         }
         return recipeService.search(user, username, title, tags);
     }
+
+    @GetMapping("/recipe/{id}")
+    public RecipeDTO getRecipeById(@PathVariable Long id, Authentication authentication) {
+        User user = getAuthenticatedUser(authentication);
+        return recipeService.getRecipe(user, id);
+    }
+
+    @DeleteMapping("/recipe/{id}")
+    public ResponseEntity<?> deleteRecipeById(@PathVariable Long id, Authentication authentication) {
+        User user = getAuthenticatedUser(authentication);
+        recipeService.deleteRecipe(user, id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateRecipe(@RequestBody RecipeDTO recipeDTO, Authentication authentication) {
+        User user = getAuthenticatedUser(authentication);
+        recipeService.updateRecipe(recipeDTO, user);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -10,9 +10,10 @@ import SearchPage from "./pages/SearchPage";
 import AddRecipePage from "./pages/AddRecipePage";
 import RegisterPage from "./pages/RegisterPage.tsx";
 import ManageRecipesPage from "./pages/ManageRecipesPage.tsx";
+import ManageRecipePage from "./pages/ManageRecipePage.tsx";
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); 
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
     async function isAuthenticated(): Promise<boolean> {
         const token = localStorage.getItem('token');
@@ -27,6 +28,7 @@ function App() {
             });
             return res.ok;
         } catch (err) {
+            console.error('Validation error:', err);
             return false;
         }
     }
@@ -62,7 +64,7 @@ function App() {
                             <Route path="/search" element={isLoggedIn ? <SearchPage /> : <Navigate to="/login" />} />
                             <Route path="/add-recipe" element={isLoggedIn ? <AddRecipePage /> : <Navigate to="/login" />} />
                             <Route path="/manage-recipes" element={isLoggedIn ? <ManageRecipesPage /> : <Navigate to="/login" />} />
-                            <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+                            <Route path="/edit/:id" element={isLoggedIn ? <ManageRecipePage /> : <Navigate to="/login" />} />
                         </>
                     )}
 

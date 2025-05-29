@@ -22,7 +22,7 @@ export default function HomePage() {
 
                 <div className="card">
                     <h2>🔍 Search for recipes</h2>
-                    <p>Find delicious recipes by title or tags.</p>
+                    <p>Find delicious recipes by title, user, or tags.</p>
                     <Link to="/search" className="homepage-button">Search now</Link>
                 </div>
 

@@ -19,9 +19,10 @@ type Recipe = {
 
 type RecipeCardProps = {
     recipe: Recipe;
+    onClick?: () => void;
 };
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
+const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick }: RecipeCardProps) => {
     const [isFavourite, setIsFavourite] = useState(recipe.favourite);
 
     const handleAddToFavourites = async () => {
@@ -63,7 +64,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
     }
 
     return (
-        <div key={recipe.id} className="recipe-card">
+        <div key={recipe.id} className="recipe-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
             <div>
                 <h2>{recipe.title}</h2>
 
@@ -74,15 +75,18 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
                 <h4>Ingredients:</h4>
                 <ul>
                     {Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0 ? (
-                        recipe.ingredients.map((ri) => (
-                            <li key={ri.id}>
-                                {ri.name} – {ri.quantity}
-                            </li>
-                        ))
+                        recipe.ingredients.map((ri, index) =>
+                            (ri.name || ri.quantity) ? (
+                                <li key={`${ri.id ?? `new-${index}`}`}>
+                                    {ri.name} – {ri.quantity}
+                                </li>
+                            ) : null
+                        )
                     ) : (
                         <li>No ingredients provided.</li>
                     )}
                 </ul>
+
             </div>
 
             <div>

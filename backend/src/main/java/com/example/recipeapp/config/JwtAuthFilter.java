@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -22,7 +23,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     /**
      * A filter that checks every HTTP request and looks for a JWT token.
      * If the token is there, it tries to verify it.
-     *
      * 1. Get the Authorization header from the request
      * 2. Check if header is present and starts with "Bearer "
      * 3. Extract the token from the header
@@ -37,7 +37,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
      * @throws IOException I/O error
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
         // Get the Authorization header from the request

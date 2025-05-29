@@ -39,14 +39,16 @@ const ManageRecipes = () => {
                         },
                         credentials: 'include',
                     });
-                    if (!response.ok) {
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log(data);
+                        setRecipes(Array.isArray(data) ? data : []);
+                    } else {
                         throw new Error('Failed to fetch recipes');
                     }
-                    const data = await response.json();
-                    console.log(data);
-                    setRecipes(Array.isArray(data) ? data : []);
 
                 } catch (err) {
+                    console.error('Validation error:', err);
                     setError('Could not load recipes');
                 } finally {
                     setLoading(false);
@@ -55,6 +57,10 @@ const ManageRecipes = () => {
 
             fetchRecipes();
         }, []);
+
+    const handleEdit = (id: number) => {
+        navigate(`/edit/${id}`);
+    };
 
         return (
             <div>
@@ -73,7 +79,7 @@ const ManageRecipes = () => {
 
                 <div className="recipes-container">
                     {recipes.map((recipe) =>
-                        <RecipeCard key={recipe.id} recipe={recipe}/>
+                        <RecipeCard key={recipe.id} recipe={recipe} onClick={() => handleEdit(recipe.id)}/>
                     )}
                 </div>
 

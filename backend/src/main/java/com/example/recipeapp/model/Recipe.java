@@ -34,7 +34,7 @@ public class Recipe {
     @JsonIgnoreProperties("user_favorite_recipes")
     private User createdBy;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
