@@ -71,23 +71,23 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick }: RecipeCardPr
                 {recipe.description ? (<h3>{recipe.description}</h3>) : null}
 
             </div>
-            <div>
+            {Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0 ? (
+
+                    <div>
                 <h4>Ingredients:</h4>
                 <ul>
-                    {Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0 ? (
-                        recipe.ingredients.map((ri, index) =>
+                    {recipe.ingredients.map((ri, index) =>
                             (ri.name || ri.quantity) ? (
                                 <li key={`${ri.id ?? `new-${index}`}`}>
                                     {ri.name} – {ri.quantity}
                                 </li>
                             ) : null
                         )
-                    ) : (
-                        <li>No ingredients provided.</li>
-                    )}
+                     }
                 </ul>
 
-            </div>
+            </div>)
+                : null}
 
             <div>
                 <h4>Instructions:</h4>
@@ -102,9 +102,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick }: RecipeCardPr
                 <div style={{marginTop: '12px'}}>
                     <small>Created by: {recipe.createdByUsername}</small>
 
-                    <div style={{marginTop: '16px'}}>
-                        {Array.isArray(recipe.tags) && recipe.tags.length > 0 ? (
-                            recipe.tags.map((tag) => (
+                    {Array.isArray(recipe.tags) && recipe.tags.length > 0 ? (
+                        <div style={{ marginTop: '16px' }}>
+                            {recipe.tags.map((tag) => (
                                 <span
                                     key={tag}
                                     style={{
@@ -113,12 +113,14 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick }: RecipeCardPr
                                         border: '1px solid #ccc',
                                         borderRadius: '4px',
                                     }}
-                                >{tag}</span>
-                            ))
-                        ) : (
-                            <span>No tags</span>
-                        )}
-                    </div>
+                                >
+                {tag}
+            </span>
+                            ))}
+                        </div>
+                    ) : null
+                    }
+
 
                     <div style={{marginTop: '12px'}}>
                         {isFavourite ? (

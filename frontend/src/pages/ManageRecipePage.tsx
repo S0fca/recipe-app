@@ -139,7 +139,6 @@ const ManageRecipePage = () => {
 
         try {
             const token = localStorage.getItem('token');
-            console.log('Token:', token);
 
             const response = await fetch('http://localhost:8080/api/recipes', {
                 method: 'PUT',
@@ -169,11 +168,13 @@ const ManageRecipePage = () => {
     if (!recipe) return <p>Loading...</p>;
 
     return (
-        <div style={styles.container}>
-            <form style={styles.form} onSubmit={e => {
-                e.preventDefault();
-                handleSubmit();
-            }}>
+        <div className="recipe-form">
+            <form
+                onSubmit={e => {
+                    e.preventDefault();
+                    handleSubmit();
+                }}
+            >
                 <h1>Edit Recipe: {recipe.title}</h1>
 
                 <label htmlFor="title">Title:</label>
@@ -183,52 +184,61 @@ const ManageRecipePage = () => {
                     placeholder="Pancakes"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    style={styles.input}
                 />
 
                 <label htmlFor="description">Description:</label>
                 <textarea
                     id="description"
-                    placeholder="A simple quick recipe. "
+                    placeholder="A simple quick recipe."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    style={styles.textarea}
                 />
 
                 <label htmlFor="instructions">Instructions:</label>
                 <textarea
                     id="instructions"
-                    placeholder="1. Mix all the ingredients together.
-2. ... "
+                    placeholder={`1. Mix all the ingredients together.\n2. ...`}
                     value={instructions}
                     onChange={(e) => setInstructions(e.target.value)}
-                    style={styles.textarea}
                 />
 
                 <h3>Ingredients</h3>
-                {ingredients.map((ingredient, index) => (
-                    <div key={index} style={styles.ingredientRow}>
+                {ingredients?.map((ingredient, index) => (
+                    <div key={index} className="ingredient-row">
                         <div>
-                            <label htmlFor={`ingredient-name-${index}`} style={styles.ingredientLabel}>Name:</label>
+                            <label
+                                htmlFor={`ingredient-name-${index}`}
+                                className="ingredient-label"
+                            >
+                                Name:
+                            </label>
                             <input
                                 id={`ingredient-name-${index}`}
                                 type="text"
                                 placeholder="Eggs"
                                 value={ingredient.name}
-                                onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}
-                                style={styles.ingredientInput}
+                                onChange={(e) =>
+                                    handleIngredientChange(index, 'name', e.target.value)
+                                }
+                                className="ingredient-input"
                             />
                         </div>
                         <div>
-                            <label htmlFor={`ingredient-quantity-${index}`}
-                                   style={styles.ingredientLabel}>Quantity:</label>
+                            <label
+                                htmlFor={`ingredient-quantity-${index}`}
+                                className="ingredient-label"
+                            >
+                                Quantity:
+                            </label>
                             <input
                                 id={`ingredient-quantity-${index}`}
                                 type="text"
                                 placeholder="2 ks"
                                 value={ingredient.quantity}
-                                onChange={(e) => handleIngredientChange(index, 'quantity', e.target.value)}
-                                style={styles.ingredientInput}
+                                onChange={(e) =>
+                                    handleIngredientChange(index, 'quantity', e.target.value)
+                                }
+                                className="ingredient-input"
                             />
                         </div>
                         <button
@@ -241,19 +251,25 @@ const ManageRecipePage = () => {
                                 border: 'none',
                                 borderRadius: '4px',
                                 padding: '4px 8px',
-                                cursor: 'pointer'
+                                cursor: 'pointer',
                             }}
                         >
                             ✖
                         </button>
                     </div>
                 ))}
-                <button type="button" onClick={handleAddIngredient} style={styles.addButton}>+ Add Ingredient</button>
+                <button
+                    type="button"
+                    onClick={handleAddIngredient}
+                    className="add-button"
+                >
+                    + Add Ingredient
+                </button>
 
                 <h3>Tags</h3>
-                <div style={styles.tagsContainer}>
-                    {availableTags.map(tag => (
-                        <label key={tag.id} style={styles.tagLabel}>
+                <div className="tags-container">
+                    {availableTags.map((tag) => (
+                        <label key={tag.id} className="tag-label">
                             <input
                                 type="checkbox"
                                 checked={tags.includes(tag.name)}
@@ -265,107 +281,40 @@ const ManageRecipePage = () => {
                 </div>
 
                 <div style={{display: 'flex', gap: '1rem', marginTop: '1rem'}}>
-                    <button type="button" onClick={handleDelete}
-                            style={{...styles.submitButton, backgroundColor: '#e76f51'}}>
+                    <button
+                        type="button"
+                        onClick={handleDelete}
+                        style={{backgroundColor: '#e76f51'}}
+                        className="submit-button"
+                    >
                         Delete
                     </button>
-                    <button type="submit" style={styles.submitButton}>Save</button>
+                    <button type="submit" className="submit-button">
+                        Save
+                    </button>
                 </div>
-                {error && <p style={styles.error}>{error}</p>}
+
+                {error && <p className="error">{error}</p>}
             </form>
 
-            <div style={styles.sidebar}>
-
-                {recipe && <RecipeCard recipe={{
-                    ...recipe,
-                    title,
-                    description,
-                    instructions,
-                    ingredients,
-                    tags
-                }} />}
+            <div className="sidebar">
+                {recipe && (
+                    <RecipeCard
+                        recipe={{
+                            ...recipe,
+                            title,
+                            description,
+                            instructions,
+                            ingredients,
+                            tags,
+                        }}
+                    />
+                )}
             </div>
         </div>
     );
 };
 
-const styles = {
-    container: {
-        display: 'flex',
-        gap: '40px',
-        padding: '20px',
-        fontFamily: 'Arial, sans-serif',
-        justifyContent: 'space-evenly',
-        flexWrap: 'wrap' as const,
-    },
-    form: {
-        flex: 1,
-        maxWidth: '650px',
-        display: 'flex',
-        flexDirection: 'column' as const,
-        minWidth: '400px'
-    },
-    input: {
-        marginBottom: '15px',
-        padding: '8px',
-        fontSize: '16px',
-    },
-    textarea: {
-        marginBottom: '15px',
-        padding: '8px',
-        fontSize: '16px',
-        minHeight: '80px',
-        resize: 'vertical' as const,
-    },
-    ingredientRow: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        marginBottom: '10px',
-        flexWrap: 'wrap' as const,
-    },
-    ingredientLabel: {
-        minWidth: '50px',
-    },
-    ingredientInput: {
-        flex: '1 1 150px',
-        padding: '6px',
-        fontSize: '14px',
-        color: 'black'
-    },
-    addButton: {
-        alignSelf: 'flex-start',
-        padding: '6px 12px',
-        marginBottom: '20px',
-        cursor: 'pointer',
-    },
-    tagsContainer: {
-        display: 'flex',
-        flexWrap: 'wrap' as const,
-        gap: '15px',
-        marginBottom: '20px',
-    },
-    tagLabel: {
-        cursor: 'pointer',
-        userSelect: 'none' as const,
-    },
-    submitButton: {
-        padding: '10px 20px',
-        fontSize: '16px',
-        cursor: 'pointer',
-    },
-    error: {
-        color: 'red',
-        marginTop: '15px',
-    },
-    sidebar: {
-        flex: 1,
-        maxWidth: '500px',
-        borderLeft: '1px solid #ccc',
-        paddingLeft: '20px',
-        minWidth: '300px'
-    }
-};
 
 export default ManageRecipePage;
 

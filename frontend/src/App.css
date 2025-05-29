@@ -131,3 +131,92 @@ input, textarea {
   border-radius: 8px;
   font-size: 1rem;
 }
+
+.recipe-form {
+  display: flex;
+  gap: 40px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.recipe-form form {
+  flex: 1;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+}
+
+.recipe-form input {
+  margin-bottom: 15px;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.recipe-form textarea {
+  margin-bottom: 15px;
+  padding: 8px;
+  font-size: 16px;
+  min-height: 80px;
+  resize: vertical;
+}
+
+.ingredient-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.ingredient-label {
+  min-width: 50px;
+}
+
+.ingredient-input {
+  flex: 1 1 150px;
+  padding: 6px;
+  font-size: 14px;
+  color: black;
+}
+
+.add-button {
+  align-self: flex-start;
+  padding: 6px 12px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.tag-label {
+  cursor: pointer;
+  user-select: none;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+  margin-top: 15px;
+}
+
+.sidebar {
+  flex: 1;
+  max-width: 500px;
+  border-left: 1px solid #ccc;
+  padding-left: 20px;
+  min-width: 300px;
+}
+

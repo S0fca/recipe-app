@@ -65,6 +65,8 @@ function App() {
                             <Route path="/add-recipe" element={isLoggedIn ? <AddRecipePage /> : <Navigate to="/login" />} />
                             <Route path="/manage-recipes" element={isLoggedIn ? <ManageRecipesPage /> : <Navigate to="/login" />} />
                             <Route path="/edit/:id" element={isLoggedIn ? <ManageRecipePage /> : <Navigate to="/login" />} />
+                            <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+                            <Route path="/register" element={<RegisterPage />} />
                         </>
                     )}
 

@@ -68,12 +68,11 @@ public class UserService {
      */
     public List<RecipeDTO> getUserFavouriteRecipes(String username) {
         Optional<User> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isEmpty()) return Collections.emptyList();
-
-        return userOpt.get().getFavoriteRecipes().stream().map(recipe -> {
-            RecipeDTO dto = RecipeDTO.GetRecipeDTO(recipe, userOpt.get());
+        return userOpt.map(user -> user.getFavoriteRecipes().stream().map(recipe -> {
+            RecipeDTO dto = RecipeDTO.GetRecipeDTO(recipe, user);
             return dto;
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList())).orElse(Collections.emptyList());
+
     }
 
 }

@@ -88,19 +88,28 @@ const AddRecipePage = () => {
             });
 
             if (!response.ok) {
-                const message = await response.text();
-                throw new Error(message);
+                const error = await response.json().then(error => error.error)
+                throw new Error(error);
             }
 
             navigate('/recipes');
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to add recipe');
+            if (err instanceof Error){
+                setError(err.message)
+                navigate("/login")
+            }
+            setError('Failed to add recipe');
         }
     };
 
     return (
-        <div style={styles.container}>
-            <form style={styles.form} onSubmit={e => { e.preventDefault(); handleSubmit(); }}>
+        <div className="recipe-form">
+            <form
+                onSubmit={e => {
+                    e.preventDefault();
+                    handleSubmit();
+                }}
+            >
                 <h1>Add Recipe</h1>
 
                 <label htmlFor="title">Title:</label>
@@ -109,63 +118,75 @@ const AddRecipePage = () => {
                     type="text"
                     placeholder="Pancakes"
                     value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    style={styles.input}
+                    onChange={e => setTitle(e.target.value)}
                 />
 
                 <label htmlFor="description">Description:</label>
                 <textarea
                     id="description"
-                    placeholder="A simple quick recipe. "
+                    placeholder="A simple quick recipe."
                     value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    style={styles.textarea}
+                    onChange={e => setDescription(e.target.value)}
                 />
 
                 <label htmlFor="instructions">Instructions:</label>
                 <textarea
                     id="instructions"
-                    placeholder="1. Mix all the ingredients together.
-2. ... "
+                    placeholder={`1. Mix all the ingredients together.\n2. ...`}
                     value={instructions}
-                    onChange={(e) => setInstructions(e.target.value)}
-                    style={styles.textarea}
+                    onChange={e => setInstructions(e.target.value)}
                 />
 
                 <h3>Ingredients</h3>
                 {ingredients.map((ingredient, index) => (
-                    <div key={index} style={styles.ingredientRow}>
+                    <div key={index} className="ingredient-row">
                         <div>
-                        <label htmlFor={`ingredient-name-${index}`} style={styles.ingredientLabel}>Name:</label>
-                        <input
-                            id={`ingredient-name-${index}`}
-                            type="text"
-                            placeholder="Eggs"
-                            value={ingredient.name}
-                            onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}
-                            style={styles.ingredientInput}
-                        />
+                            <label
+                                htmlFor={`ingredient-name-${index}`}
+                                className="ingredient-label"
+                            >
+                                Name:
+                            </label>
+                            <input
+                                id={`ingredient-name-${index}`}
+                                type="text"
+                                placeholder="Eggs"
+                                value={ingredient.name}
+                                onChange={e => handleIngredientChange(index, 'name', e.target.value)}
+                                className="ingredient-input"
+                            />
                         </div>
                         <div>
-                        <label htmlFor={`ingredient-quantity-${index}`} style={styles.ingredientLabel}>Quantity:</label>
-                        <input
-                            id={`ingredient-quantity-${index}`}
-                            type="text"
-                            placeholder="2 ks"
-                            value={ingredient.quantity}
-                            onChange={(e) => handleIngredientChange(index, 'quantity', e.target.value)}
-                            style={styles.ingredientInput}
-                        />
+                            <label
+                                htmlFor={`ingredient-quantity-${index}`}
+                                className="ingredient-label"
+                            >
+                                Quantity:
+                            </label>
+                            <input
+                                id={`ingredient-quantity-${index}`}
+                                type="text"
+                                placeholder="2 ks"
+                                value={ingredient.quantity}
+                                onChange={e => handleIngredientChange(index, 'quantity', e.target.value)}
+                                className="ingredient-input"
+                            />
                         </div>
-
                     </div>
                 ))}
-                <button type="button" onClick={handleAddIngredient} style={styles.addButton}>+ Add Ingredient</button>
+
+                <button
+                    type="button"
+                    onClick={handleAddIngredient}
+                    className="add-button"
+                >
+                    + Add Ingredient
+                </button>
 
                 <h3>Tags</h3>
-                <div style={styles.tagsContainer}>
+                <div className="tags-container">
                     {availableTags.map(tag => (
-                        <label key={tag.id} style={styles.tagLabel}>
+                        <label key={tag.id} className="tag-label">
                             <input
                                 type="checkbox"
                                 checked={tags.includes(tag.name)}
@@ -176,25 +197,25 @@ const AddRecipePage = () => {
                     ))}
                 </div>
 
-                <button type="submit" style={styles.submitButton}>Submit</button>
-                {error && <p style={styles.error}>{error}</p>}
+                <button type="submit" className="submit-button">Submit</button>
+
+                {error && <p className="error">{error}</p>}
             </form>
 
-            <div style={styles.sidebar}>
-
+            <div className="sidebar">
                 <div className="recipe-card">
-                    <div style={{display: "flex"}}>
+                    <div style={{display: 'flex'}}>
                         <h2>{title}</h2>
                     </div>
 
-                    {description ? (<h3>{description}</h3>) : null}
+                    {description && <h3>{description}</h3>}
 
                     <div>
                         <h4>Ingredients:</h4>
                         <ul>
                             {ingredients
-                                ?.filter(ri => ri.name.trim() !== '' || ri.quantity.trim() !== '')
-                                .map((ri) => (
+                                .filter(ri => ri.name.trim() !== '' || ri.quantity.trim() !== '')
+                                .map(ri => (
                                     <li key={ri.name + ri.quantity}>
                                         {ri.name} {ri.quantity}
                                     </li>
@@ -210,103 +231,29 @@ const AddRecipePage = () => {
                     </div>
 
                     <div style={{marginTop: '4px'}}>
-                        <small>Created by: {}</small>
+                        <small>Created by: user</small>
 
                         <div>
-                            {tags.map((tag) => (
-                                <span key={tag} style={{
-                                    marginRight: '8px',
-                                    padding: '2px 6px',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '4px'
-                                }}>
-                                        {tag}
-                                    </span>
+                            {tags.map(tag => (
+                                <span
+                                    key={tag}
+                                    style={{
+                                        marginRight: '8px',
+                                        padding: '2px 6px',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '4px',
+                                    }}
+                                >
+              {tag}
+            </span>
                             ))}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    );
-};
 
-const styles = {
-    container: {
-        display: 'flex',
-        gap: '40px',
-        padding: '20px',
-        fontFamily: 'Arial, sans-serif',
-        justifyContent: 'space-evenly',
-        flexWrap: 'wrap' as const,
-    },
-    form: {
-        flex: 1,
-        maxWidth: '650px',
-        display: 'flex',
-        flexDirection: 'column' as const,
-        minWidth: '400px'
-    },
-    input: {
-        marginBottom: '15px',
-        padding: '8px',
-        fontSize: '16px',
-    },
-    textarea: {
-        marginBottom: '15px',
-        padding: '8px',
-        fontSize: '16px',
-        minHeight: '80px',
-        resize: 'vertical' as const,
-    },
-    ingredientRow: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        marginBottom: '10px',
-        flexWrap: 'wrap' as const,
-    },
-    ingredientLabel: {
-        minWidth: '50px',
-    },
-    ingredientInput: {
-        flex: '1 1 150px',
-        padding: '6px',
-        fontSize: '14px',
-        color: 'black'
-    },
-    addButton: {
-        alignSelf: 'flex-start',
-        padding: '6px 12px',
-        marginBottom: '20px',
-        cursor: 'pointer',
-    },
-    tagsContainer: {
-        display: 'flex',
-        flexWrap: 'wrap' as const,
-        gap: '15px',
-        marginBottom: '20px',
-    },
-    tagLabel: {
-        cursor: 'pointer',
-        userSelect: 'none' as const,
-    },
-    submitButton: {
-        padding: '10px 20px',
-        fontSize: '16px',
-        cursor: 'pointer',
-    },
-    error: {
-        color: 'red',
-        marginTop: '15px',
-    },
-    sidebar: {
-        flex: 1,
-        maxWidth: '500px',
-        borderLeft: '1px solid #ccc',
-        paddingLeft: '20px',
-        minWidth: '300px'
-    }
+    );
 };
 
 export default AddRecipePage;

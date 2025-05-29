@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import RecipeCard from "./RecipeCard.tsx";
+import {useNavigate} from "react-router-dom";
 
 type RecipeIngredient = {
     id: number;
@@ -30,24 +31,37 @@ const SearchPage = () => {
     const [results, setResults] = useState<Recipe[]>([]);
     const [tags, setTags] = useState<string[]>([]);
     const [availableTags, setAvailableTags] = useState<Tag[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        fetch('http://localhost:8080/api/tags', {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-        })
-            .then(res => res.json())
-            .then((tags: Tag[]) => {
-                setAvailableTags(tags);
+            fetch('http://localhost:8080/api/tags', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
             })
-            .catch(() => {
-                setAvailableTags([]);
-                setTags([]);
-            });
+                .then(async res => {
+                    if (!res.ok) {
+                        const errorData = await res.json();
+                        throw new Error(errorData.error || 'Failed to fetch tags');
+                    }
+                    return res.json() as Promise<Tag[]>;
+                })
+                .then((tags: Tag[]) => {
+                    setAvailableTags(tags);
+                })
+                .catch((err) => {
+                    setAvailableTags([]);
+                    setTags([]);
+                    if (err instanceof Error){
+                        console.log(err.message)
+                        if (err.message == "Unauthorized path") {
+                            navigate("/login")
+                        }
+                    }
+                });
     }, []);
 
 
@@ -57,17 +71,26 @@ const SearchPage = () => {
         if (tags.length > 0) params.append('tags', tags.join(','));
         if (title) params.append('title', title);
 
-        const token = localStorage.getItem('token');
-
-        const response = await fetch(`http://localhost:8080/api/recipes/search?${params}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-        });
-        const data = await response.json();
-        setResults(data);
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:8080/api/recipes/search?${params}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                const error = await response.json().then(error => error.error)
+                throw new Error(error);
+            }
+            const data = await response.json();
+            setResults(data);
+        }catch (err) {
+            if (err instanceof Error && err.message == "Unauthorized path"){
+                navigate("/login")
+            }
+        }
     };
 
     const toggleTag = (tag: Tag) => {

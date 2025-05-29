@@ -27,36 +27,44 @@ const ManageRecipes = () => {
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState<string | null>(null);
 
-        useEffect(() => {
-            const fetchRecipes = async () => {
-                try {
-                    const token = localStorage.getItem('token');
+    useEffect(() => {
+        const fetchRecipes = async () => {
+            try {
+                const token = localStorage.getItem('token');
 
-                    const response = await fetch(`http://localhost:8080/api/recipes/user`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                        credentials: 'include',
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log(data);
-                        setRecipes(Array.isArray(data) ? data : []);
-                    } else {
-                        throw new Error('Failed to fetch recipes');
-                    }
+                const response = await fetch(`http://localhost:8080/api/recipes/user`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
 
-                } catch (err) {
-                    console.error('Validation error:', err);
-                    setError('Could not load recipes');
-                } finally {
-                    setLoading(false);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);
+                    setRecipes(Array.isArray(data) ? data : []);
+                } else {
+                    const error = await response.json()
+                    throw new Error(error?.error || 'Could not load recipes');
                 }
-            };
+            } catch (err) {
+                if (err instanceof Error){
+                    setError(err.message)
 
-            fetchRecipes();
-        }, []);
+                    if (err.message == "Unauthorized path") {
+                        navigate("/login")
+                    }
+                }else {
+                    setError('Could not load recipes');
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRecipes();
+    }, []);
 
     const handleEdit = (id: number) => {
         navigate(`/edit/${id}`);

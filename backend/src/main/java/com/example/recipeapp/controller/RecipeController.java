@@ -112,6 +112,14 @@ public class RecipeController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
     }
 
+    /**
+     * Searches recipes by provided user, title, and tags
+     * @param authentication authenticated user
+     * @param username username - createdBy
+     * @param tags tags
+     * @param title recipe title
+     * @return List of matching recipe DTO
+     */
     @GetMapping("/search")
     public List<RecipeDTO> searchRecipes(
             Authentication authentication,
@@ -120,19 +128,30 @@ public class RecipeController {
             @RequestParam(required = false) String title
     ) {
         User user = getAuthenticatedUser(authentication);
-        // Pokud není žádný tag, pošli null
         if (tags != null && tags.isEmpty()) {
             tags = null;
         }
         return recipeService.search(user, username, title, tags);
     }
 
+    /**
+     * Gets a recipe by id
+     * @param id recipe id
+     * @param authentication authenticated user
+     * @return recipe DTO by recipe id
+     */
     @GetMapping("/recipe/{id}")
-    public RecipeDTO getRecipeById(@PathVariable Long id, Authentication authentication) {
+    public RecipeDTO getUsersRecipeById(@PathVariable Long id, Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
-        return recipeService.getRecipe(user, id);
+        return recipeService.getUsersRecipeById(user, id);
     }
 
+    /**
+     * Deletes a recipe by id
+     * @param id recipe to delete id
+     * @param authentication authenticated user
+     * @return whether the recipe was deleted successfully
+     */
     @DeleteMapping("/recipe/{id}")
     public ResponseEntity<?> deleteRecipeById(@PathVariable Long id, Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
@@ -140,6 +159,12 @@ public class RecipeController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Updates an existing recipe
+     * @param recipeDTO updated recipe
+     * @param authentication authenticated user
+     * @return whether the recipe was updated successfully
+     */
     @PutMapping
     public ResponseEntity<?> updateRecipe(@RequestBody RecipeDTO recipeDTO, Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
