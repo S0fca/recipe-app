@@ -102,6 +102,14 @@ const AddRecipePage = () => {
         }
     };
 
+    const handleRemoveIngredient = (index: number) => {
+        setIngredients(prev => prev.filter((_, i) => i !== index));
+    };
+
+    function handleCancel() {
+        navigate("/manage-recipes")
+    }
+
     return (
         <div className="recipe-form">
             <form
@@ -113,20 +121,25 @@ const AddRecipePage = () => {
                 <h1>Add Recipe</h1>
 
                 <label htmlFor="title">Title:</label>
+                <small>{title.length}/100 characters</small>
                 <input
                     id="title"
                     type="text"
                     placeholder="Pancakes"
                     value={title}
                     onChange={e => setTitle(e.target.value)}
+                    maxLength={100}
+                    minLength={2}
                 />
 
                 <label htmlFor="description">Description:</label>
+                <small>{description.length}/255 characters</small>
                 <textarea
                     id="description"
                     placeholder="A simple quick recipe."
                     value={description}
                     onChange={e => setDescription(e.target.value)}
+                    maxLength={255}
                 />
 
                 <label htmlFor="instructions">Instructions:</label>
@@ -135,6 +148,7 @@ const AddRecipePage = () => {
                     placeholder={`1. Mix all the ingredients together.\n2. ...`}
                     value={instructions}
                     onChange={e => setInstructions(e.target.value)}
+                    maxLength={10000}
                 />
 
                 <h3>Ingredients</h3>
@@ -154,6 +168,7 @@ const AddRecipePage = () => {
                                 value={ingredient.name}
                                 onChange={e => handleIngredientChange(index, 'name', e.target.value)}
                                 className="ingredient-input"
+                                maxLength={255}
                             />
                         </div>
                         <div>
@@ -170,8 +185,23 @@ const AddRecipePage = () => {
                                 value={ingredient.quantity}
                                 onChange={e => handleIngredientChange(index, 'quantity', e.target.value)}
                                 className="ingredient-input"
+                                maxLength={255}
                             />
                         </div>
+                        <button
+                            type="button"
+                            onClick={() => handleRemoveIngredient(index)}
+                            className={"delete-button"}
+                            style={{
+                                marginLeft: '8px',
+                                border: 'none',
+                                borderRadius: '4px',
+                                padding: '4px 8px',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            ✖
+                        </button>
                     </div>
                 ))}
 
@@ -197,9 +227,15 @@ const AddRecipePage = () => {
                     ))}
                 </div>
 
-                <button type="submit" className="submit-button">Submit</button>
-
                 {error && <p className="error">{error}</p>}
+
+                <div style={{display: 'flex', gap: '1rem', marginTop: '1rem'}}>
+                    <button type="button" className="submit-button, cancel-button" onClick={handleCancel}>
+                        Cancel
+                    </button>
+                    <button type="submit" className="form-button">Submit</button>
+                </div>
+
             </form>
 
             <div className="sidebar">

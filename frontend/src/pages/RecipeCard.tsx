@@ -103,12 +103,13 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick }: RecipeCardPr
                     <small>Created by: {recipe.createdByUsername}</small>
 
                     {Array.isArray(recipe.tags) && recipe.tags.length > 0 ? (
-                        <div style={{ marginTop: '16px' }}>
+                        <div style={{ marginTop: '16px', display: 'flex', flexWrap: 'wrap', gap: '4px'}}>
                             {recipe.tags.map((tag) => (
                                 <span
                                     key={tag}
                                     style={{
-                                        marginRight: '8px',
+                                        whiteSpace: 'nowrap',
+                                        margin: '2px',
                                         padding: '2px 6px',
                                         border: '1px solid #ccc',
                                         borderRadius: '4px',

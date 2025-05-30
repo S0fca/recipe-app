@@ -167,6 +167,10 @@ const ManageRecipePage = () => {
 
     if (!recipe) return <p>Loading...</p>;
 
+    function handleCancel() {
+        navigate("/manage-recipes")
+    }
+
     return (
         <div className="recipe-form">
             <form
@@ -178,20 +182,25 @@ const ManageRecipePage = () => {
                 <h1>Edit Recipe: {recipe.title}</h1>
 
                 <label htmlFor="title">Title:</label>
+                <small>{title.length}/100 characters</small>
                 <input
                     id="title"
                     type="text"
                     placeholder="Pancakes"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    maxLength={100}
+                    minLength={2}
                 />
 
                 <label htmlFor="description">Description:</label>
+                <small>{description.length}/255 characters</small>
                 <textarea
                     id="description"
                     placeholder="A simple quick recipe."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    maxLength={255}
                 />
 
                 <label htmlFor="instructions">Instructions:</label>
@@ -200,6 +209,7 @@ const ManageRecipePage = () => {
                     placeholder={`1. Mix all the ingredients together.\n2. ...`}
                     value={instructions}
                     onChange={(e) => setInstructions(e.target.value)}
+                    maxLength={10000}
                 />
 
                 <h3>Ingredients</h3>
@@ -244,10 +254,9 @@ const ManageRecipePage = () => {
                         <button
                             type="button"
                             onClick={() => handleRemoveIngredient(index)}
+                            className={"delete-button"}
                             style={{
                                 marginLeft: '8px',
-                                backgroundColor: '#e76f51',
-                                color: 'white',
                                 border: 'none',
                                 borderRadius: '4px',
                                 padding: '4px 8px',
@@ -280,21 +289,24 @@ const ManageRecipePage = () => {
                     ))}
                 </div>
 
+                {error && <p className="error">{error}</p>}
+
                 <div style={{display: 'flex', gap: '1rem', marginTop: '1rem'}}>
                     <button
                         type="button"
                         onClick={handleDelete}
-                        style={{backgroundColor: '#e76f51'}}
-                        className="submit-button"
+                        className="form-button, delete-button"
                     >
                         Delete
                     </button>
-                    <button type="submit" className="submit-button">
+                    <button type="button" className="form-button, cancel-button" onClick={handleCancel}>
+                        Cancel
+                    </button>
+                    <button type="submit" className="form-button">
                         Save
                     </button>
                 </div>
 
-                {error && <p className="error">{error}</p>}
             </form>
 
             <div className="sidebar">
