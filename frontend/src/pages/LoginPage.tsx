@@ -20,11 +20,8 @@ export default function LoginPage({ setIsLoggedIn }: { setIsLoggedIn: (v: boolea
             });
 
             if (!response.ok) {
-                if (response.status === 401) {
-                    throw new Error('Invalid username or password');
-                } else {
-                    throw new Error('Login failed');
-                }
+                const error = await response.json().then(error => error.error)
+                throw new Error(error);
             }
 
             const data = await response.json();
@@ -36,7 +33,9 @@ export default function LoginPage({ setIsLoggedIn }: { setIsLoggedIn: (v: boolea
 
             if (error.message.includes('Failed to fetch')) {
                 setError('Cannot connect to server. ');
-            } else {
+            } else if(error.message.includes("Invalid credentials")){
+                setError("Invalid username or password.")
+            }else {
                 setError(error.message || 'Unknown error');
             }
         }

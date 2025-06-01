@@ -10,6 +10,7 @@ import com.example.recipeapp.repository.RecipeRepository;
 import com.example.recipeapp.repository.TagRepository;
 import com.example.recipeapp.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -138,6 +139,8 @@ public class RecipeService {
         if (!(recipe.getCreatedBy().getUsername().equals(user.getUsername()))) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
+
+        userRepository.deleteRecipeFromFavorites(id);
         recipeRepository.deleteById(id);
     }
 
@@ -156,6 +159,7 @@ public class RecipeService {
      * @param user updating user
      * @throws ResponseStatusException when the recipe isn't created by specified user
      */
+    @Transactional
     public void updateRecipe(RecipeDTO updatedRecipe, User user) throws ResponseStatusException {
         // Find recipe in db
         Recipe recipe = recipeRepository.findById(updatedRecipe.getId())

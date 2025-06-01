@@ -18,4 +18,7 @@ public class Tag {
 
     private String name;
 
+    public Tag(String tagName) {
+        this.name = tagName;
+    }
 }

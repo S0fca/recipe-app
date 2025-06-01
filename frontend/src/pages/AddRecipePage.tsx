@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import {useEffect, useState} from "react";
+import RecipeCard from "./RecipeCard.tsx";
 
 type RecipeIngredient = {
+    id: number;
     name: string;
     quantity: string;
 };
@@ -17,7 +19,7 @@ const AddRecipePage = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [instructions, setInstructions] = useState('');
-    const [ingredients, setIngredients] = useState<RecipeIngredient[]>([{ name: '', quantity: '' }]);
+    const [ingredients, setIngredients] = useState<RecipeIngredient[]>([{id: 0, name: '', quantity: '' }]);
     const [tags, setTags] = useState<string[]>([]);
     const [availableTags, setAvailableTags] = useState<Tag[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -42,7 +44,7 @@ const AddRecipePage = () => {
     }, []);
 
     const handleAddIngredient = () => {
-        setIngredients([...ingredients, { name: '', quantity: '' }]);
+        setIngredients([...ingredients, { id: 0, name: '', quantity: '' }]);
     };
 
     const handleIngredientChange = (index: number, field: 'name' | 'quantity', value: string) => {
@@ -83,7 +85,6 @@ const AddRecipePage = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                //credentials: 'include',
                 body: JSON.stringify(recipe)
             });
 
@@ -94,11 +95,12 @@ const AddRecipePage = () => {
 
             navigate('/recipes');
         } catch (err) {
-            if (err instanceof Error){
-                setError(err.message)
-                navigate("/login")
+            if (err instanceof Error) {
+                setError(err.message);
+                if (err.message.includes("Unauthorized")) {
+                    navigate("/login");
+                }
             }
-            setError('Failed to add recipe');
         }
     };
 
@@ -230,7 +232,7 @@ const AddRecipePage = () => {
                 {error && <p className="error">{error}</p>}
 
                 <div style={{display: 'flex', gap: '1rem', marginTop: '1rem'}}>
-                    <button type="button" className="submit-button, cancel-button" onClick={handleCancel}>
+                    <button type="button" className="submit-button cancel-button" onClick={handleCancel}>
                         Cancel
                     </button>
                     <button type="submit" className="form-button">Submit</button>
@@ -239,53 +241,20 @@ const AddRecipePage = () => {
             </form>
 
             <div className="sidebar">
-                <div className="recipe-card">
-                    <div style={{display: 'flex'}}>
-                        <h2>{title}</h2>
-                    </div>
 
-                    {description && <h3>{description}</h3>}
+                    <RecipeCard
+                        recipe={{
+                            id: 0,
+                            title,
+                            description,
+                            instructions,
+                            ingredients,
+                            tags,
+                            createdByUsername: "user",
+                            favourite: false
+                    }}
+                    />
 
-                    <div>
-                        <h4>Ingredients:</h4>
-                        <ul>
-                            {ingredients
-                                .filter(ri => ri.name.trim() !== '' || ri.quantity.trim() !== '')
-                                .map(ri => (
-                                    <li key={ri.name + ri.quantity}>
-                                        {ri.name} {ri.quantity}
-                                    </li>
-                                ))}
-                        </ul>
-                    </div>
-
-                    <h4>Instructions:</h4>
-                    <div>
-                        {instructions.split('\n').map((line, index) => (
-                            <p key={index}>{line}</p>
-                        ))}
-                    </div>
-
-                    <div style={{marginTop: '4px'}}>
-                        <small>Created by: user</small>
-
-                        <div>
-                            {tags.map(tag => (
-                                <span
-                                    key={tag}
-                                    style={{
-                                        marginRight: '8px',
-                                        padding: '2px 6px',
-                                        border: '1px solid #ccc',
-                                        borderRadius: '4px',
-                                    }}
-                                >
-              {tag}
-            </span>
-                            ))}
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 

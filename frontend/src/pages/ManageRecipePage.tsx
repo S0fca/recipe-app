@@ -319,6 +319,8 @@ const ManageRecipePage = () => {
                             instructions,
                             ingredients,
                             tags,
+                            createdByUsername: "user",
+                            favourite: false
                         }}
                     />
                 )}

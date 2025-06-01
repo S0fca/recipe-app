@@ -47,4 +47,18 @@ public class Recipe {
     )
     private Set<Tag> tags = new HashSet<>();
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Recipe)) return false;
+        Recipe recipe = (Recipe) o;
+        return id != null && id.equals(recipe.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
 }
