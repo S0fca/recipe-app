@@ -1,28 +1,7 @@
 import {useEffect, useState} from "react";
-import RecipeCard from "./RecipeCard.tsx";
+import RecipeCard from "../components/RecipeCard.tsx";
 import {useNavigate} from "react-router-dom";
-
-type RecipeIngredient = {
-    id: number;
-    name: string;
-    quantity: string;
-};
-
-type Recipe = {
-    id: number;
-    title: string;
-    description: string;
-    instructions: string;
-    createdByUsername: string;
-    tags: string[];
-    ingredients: RecipeIngredient[];
-    favourite: boolean;
-};
-
-type Tag = {
-    id: number;
-    name: string;
-}
+import type {Recipe, Tag} from "../types.ts";
 
 const SearchPage = () => {
 
@@ -30,6 +9,7 @@ const SearchPage = () => {
     const [title, setTitle] = useState('');
     const [results, setResults] = useState<Recipe[]>([]);
     const [tags, setTags] = useState<string[]>([]);
+
     const [availableTags, setAvailableTags] = useState<Tag[]>([]);
     const navigate = useNavigate();
 
@@ -135,16 +115,6 @@ const SearchPage = () => {
                     ))
                 )}
             </div>
-
-
-            {/*
-
-        Title
-        Tag
-        User
-
-        */}
-
         </div>
     )
 }

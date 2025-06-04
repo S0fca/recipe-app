@@ -1,21 +1,5 @@
 import {useState} from "react";
-
-type RecipeIngredient = {
-    id: number;
-    name: string;
-    quantity: string;
-};
-
-type Recipe = {
-    id: number;
-    title: string;
-    description: string;
-    instructions: string;
-    createdByUsername: string;
-    tags: string[];
-    ingredients: RecipeIngredient[];
-    favourite: boolean;
-};
+import type { Recipe } from "../types.ts";
 
 type RecipeCardProps = {
     recipe: Recipe;
@@ -78,8 +62,8 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick }: RecipeCardPr
                 <ul>
                     {recipe.ingredients.map((ri, index) =>
                             (ri.name || ri.quantity) ? (
-                                <li key={`${ri.id ?? `new-${index}`}`}>
-                                    {ri.name} – {ri.quantity}
+                                <li key={ri.id !== undefined && ri.id !== 0 ? ri.id : `new-${index}`}>
+                                    {ri.name} {(ri.quantity) ? "–" : null} {ri.quantity}
                                 </li>
                             ) : null
                         )
@@ -156,7 +140,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick }: RecipeCardPr
                     </div>
                 </div>
             </div>
-            );
-            };
+    );
+};
 
             export default RecipeCard;

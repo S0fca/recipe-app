@@ -15,6 +15,7 @@ import ManageRecipePage from "./pages/ManageRecipePage.tsx";
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
+    //checks if the saved token is valid
     async function isAuthenticated(): Promise<boolean> {
         const token = localStorage.getItem('token');
         if (!token) return false;
@@ -33,6 +34,7 @@ function App() {
         }
     }
 
+    // On component load, check auth and set isLoggedIn
     useEffect(() => {
         const checkAuth = async () => {
             const valid = await isAuthenticated();
@@ -41,6 +43,7 @@ function App() {
         checkAuth();
     }, []);
 
+    //if logged in is null return message
     if (isLoggedIn === null) {
         return <div>Checking authentication...</div>;
     }
@@ -75,6 +78,7 @@ function App() {
     );
 }
 
+//based on whether the user is logged in and which page they're on return different navigation
 function Layout({ isLoggedIn }: { isLoggedIn: boolean }) {
     const location = useLocation();
     const navigate = useNavigate();
@@ -85,6 +89,12 @@ function Layout({ isLoggedIn }: { isLoggedIn: boolean }) {
 
     const register = () => {
         navigate('/register');
+    };
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+        window.location.reload();
     };
 
     if (location.pathname === "/login"){
@@ -111,12 +121,6 @@ function Layout({ isLoggedIn }: { isLoggedIn: boolean }) {
             </div>
         )
     }
-
-    const logout = () => {
-        localStorage.removeItem('token');
-        navigate('/login');
-        window.location.reload();
-    };
 
     return (
         <header>

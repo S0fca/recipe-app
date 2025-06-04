@@ -1,23 +1,7 @@
 import {useEffect, useState} from "react";
-import RecipeCard from "./RecipeCard.tsx";
+import RecipeCard from "../components/RecipeCard.tsx";
 import {useNavigate} from "react-router-dom";
-
-type RecipeIngredient = {
-    id: number;
-    name: string;
-    quantity: string;
-};
-
-type Recipe = {
-    id: number;
-    title: string;
-    description: string;
-    instructions: string;
-    createdByUsername: string;
-    tags: string[];
-    ingredients: RecipeIngredient[];
-    favourite: boolean;
-};
+import type { Recipe } from "../types.ts";
 
 const FavoritesPage = () => {
         const [recipes, setRecipes] = useState<Recipe[]>([]);

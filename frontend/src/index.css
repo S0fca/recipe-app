@@ -14,19 +14,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 html, body, #root {
   height: 100%;
   width: 100%;
-}
-
-a {
-  font-weight: 500;
-  color: #e76f51;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #bc4c2e;
 }
 
 body {
@@ -38,6 +28,7 @@ body {
   box-sizing: border-box;
 }
 
+
 h1 {
   font-size: 3em;
   line-height: 1.1;
@@ -48,6 +39,17 @@ h1 {
     font-size: 2em;
   }
 }
+
+
+a {
+  font-weight: 500;
+  color: #e76f51;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #bc4c2e;
+}
+
 
 button {
   border-radius: 8px;

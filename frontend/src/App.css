@@ -4,6 +4,7 @@
   padding: 2rem;
 }
 
+/*nav*/
 header nav {
   font-size: 1.3rem;
   color: #f4a261;
@@ -20,6 +21,7 @@ header nav button {
   font-weight: bold;
   transition: background-color 0.2s ease;
 }
+
 head nav button:hover {
   background-color: #e76f51;
 }
@@ -48,6 +50,8 @@ header nav div {
   }
 }
 
+
+/*homepage*/
 .homepage-container {
   padding: 2rem;
   text-align: center;
@@ -87,7 +91,7 @@ header nav div {
   background-color: #e76f51;
   color: white;
 }
-
+/*homepage card*/
 .card {
   background-color: #f8e8d6;
   border-radius: 12px;
@@ -110,6 +114,8 @@ header nav div {
   color: #1a1a1a;
 }
 
+
+/*recipe card*/
 .recipe-card {
   background-color: #f8e8d6;
   border-radius: 12px;
@@ -144,6 +150,7 @@ header nav div {
   padding-right: 10px;
 }
 
+/*recipe container*/
 .recipes-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
@@ -163,6 +170,7 @@ header nav div {
   }
 }
 
+/*login, register*/
 .login {
   align-content: center;
   text-align: center;
@@ -181,6 +189,8 @@ input, textarea {
   font-size: 1rem;
 }
 
+
+/*add, edit recipe form*/
 .recipe-form {
   display: flex;
   gap: 40px;

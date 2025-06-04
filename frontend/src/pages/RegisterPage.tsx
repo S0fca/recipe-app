@@ -43,7 +43,6 @@ export default function RegisterPage() {
         }
     };
 
-
     return (
         <div className="login">
             <h1>Create Account</h1>

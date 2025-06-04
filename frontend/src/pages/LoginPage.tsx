@@ -41,11 +41,6 @@ export default function LoginPage({ setIsLoggedIn }: { setIsLoggedIn: (v: boolea
         }
     };
 
-    // const handleLogin = async () => {
-    //     setIsLoggedIn(true);
-    //     navigate('/');
-    // };
-
     return (
         <div className="login">
             <h1>Log in</h1>
