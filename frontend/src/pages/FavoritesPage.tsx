@@ -9,6 +9,7 @@ const FavoritesPage = () => {
         const [error, setError] = useState<string | null>(null);
         const navigate = useNavigate();
 
+        //fetch all user favorite recipes
         useEffect(() => {
             const fetchRecipes = async () => {
                 try {
@@ -59,7 +60,6 @@ const FavoritesPage = () => {
                         <RecipeCard key={recipe.id} recipe={recipe}/>
                     )}
                 </div>
-
 
             </div>
         )

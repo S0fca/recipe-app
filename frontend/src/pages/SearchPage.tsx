@@ -13,6 +13,7 @@ const SearchPage = () => {
     const [availableTags, setAvailableTags] = useState<Tag[]>([]);
     const navigate = useNavigate();
 
+    //fetch all available tags
     useEffect(() => {
         const token = localStorage.getItem('token');
             fetch('http://localhost:8080/api/tags', {
@@ -44,7 +45,7 @@ const SearchPage = () => {
                 });
     }, []);
 
-
+    //fetch recipes that match parameters
     const handleSearch = async () => {
         const params = new URLSearchParams();
         if (username) params.append('username', username);
@@ -73,6 +74,7 @@ const SearchPage = () => {
         }
     };
 
+    //add or delete tags from selected tags
     const toggleTag = (tag: Tag) => {
         setTags(tags.includes(tag.name)
             ? tags.filter(t => t !== tag.name)

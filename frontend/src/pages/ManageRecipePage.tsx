@@ -8,6 +8,7 @@ const ManageRecipePage = () => {
     const { id } = useParams();
     const [recipe, setRecipe] = useState<Recipe | null>(null);
 
+    //fetch a recipe by id
     useEffect(() => {
         const token = localStorage.getItem('token');
 

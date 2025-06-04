@@ -9,6 +9,7 @@ const RecipesPage = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
+    //fetch all recipes
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
@@ -43,19 +44,17 @@ const RecipesPage = () => {
         fetchRecipes();
     }, []);
 
-        return (
-            <div>
-                <h1>Recipes</h1>
-                {loading && <p>Loading...</p>}
-                {error && <p style={{color: 'red'}}>{error}</p>}
-                <div className="recipes-container">
-                    {recipes.map((recipe) => (
-                        <RecipeCard key={recipe.id} recipe={recipe}/>
-                    ))}
-                </div>
-
+    return (
+        <div>
+            <h1>Recipes</h1>
+            {loading && <p>Loading...</p>}
+            {error && <p style={{color: 'red'}}>{error}</p>}
+            <div className="recipes-container">
+                {recipes.map((recipe) => (
+                    <RecipeCard key={recipe.id} recipe={recipe}/>
+                ))}
             </div>
-        )
-    }
-;
+        </div>
+    )
+};
 export default RecipesPage;

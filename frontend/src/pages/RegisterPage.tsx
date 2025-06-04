@@ -8,6 +8,8 @@ export default function RegisterPage() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
 
+    //handle user registration
+    // - register (username, password)
     const handleRegister = async () => {
         setError(null);
 

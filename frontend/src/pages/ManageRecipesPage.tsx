@@ -7,9 +7,10 @@ const ManageRecipes = () => {
     const navigate = useNavigate();
 
     const [recipes, setRecipes] = useState<Recipe[]>([]);
-        const [loading, setLoading] = useState(true);
-        const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
+    //fetch all users recipes
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
@@ -49,6 +50,7 @@ const ManageRecipes = () => {
         fetchRecipes();
     }, []);
 
+    //navigate to edit page (onClick)
     const handleEdit = (id: number) => {
         navigate(`/edit/${id}`);
     };
