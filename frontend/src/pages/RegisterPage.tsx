@@ -37,34 +37,46 @@ export default function RegisterPage() {
             }
             navigate('/login');
         } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('Unknown error occurred');
+
+            const error = err as Error;
+
+            if (error.message.includes('Failed to fetch')) {
+                setError('Cannot connect to server. ');
+            } else if(error.message.includes("Username is already taken")){
+                setError("Username is already taken")
+            }else {
+                setError(error.message || 'Unknown error');
             }
+
         }
     };
 
     return (
-        <div className="login">
+        <form
+            className="login"
+            onSubmit={(e) => {
+                e.preventDefault();
+                handleRegister();
+            }}
+        >
             <h1>Create Account</h1>
             <input
                 type="text"
                 placeholder="Name"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-            /><br />
+            /><br/>
             <input
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-            /><br />
-            <button onClick={handleRegister}>Register</button>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            /><br/>
+            <button type="submit">Register</button>
+            {error && <p style={{color: 'red'}}>{error}</p>}
             <p>
                 Already have an account? <a href="/login">Log in</a>
             </p>
-        </div>
+        </form>
     );
 }
