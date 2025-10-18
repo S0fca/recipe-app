@@ -3,6 +3,9 @@ import RecipeCard from "../components/RecipeCard.tsx";
 import {useNavigate} from "react-router-dom";
 import type { Recipe } from "../types.ts";
 
+import {api} from "../api/axios";
+import { AxiosError } from "axios";
+
 const FavoritesPage = () => {
         const [recipes, setRecipes] = useState<Recipe[]>([]);
         const [loading, setLoading] = useState(true);
@@ -11,41 +14,32 @@ const FavoritesPage = () => {
 
         //fetch all user favorite recipes
         useEffect(() => {
-            const fetchRecipes = async () => {
+            const fetchFavourites = async () => {
                 try {
-                    const token = localStorage.getItem('token');
-
-                    const response = await fetch(`http://localhost:8080/api/users/favourites`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                        credentials: 'include',
+                    const res = await api.get("/api/users/favourites", {
+                        withCredentials: true,
                     });
-                    if (!response.ok) {
-                        const error = await response.json().then(error => error.error)
-                        throw new Error(error);
-                    }
-                    const data = await response.json();
-                    console.log(data);
-                    setRecipes(Array.isArray(data) ? data : []);
+
+                    setRecipes(Array.isArray(res.data) ? res.data : []);
+                    console.log(res.data);
 
                 } catch (err) {
-                    if (err instanceof Error){
-                        setError(err.message)
+                    if (err instanceof AxiosError) {
+                        const errorMsg = err.response?.data?.error || "Could not load recipes";
+                        setError(errorMsg);
 
-                        if (err.message == "Unauthorized path") {
-                            navigate("/login")
+                        if (err.response?.status === 401 || errorMsg === "Unauthorized path") {
+                            navigate("/login");
                         }
-                    }else {
-                        setError('Could not load recipes');
+                    } else {
+                        setError("Could not connect to server");
                     }
                 } finally {
                     setLoading(false);
                 }
             };
 
-            fetchRecipes();
+            fetchFavourites();
         }, []);
 
         return (

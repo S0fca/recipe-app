@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RecipeCard from "./RecipeCard";
 import type { Recipe, RecipeIngredient, Tag } from "../types.ts";
+import {api} from "../api/axios";
+import { AxiosError } from "axios";
 
 type RecipeFormProps = {
     recipe?: Recipe;
@@ -32,23 +34,21 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
 
     //set all available tags
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        fetch('http://localhost:8080/api/tags', {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-        })
-            .then(res => res.json())
-            .then((tags: Tag[]) => {
-                setAvailableTags(tags);
-            })
-            .catch(() => {
+        const fetchTags = async () => {
+            try {
+                const res = await api.get<Tag[]>("/api/tags", {
+                    withCredentials: true,
+                });
+                setAvailableTags(res.data);
+            } catch {
                 setAvailableTags([]);
                 setTags([]);
-            });
+            }
+        };
+
+        fetchTags();
     }, []);
+
 
     //adds new ingredient to list
     const handleAddIngredient = () => {
@@ -82,23 +82,21 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
     //delete button - delete recipe based on id
     const handleDelete = async () => {
         if (!window.confirm('Are you sure you want to delete this recipe?')) return;
-        const token = localStorage.getItem('token');
+
         try {
-            const res = await fetch(`http://localhost:8080/api/recipes/recipe/${recipeId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+            await api.delete(`/api/recipes/recipe/${recipeId}`, {
+                withCredentials: true,
             });
-            if (res.ok) {
-                navigate('/manage-recipes');
-            } else {
-                throw new Error('Failed to delete recipe');
-            }
+            navigate('/manage-recipes');
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to delete');
+            if (err instanceof AxiosError) {
+                setError(err.response?.data?.error || 'Failed to delete recipe');
+            } else {
+                setError('Failed to delete recipe');
+            }
         }
     };
+
 
     //submit button, add/update recipe
     const handleSubmit = async () => {
@@ -115,32 +113,25 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
             description,
             instructions,
             ingredients: ingredients.filter(i => i.name),
-            tags
+            tags,
         };
 
         try {
-            const token = localStorage.getItem('token');
-
-            const response = await fetch('http://localhost:8080/api/recipes', {
-                method: mode === "edit" ? 'PUT' : 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                credentials: 'include',
-                body: JSON.stringify(newRecipe)
-            });
-
-            if (response.ok) {
-                navigate('/manage-recipes');
+            if (mode === "edit") {
+                await api.put(`/api/recipes`, newRecipe, { withCredentials: true });
             } else {
-                const message = await response.text();
-                throw new Error(message);
+                await api.post(`/api/recipes`, newRecipe, { withCredentials: true });
             }
+            navigate('/manage-recipes');
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to save recipe');
+            if (err instanceof AxiosError) {
+                setError(err.response?.data?.error || 'Failed to save recipe');
+            } else {
+                setError('Failed to save recipe');
+            }
         }
     };
+
 
     return (
         <div className="recipe-form">

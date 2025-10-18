@@ -1,6 +1,9 @@
 import {useState} from "react";
 import type { Recipe } from "../types.ts";
 
+import {api} from "../api/axios";
+import { AxiosError } from "axios";
+
 type RecipeCardProps = {
     recipe: Recipe;
     onClick?: () => void;
@@ -10,42 +13,40 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick }: RecipeCardPr
     const [isFavourite, setIsFavourite] = useState(recipe.favourite);
 
     const handleAddToFavourites = async () => {
-            try {
-                const token = localStorage.getItem('token');
+        try {
+            await api.post(`/api/recipes/${recipe.id}/favourite`, {}, {
+                withCredentials: true,
+            });
 
-                await fetch(`http://localhost:8080/api/recipes/${recipe.id}/favourite`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({}),
-                });
+            setIsFavourite(true);
+            recipe.favourite = true;
 
-                setIsFavourite(true);
-                recipe.favourite = true;
-            } catch (error) {
-                console.error("Chyba při přidávání do oblíbených:", error);
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                console.error("Chyba při přidávání do oblíbených:", err.response?.data?.error || err.message);
+            } else {
+                console.error("Chyba při přidávání do oblíbených:", err);
             }
         }
+    };
 
-    const handleRemoveFromFavourites= async () => {
+    const handleRemoveFromFavourites = async () => {
         try {
-            const token = localStorage.getItem('token');
-
-            await fetch(`http://localhost:8080/api/recipes/${recipe.id}/favourite`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
+            await api.delete(`/api/recipes/${recipe.id}/favourite`, {
+                withCredentials: true,
             });
+
             setIsFavourite(false);
             recipe.favourite = false;
-        } catch (error) {
-            console.error("Chyba při odebírání z oblíbených:", error);
+
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                console.error("Chyba při odebírání z oblíbených:", err.response?.data?.error || err.message);
+            } else {
+                console.error("Chyba při odebírání z oblíbených:", err);
+            }
         }
-    }
+    };
 
     return (
         <div key={recipe.id} className="recipe-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>

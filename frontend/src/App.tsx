@@ -12,6 +12,9 @@ import RegisterPage from "./pages/RegisterPage.tsx";
 import ManageRecipesPage from "./pages/ManageRecipesPage.tsx";
 import ManageRecipePage from "./pages/ManageRecipePage.tsx";
 
+import { api } from "./api/axios";
+
+
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
@@ -21,15 +24,10 @@ function App() {
         if (!token) return false;
 
         try {
-            const res = await fetch('http://localhost:8080/api/users/validate', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            return res.ok;
+            const res = await api.get("/api/users/validate");
+            return res.status === 200;
         } catch (err) {
-            console.error('Validation error:', err);
+            console.error("Validation error:", err);
             return false;
         }
     }

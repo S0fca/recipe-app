@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import RecipeCard from "../components/RecipeCard.tsx";
 import {useNavigate} from "react-router-dom";
 import type {Recipe} from "../types.ts";
+import {api} from "../api/axios";
+import {AxiosError} from "axios";
 
 const RecipesPage = () => {
     const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -13,29 +15,18 @@ const RecipesPage = () => {
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
-                const token = localStorage.getItem('token');
-
-                const response = await fetch('http://localhost:8080/api/recipes', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
-                if (!response.ok) {
-                    const error = await response.json().then(error => error.error)
-                    throw new Error(error);
-                }
-                const data = await response.json();
-                setRecipes(data);
+                const res = await api.get("/api/recipes");
+                setRecipes(res.data);
             } catch (err) {
-                if (err instanceof Error){
-                    setError(err.message)
+                if (err instanceof AxiosError) {
+                    const errorMsg = err.response?.data?.error || "Could not load recipes";
+                    setError(errorMsg);
 
-                    if (err.message == "Unauthorized path") {
-                        navigate("/login")
+                    if (err.response?.status === 401 || errorMsg === "Unauthorized path") {
+                        navigate("/login");
                     }
-                }else {
-                    setError('Could not load recipes');
+                } else {
+                    setError("Could not connect to server");
                 }
             } finally {
                 setLoading(false);

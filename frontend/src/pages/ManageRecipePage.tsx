@@ -3,34 +3,44 @@ import {useEffect, useState} from "react";
 import type {Recipe} from "../types.ts";
 import RecipeForm from "../components/RecipeForm.tsx";
 
+import {api} from "../api/axios";
+import { AxiosError } from "axios";
+
 const ManageRecipePage = () => {
-
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
     const [recipe, setRecipe] = useState<Recipe | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
-    //fetch a recipe by id
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        if (!id) return;
 
-        fetch(`http://localhost:8080/api/recipes/recipe/${id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-        })
-            .then(res => res.json())
-            .then(setRecipe);
+        const fetchRecipe = async () => {
+            try {
+                const res = await api.get<Recipe>(`/api/recipes/recipe/${id}`, {
+                    withCredentials: true,
+                });
+                setRecipe(res.data);
+            } catch (err) {
+                if (err instanceof AxiosError) {
+                    setError(err.response?.data?.error || "Could not load recipe");
+                } else {
+                    setError("Could not connect to server");
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRecipe();
     }, [id]);
 
     if (!id) return <p>Missing recipe ID</p>;
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
+    if (!recipe) return <p>Recipe not found</p>;
 
-    if (!recipe) return <p>Loading...</p>;
-
-    return (
-        <RecipeForm recipe={recipe} recipeId={id!} mode="edit" />
-    );
+    return <RecipeForm recipe={recipe} recipeId={id} mode="edit" />;
 };
 
 export default ManageRecipePage;
-

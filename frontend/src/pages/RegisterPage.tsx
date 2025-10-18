@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import {api} from "../api/axios";
+import { AxiosError } from "axios";
+
 export default function RegisterPage() {
     const navigate = useNavigate();
 
@@ -8,12 +11,10 @@ export default function RegisterPage() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
 
-    //handle user registration
-    // - register (username, password)
     const handleRegister = async () => {
         setError(null);
 
-        if (!username || username.trim().length === 0) {
+        if (!username.trim()) {
             setError('Username cannot be empty');
             return;
         }
@@ -23,31 +24,18 @@ export default function RegisterPage() {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/api/users/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-            if (!response.ok) {
-                const message = await response.text();
-                if (response.status === 409) {
-                    throw new Error('Username already exists');
-                }
-                throw new Error(message);
-            }
-            navigate('/login');
+            await api.post("/api/users/register", { username, password });
+            navigate("/login");
         } catch (err) {
-
-            const error = err as Error;
-
-            if (error.message.includes('Failed to fetch')) {
-                setError('Cannot connect to server. ');
-            } else if(error.message.includes("Username is already taken")){
-                setError("Username is already taken")
-            }else {
-                setError(error.message || 'Unknown error');
+            if (err instanceof AxiosError) {
+                if (err.response?.status === 409 || err.response?.data?.error?.includes("already")) {
+                    setError("Username is already taken");
+                } else {
+                    setError(err.response?.data?.error || "Unknown error");
+                }
+            } else {
+                setError("Cannot connect to server.");
             }
-
         }
     };
 

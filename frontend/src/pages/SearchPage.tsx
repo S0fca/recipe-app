@@ -3,6 +3,8 @@ import RecipeCard from "../components/RecipeCard.tsx";
 import {useNavigate} from "react-router-dom";
 import type {Recipe, Tag} from "../types.ts";
 
+
+
 const SearchPage = () => {
 
     const [username, setUsername] = useState('');

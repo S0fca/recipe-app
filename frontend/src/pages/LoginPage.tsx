@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 
+import {api} from "../api/axios";
+import { AxiosError } from "axios";
+
 export default function LoginPage({ setIsLoggedIn }: { setIsLoggedIn: (v: boolean) => void }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -11,32 +14,26 @@ export default function LoginPage({ setIsLoggedIn }: { setIsLoggedIn: (v: boolea
     const handleLogin = async () => {
         setError(null);
         try {
-            const response = await fetch('http://localhost:8080/api/users/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
+            const res = await api.post("/api/users/login", { username, password });
 
-            if (!response.ok) {
-                const error = await response.json().then(error => error.error)
-                throw new Error(error);
-            }
-
-            const data = await response.json();
-            localStorage.setItem('token', data.token); // uložit JWT
+            // uložíme JWT token do localStorage
+            localStorage.setItem("token", res.data.token);
             setIsLoggedIn(true);
-            navigate('/');
-        } catch (err) {
-            const error = err as Error;
+            navigate("/");
 
-            if (error.message.includes('Failed to fetch')) {
-                setError('Cannot connect to server. ');
-            } else if(error.message.includes("Invalid credentials")){
-                setError("Invalid username or password.")
-            }else {
-                setError(error.message || 'Unknown error');
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                const errorMsg = err.response?.data?.error || "Unknown error";
+
+                if (errorMsg.includes("Invalid credentials")) {
+                    setError("Invalid username or password.");
+                } else {
+                    setError(errorMsg);
+                }
+
+            } else {
+                // například chyba sítě
+                setError("Cannot connect to server.");
             }
         }
     };
