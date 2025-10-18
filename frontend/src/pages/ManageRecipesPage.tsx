@@ -56,7 +56,7 @@ const ManageRecipes = () => {
 
             <div className="recipes-container">
                 {recipes.map((recipe) => (
-                    <RecipeCard key={recipe.id} recipe={recipe} onClick={() => handleEdit(recipe.id)} />
+                    <RecipeCard key={recipe.id} recipe={recipe} onClick={() => handleEdit(recipe.id)} style={"recipe-card-scrollbar"}/>
                 ))}
             </div>
         </div>

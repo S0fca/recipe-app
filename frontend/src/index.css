@@ -68,3 +68,36 @@ button:hover {
   background-color: #e76f51;
   color: white;
 }
+
+@media (max-width: 1124px) {
+    html {
+        font-size: 95%;
+    }
+    button {
+        font-size: 0.95em;
+        padding: 0.55em 1.1em;
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 90%;
+    }
+    button {
+        font-size: 0.9em;
+        padding: 0.5em 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    html {
+        font-size: 85%;
+    }
+    h1 {
+        font-size: 1.8em;
+    }
+    button {
+        font-size: 0.85em;
+        padding: 0.45em 0.9em;
+    }
+}

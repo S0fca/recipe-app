@@ -149,10 +149,12 @@ public class RecipeController {
      */
     @GetMapping("/recipe/{id}")
     public ResponseEntity<RecipeDTO> getUsersRecipeById(@PathVariable Long id, Authentication authentication) {
-        User user = getAuthenticatedUser(authentication);
-        RecipeDTO recipe = recipeService.getUsersRecipeById(user, id);
+//        User user = getAuthenticatedUser(authentication);
+//        RecipeDTO recipe = recipeService.getUsersRecipeById(user, id);
+        RecipeDTO recipe = recipeService.getRecipeDTOById(id);
         return ResponseEntity.ok(recipe);
     }
+
     /**
      * Deletes a recipe by id
      * @param id recipe to delete id

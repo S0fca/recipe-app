@@ -7,9 +7,10 @@ import { AxiosError } from "axios";
 type RecipeCardProps = {
     recipe: Recipe;
     onClick?: () => void;
+    style: string
 };
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick }: RecipeCardProps) => {
+const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick, style }: RecipeCardProps) => {
     const [isFavourite, setIsFavourite] = useState(recipe.favourite);
 
     const handleAddToFavourites = async () => {
@@ -49,7 +50,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick }: RecipeCardPr
     };
 
     return (
-        <div key={recipe.id} className="recipe-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
+        <div key={recipe.id} className={style} onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
             <div>
                 <h2>{recipe.title}</h2>
 
@@ -92,34 +93,19 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick }: RecipeCardPr
                             {recipe.tags.map((tag) => (
                                 <span
                                     key={tag}
-                                    style={{
-                                        whiteSpace: 'nowrap',
-                                        margin: '2px',
-                                        padding: '2px 6px',
-                                        border: '1px solid #ccc',
-                                        borderRadius: '4px',
-                                    }}
+                                    className="favorites-button"
                                 >
-                {tag}
-            </span>
+                                    {tag}
+                                </span>
                             ))}
                         </div>
-                    ) : null
-                    }
-
+                    ) : null}
 
                     <div style={{marginTop: '12px'}}>
                         {isFavourite ? (
                             <button
                                 onClick={handleRemoveFromFavourites}
-                                style={{
-                                    padding: '6px 12px',
-                                    backgroundColor: '#f8e8d6',
-                                    color: 'black',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                }}
+                                className="favorites-button"
                             >
                                 💔 Remove from Favourites
                             </button>

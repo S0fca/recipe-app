@@ -4,6 +4,7 @@ import RecipeCard from "./RecipeCard";
 import type { Recipe, RecipeIngredient, Tag } from "../types.ts";
 import {api} from "../api/axios";
 import { AxiosError } from "axios";
+import '../Form.css'
 
 type RecipeFormProps = {
     recipe?: Recipe;
@@ -210,21 +211,21 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
                                 className="ingredient-input"
                                 maxLength={255}
                             />
+                            <button
+                                type="button"
+                                onClick={() => handleRemoveIngredient(index)}
+                                className={"delete-button"}
+                                style={{
+                                    marginLeft: '8px',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    padding: '4px 8px',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                ✖
+                            </button>
                         </div>
-                        <button
-                            type="button"
-                            onClick={() => handleRemoveIngredient(index)}
-                            className={"delete-button"}
-                            style={{
-                                marginLeft: '8px',
-                                border: 'none',
-                                borderRadius: '4px',
-                                padding: '4px 8px',
-                                cursor: 'pointer',
-                            }}
-                        >
-                            ✖
-                        </button>
                     </div>
                 ))}
 
@@ -244,6 +245,7 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
                                 type="checkbox"
                                 checked={tags.includes(tag.name)}
                                 onChange={() => toggleTag(tag)}
+                                className="ingredient-input"
                             />
                             {tag.name}
                         </label>
@@ -283,6 +285,7 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
                         createdByUsername: "user",
                         favourite: false
                     }}
+                    style={"recipe-card"}
                 />
             </div>
         </div>

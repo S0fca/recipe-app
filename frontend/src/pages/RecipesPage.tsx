@@ -1,9 +1,9 @@
-import {useEffect, useState} from "react";
-import RecipeCard from "../components/RecipeCard.tsx";
-import {useNavigate} from "react-router-dom";
-import type {Recipe} from "../types.ts";
-import {api} from "../api/axios";
-import {AxiosError} from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { api } from "../api/axios";
+import { AxiosError } from "axios";
+import type { Recipe } from "../types.ts";
+import PreviewCard from "../components/PreviewCard";
 
 const RecipesPage = () => {
     const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -11,7 +11,6 @@ const RecipesPage = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    //fetch all recipes
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
@@ -39,13 +38,18 @@ const RecipesPage = () => {
         <div>
             <h1>Recipes</h1>
             {loading && <p>Loading...</p>}
-            {error && <p style={{color: 'red'}}>{error}</p>}
+            {error && <p style={{ color: "red" }}>{error}</p>}
             <div className="recipes-container">
                 {recipes.map((recipe) => (
-                    <RecipeCard key={recipe.id} recipe={recipe}/>
+                    <PreviewCard
+                        key={recipe.id}
+                        recipe={recipe}
+                        onClick={() => navigate(`/recipes/${recipe.id}`)}
+                    />
                 ))}
             </div>
         </div>
-    )
+    );
 };
+
 export default RecipesPage;

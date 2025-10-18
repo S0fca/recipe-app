@@ -132,6 +132,25 @@ public class RecipeService {
     }
 
     /**
+     * Gets a recipe by id
+     * only if the recipe was created by a specific user
+     * @param id recipe id
+     * @return recipe DTO
+     * @throws ApiException when the recipe isn't created by specified user (403)
+     *                      or when recipe doesn't exist (404)
+     */
+    public RecipeDTO getRecipeDTOById(Long id) throws ApiException {
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new ApiException(
+                        "Recipe not found with id " + id,
+                        HttpStatus.NOT_FOUND
+                ));
+        User user = recipe.getCreatedBy();
+
+        return RecipeDTO.GetRecipeDTO(recipe, user);
+    }
+
+    /**
      * Deletes a recipe by id
      * only if the recipe was created by a specific user
      * @param user updating user

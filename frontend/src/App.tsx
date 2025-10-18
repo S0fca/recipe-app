@@ -11,6 +11,7 @@ import AddRecipePage from "./pages/AddRecipePage";
 import RegisterPage from "./pages/RegisterPage.tsx";
 import ManageRecipesPage from "./pages/ManageRecipesPage.tsx";
 import ManageRecipePage from "./pages/ManageRecipePage.tsx";
+import RecipeDetailPage from "./pages/RecipeDetailPage";
 
 import { api } from "./api/axios";
 
@@ -68,6 +69,7 @@ function App() {
                             <Route path="/edit/:id" element={isLoggedIn ? <ManageRecipePage /> : <Navigate to="/login" />} />
                             <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
                             <Route path="/register" element={<RegisterPage />} />
+                            <Route path="/recipes/:id" element={isLoggedIn ? <RecipeDetailPage /> : <Navigate to="/login" />} />
                         </>
                     )}
 

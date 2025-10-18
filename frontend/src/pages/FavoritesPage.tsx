@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
-import RecipeCard from "../components/RecipeCard.tsx";
 import {useNavigate} from "react-router-dom";
 import type { Recipe } from "../types.ts";
 
 import {api} from "../api/axios";
 import { AxiosError } from "axios";
+import PreviewCard from "../components/PreviewCard.tsx";
 
 const FavoritesPage = () => {
         const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -50,9 +50,13 @@ const FavoritesPage = () => {
                 {!loading && !error && recipes.length === 0 && <p>You have no favorite recipes yet.</p>}
 
                 <div className="recipes-container">
-                    {recipes.map((recipe) =>
-                        <RecipeCard key={recipe.id} recipe={recipe}/>
-                    )}
+                    {recipes.map((recipe) => (
+                        <PreviewCard
+                            key={recipe.id}
+                            recipe={recipe}
+                            onClick={() => navigate(`/recipes/${recipe.id}`)}
+                        />
+                    ))}
                 </div>
 
             </div>
