@@ -2,6 +2,7 @@ package com.sofia.recipeapp.services;
 
 import com.sofia.recipeapp.dto.IngredientDTO;
 import com.sofia.recipeapp.dto.RecipeDTO;
+import com.sofia.recipeapp.exception.ApiException;
 import com.sofia.recipeapp.model.Recipe;
 import com.sofia.recipeapp.model.RecipeIngredient;
 import com.sofia.recipeapp.model.Tag;
@@ -36,7 +37,6 @@ public class RecipeService {
      */
     public void addToFavourites(User user, Long recipeId) {
         Recipe recipe = getRecipeById(recipeId);
-
         if (!user.getFavoriteRecipes().contains(recipe)) {
             user.getFavoriteRecipes().add(recipe);
             userRepository.save(user);
@@ -85,14 +85,16 @@ public class RecipeService {
         recipeRepository.save(recipe);
     }
 
+
     /**
      * gets a recipe from recipe id
      * @param recipeId recipe id
      * @return Recipe
+     * @throws ApiException recipe not found exception
      */
-    private Recipe getRecipeById(Long recipeId) {
+    private Recipe getRecipeById(Long recipeId) throws ApiException {
         return recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found"));
+                .orElseThrow(() -> new ApiException("Recipe not found", HttpStatus.NOT_FOUND));
     }
 
     public List<RecipeDTO> search(User user, String username, String title, List<String> tags) {
@@ -114,13 +116,17 @@ public class RecipeService {
      * @param user updating user
      * @param id recipe id
      * @return recipe DTO
-     * @throws ResponseStatusException when the recipe isn't created by specified user
+     * @throws ApiException when the recipe isn't created by specified user (403)
+     *                      or when recipe doesn't exist (404)
      */
-    public RecipeDTO getUsersRecipeById(User user, Long id) throws ResponseStatusException {
+    public RecipeDTO getUsersRecipeById(User user, Long id) throws ApiException {
         Recipe recipe = recipeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Recipe not found with id " + id));
+                .orElseThrow(() -> new ApiException(
+                        "Recipe not found with id " + id,
+                        HttpStatus.NOT_FOUND
+                ));
         if (!(recipe.getCreatedBy().getUsername().equals(user.getUsername()))) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ApiException("This recipe wasn't created by this user", HttpStatus.FORBIDDEN);
         }
         return RecipeDTO.GetRecipeDTO(recipe, user);
     }
@@ -130,14 +136,18 @@ public class RecipeService {
      * only if the recipe was created by a specific user
      * @param user updating user
      * @param id recipe id
-     * @throws ResponseStatusException when the recipe isn't created by specified user
+     * @throws ApiException when the recipe isn't created by specified user (403)
+     *                      or when recipe doesn't exist (404)
      */
-    public void deleteRecipe(User user, Long id) throws ResponseStatusException {
+    public void deleteRecipe(User user, Long id) throws ApiException {
         Recipe recipe = recipeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Recipe not found with id " + id));
+                .orElseThrow(() -> new ApiException(
+                        "Recipe not found with id " + id,
+                        HttpStatus.NOT_FOUND
+                ));
 
         if (!(recipe.getCreatedBy().getUsername().equals(user.getUsername()))) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ApiException("This recipe wasn't created by this user", HttpStatus.FORBIDDEN);
         }
 
         userRepository.deleteRecipeFromFavorites(id);
@@ -163,10 +173,13 @@ public class RecipeService {
     public void updateRecipe(RecipeDTO updatedRecipe, User user) throws ResponseStatusException {
         // Find recipe in db
         Recipe recipe = recipeRepository.findById(updatedRecipe.getId())
-                .orElseThrow(() -> new RuntimeException("Recipe not found"));
+                .orElseThrow(() -> new ApiException(
+                        "Recipe not found with id " + updatedRecipe.getId(),
+                        HttpStatus.NOT_FOUND
+                ));
 
         if (!(recipe.getCreatedBy().getUsername().equals(user.getUsername()))) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ApiException("This recipe wasn't created by this user", HttpStatus.FORBIDDEN);
         }
 
         // Update recipe title, description and instructions

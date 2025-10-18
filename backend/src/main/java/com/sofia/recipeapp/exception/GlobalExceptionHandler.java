@@ -10,11 +10,16 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<Map<String, String>> handleApiException(ApiException ex) {
+        Map<String, String> error = Map.of("error", ex.getMessage());
+        return new ResponseEntity<>(error, ex.getStatus());
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleException(Exception ex) {
-        ex.printStackTrace();
-        String message = ex.getMessage();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of("error", message));
+    public ResponseEntity<Map<String, String>> handleAllExceptions(Exception ex) {
+        System.out.println(ex.getMessage());
+        Map<String, String> error = Map.of("error", "Internal server error");
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

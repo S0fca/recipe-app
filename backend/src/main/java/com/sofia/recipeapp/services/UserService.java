@@ -3,6 +3,7 @@ package com.sofia.recipeapp.services;
 import com.sofia.recipeapp.config.UserAuthProvider;
 import com.sofia.recipeapp.dto.RecipeDTO;
 import com.sofia.recipeapp.dto.UserDTO;
+import com.sofia.recipeapp.exception.ApiException;
 import com.sofia.recipeapp.model.User;
 import com.sofia.recipeapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class UserService {
      */
     public UserDTO register(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username is already taken");
+            throw new ApiException("Username is already taken", HttpStatus.CONFLICT);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -51,10 +52,10 @@ public class UserService {
      */
     public UserDTO login(User user) {
         User foundUser = userRepository.findByUsername(user.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials"));
+                .orElseThrow(() -> new ApiException("Invalid credentials", HttpStatus.UNAUTHORIZED));
 
         if (!passwordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+            throw new ApiException("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
 
         String token = userAuthProvider.createToken(foundUser.getUsername());

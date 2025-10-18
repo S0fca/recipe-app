@@ -2,6 +2,7 @@ package com.sofia.recipeapp.controller;
 
 import com.sofia.recipeapp.dto.RecipeDTO;
 import com.sofia.recipeapp.dto.UserDTO;
+import com.sofia.recipeapp.exception.ApiException;
 import com.sofia.recipeapp.model.User;
 import com.sofia.recipeapp.repository.RecipeRepository;
 import com.sofia.recipeapp.repository.UserRepository;
@@ -11,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -28,15 +28,15 @@ public class RecipeController {
     /**
      * gets all recipes
      * @param authentication authenticated user
-     * @return list of recipe DTO
+     * @return HTTP 200 (OK) with a list of all recipes as DTOs
      */
     @GetMapping
-    public List<RecipeDTO> getAllRecipes(Authentication authentication) {
+    public ResponseEntity<List<RecipeDTO>> getAllRecipes(Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
-
-        return recipeRepository.findAll().stream()
+        List<RecipeDTO> recipes = recipeRepository.findAll().stream()
                 .map(recipe -> RecipeDTO.GetRecipeDTO(recipe, user))
                 .toList();
+        return ResponseEntity.ok(recipes);
     }
 
     /**
@@ -47,27 +47,25 @@ public class RecipeController {
      */
     @PostMapping
     public ResponseEntity<?> addRecipe(@RequestBody RecipeDTO recipeDTO, Authentication authentication) {
-        try {
-            User user = getAuthenticatedUser(authentication);
-            recipeService.addRecipe(recipeDTO, user);
-            return ResponseEntity.ok("Recipe created successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating recipe: " + e.getMessage());
-        }
+        User user = getAuthenticatedUser(authentication);
+        recipeService.addRecipe(recipeDTO, user);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Recipe created successfully");
     }
 
     /**
      * gets recipes created by authenticated user
      * @param authentication authenticated user
-     * @return list of users recipes DTO
+     * @return HTTP 200 (OK) with a list of users recipes as DTOs
      */
     @GetMapping("/user")
-    public List<RecipeDTO> getUserRecipes(Authentication authentication) {
+    public ResponseEntity<List<RecipeDTO>> getUserRecipes(Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
 
-        return recipeRepository.findByCreatedByUsername(user.getUsername()).stream()
+        List<RecipeDTO> recipes = recipeRepository.findByCreatedByUsername(user.getUsername()).stream()
                 .map(recipe -> RecipeDTO.GetRecipeDTO(recipe, user))
                 .toList();
+
+        return ResponseEntity.ok(recipes);
     }
 
     /**
@@ -98,18 +96,20 @@ public class RecipeController {
         return ResponseEntity.ok().build();
     }
 
+
     /**
      * gets User from authenticated user
      * @param authentication authenticated user
      * @return user
+     * @throws ApiException user not authenticated or not found
      */
-    private User getAuthenticatedUser(Authentication authentication) {
+    private User getAuthenticatedUser(Authentication authentication) throws ApiException{
         if (authentication == null || !(authentication.getPrincipal() instanceof UserDTO userDTO)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+            throw new ApiException("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
 
         return userRepository.findByUsername(userDTO.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+                .orElseThrow(() -> new ApiException("User not found", HttpStatus.UNAUTHORIZED));
     }
 
     /**
@@ -118,10 +118,10 @@ public class RecipeController {
      * @param username username - createdBy
      * @param tags tags
      * @param title recipe title
-     * @return List of matching recipe DTO
+     * @return HTTP 200 (OK) with a list of matching recipe DTOs, or 204 (No Content) if none found
      */
     @GetMapping("/search")
-    public List<RecipeDTO> searchRecipes(
+    public ResponseEntity<List<RecipeDTO>> searchRecipes(
             Authentication authentication,
             @RequestParam(required = false) String username,
             @RequestParam(required = false) List<String> tags,
@@ -131,21 +131,28 @@ public class RecipeController {
         if (tags != null && tags.isEmpty()) {
             tags = null;
         }
-        return recipeService.search(user, username, title, tags);
+
+        List<RecipeDTO> results = recipeService.search(user, username, title, tags);
+
+        if (results.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(results);
     }
 
     /**
      * Gets a recipe by id
      * @param id recipe id
      * @param authentication authenticated user
-     * @return recipe DTO by recipe id
+     * @return HTTP 200 (OK) with the recipe DTO if found, or 404 (Not Found) if not found or not accessible
      */
     @GetMapping("/recipe/{id}")
-    public RecipeDTO getUsersRecipeById(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<RecipeDTO> getUsersRecipeById(@PathVariable Long id, Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
-        return recipeService.getUsersRecipeById(user, id);
+        RecipeDTO recipe = recipeService.getUsersRecipeById(user, id);
+        return ResponseEntity.ok(recipe);
     }
-
     /**
      * Deletes a recipe by id
      * @param id recipe to delete id

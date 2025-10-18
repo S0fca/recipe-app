@@ -20,19 +20,21 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
     /**
      * gets users favourite recipes
      * @param authentication authenticated user
-     * @return list of favourite recipes
+     * @return HTTP 200 (OK) with a list of favourite recipes
      */
     @GetMapping("/favourites")
-    public List<RecipeDTO> getUserFavouriteRecipes(Authentication authentication) {
+    public ResponseEntity<List<RecipeDTO>> getUserFavouriteRecipes(Authentication authentication) {
         UserDTO user = (UserDTO) authentication.getPrincipal();
-        return userService.getUserFavouriteRecipes(user.getUsername());
+        List<RecipeDTO> recipeDTOs = userService.getUserFavouriteRecipes(user.getUsername());
+        return ResponseEntity.ok(recipeDTOs);
     }
 
     /**
