@@ -79,25 +79,12 @@ button:hover {
     }
 }
 
-@media (max-width: 768px) {
-    html {
-        font-size: 90%;
-    }
-    button {
-        font-size: 0.9em;
-        padding: 0.5em 1em;
-    }
-}
 
 @media (max-width: 480px) {
     html {
-        font-size: 85%;
+        font-size: 90%;
     }
     h1 {
         font-size: 1.8em;
-    }
-    button {
-        font-size: 0.85em;
-        padding: 0.45em 0.9em;
     }
 }

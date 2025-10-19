@@ -93,7 +93,13 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick, style }: Recip
                             {recipe.tags.map((tag) => (
                                 <span
                                     key={tag}
-                                    className="favorites-button"
+                                    style={{
+                                        whiteSpace: 'nowrap',
+                                        margin: '2px',
+                                        padding: '2px 6px',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '4px',
+                                    }}
                                 >
                                     {tag}
                                 </span>
@@ -104,22 +110,21 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick, style }: Recip
                     <div style={{marginTop: '12px'}}>
                         {isFavourite ? (
                             <button
-                                onClick={handleRemoveFromFavourites}
+                                onClick={ (e) => {
+                                    e.stopPropagation();
+                                    handleRemoveFromFavourites();
+                                }}
                                 className="favorites-button"
                             >
                                 💔 Remove from Favourites
                             </button>
                         ) : (
                             <button
-                                onClick={handleAddToFavourites}
-                                style={{
-                                    padding: '6px 12px',
-                                    backgroundColor: '#f8e8d6',
-                                    color: 'black',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleAddToFavourites();
                                 }}
+                                className="favorites-button"
                             >
                                 ❤️ Add to Favourites
                             </button>
@@ -130,4 +135,4 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick, style }: Recip
     );
 };
 
-            export default RecipeCard;
+export default RecipeCard;

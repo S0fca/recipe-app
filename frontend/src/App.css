@@ -218,3 +218,20 @@ input, textarea {
   border-radius: 8px;
   font-size: 1rem;
 }
+
+.show-password {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #e76f51;
+}
+
+.show-password:hover {
+    color: #bc4c2e;
+    background: none;
+    border: none;
+}

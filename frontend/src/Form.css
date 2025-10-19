@@ -169,7 +169,6 @@
     }
 }
 
-/* Small screens tweaks */
 @media (max-width: 480px) {
     .ingredient-row {
         gap: 4px;

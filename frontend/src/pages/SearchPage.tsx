@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import type {Recipe, Tag} from "../types.ts";
 import PreviewCard from "../components/PreviewCard.tsx";
+import { AxiosError } from "axios";
+import { api } from "../api/axios";
 
 
 
@@ -17,61 +19,45 @@ const SearchPage = () => {
 
     //fetch all available tags
     useEffect(() => {
-        const token = localStorage.getItem('token');
-            fetch('http://localhost:8080/api/tags', {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-            })
-                .then(async res => {
-                    if (!res.ok) {
-                        const errorData = await res.json();
-                        throw new Error(errorData.error || 'Failed to fetch tags');
+        const fetchTags = async () => {
+            try {
+                const res = await api.get<Tag[]>("/api/tags");
+                setAvailableTags(res.data);
+            } catch (err) {
+                setAvailableTags([]);
+                setTags([]);
+
+                if (err instanceof AxiosError) {
+                    const errorMsg = err.response?.data?.error || "Failed to fetch tags";
+                    console.log(errorMsg);
+                    if (err.response?.status === 401 || errorMsg === "Unauthorized path") {
+                        navigate("/login");
                     }
-                    return res.json() as Promise<Tag[]>;
-                })
-                .then((tags: Tag[]) => {
-                    setAvailableTags(tags);
-                })
-                .catch((err) => {
-                    setAvailableTags([]);
-                    setTags([]);
-                    if (err instanceof Error){
-                        console.log(err.message)
-                        if (err.message == "Unauthorized path") {
-                            navigate("/login")
-                        }
-                    }
-                });
+                } else {
+                    console.log("Could not connect to server");
+                }
+            }
+        };
+
+        fetchTags();
     }, []);
 
     //fetch recipes that match parameters
     const handleSearch = async () => {
-        const params = new URLSearchParams();
-        if (username) params.append('username', username);
-        if (tags.length > 0) params.append('tags', tags.join(','));
-        if (title) params.append('title', title);
+        const params: Record<string, string> = {};
+        if (username) params.username = username;
+        if (tags.length > 0) params.tags = tags.join(",");
+        if (title) params.title = title;
 
         try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:8080/api/recipes/search?${params}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-            });
-            if (!response.ok) {
-                const error = await response.json().then(error => error.error)
-                throw new Error(error);
-            }
-            const data = await response.json();
-            setResults(data);
-        }catch (err) {
-            if (err instanceof Error && err.message == "Unauthorized path"){
-                navigate("/login")
+            const res = await api.get("/api/recipes/search", { params });
+            setResults(res.data);
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                const errorMsg = err.response?.data?.error || "Search failed";
+                if (err.response?.status === 401 || errorMsg === "Unauthorized path") {
+                    navigate("/login");
+                }
             }
         }
     };

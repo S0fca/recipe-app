@@ -11,6 +11,9 @@ export default function LoginPage({ setIsLoggedIn }: { setIsLoggedIn: (v: boolea
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
 
+    const [showPassword, setShowPassword] = useState(false);
+
+
     const handleLogin = async () => {
         setError(null);
         try {
@@ -47,12 +50,22 @@ export default function LoginPage({ setIsLoggedIn }: { setIsLoggedIn: (v: boolea
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
             /><br/>
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            /><br/>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+                <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="show-password"
+                >
+                    {showPassword ? 'Hide' : 'Show'}
+                </button>
+            </div>
+            <br/>
             <button onClick={handleLogin}>Log In</button>
             {error && <p style={{color: 'red'}}>{error}</p>}
             <p>Don't have an account? <Link to="/register">Register here</Link></p>
