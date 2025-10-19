@@ -1,7 +1,10 @@
 #root {
   max-width: 100%;
   margin: 0 auto auto 0;
-  padding: 2rem;
+}
+
+body {
+    padding: 2rem;
 }
 
 /*nav*/

@@ -39,21 +39,10 @@
     padding: 8px;
     font-size: 16px;
     min-height: 80px;
-    resize: vertical;
     width: 100%;
     box-sizing: border-box;
 
-    max-height: 600px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    touch-action: auto;
-
-    scrollbar-width: thin;
-    scrollbar-color: #c4b5aa transparent;
-
-    word-break: break-word;
-    overflow-wrap: anywhere;
-    white-space: pre-wrap;
+    resize: none;
 }
 
 .form-button {

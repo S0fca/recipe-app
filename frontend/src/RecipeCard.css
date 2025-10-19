@@ -37,6 +37,15 @@
     white-space: pre-wrap;
 }
 
+.recipe-card,
+.recipe-card-scrollbar {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
 .recipe-card:hover {
     transform: translateY(-2px);
 }

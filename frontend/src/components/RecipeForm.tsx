@@ -171,8 +171,13 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
                     id="instructions"
                     placeholder={`1. Mix all the ingredients together.\n2. ...`}
                     value={instructions}
-                    onChange={(e) => setInstructions(e.target.value)}
+                    onChange={(e) => {
+                        setInstructions(e.target.value);
+                        e.target.style.height = "auto";
+                        e.target.style.height = `${e.target.scrollHeight}px`;
+                    }}
                     maxLength={10000}
+                    style={{ overflowY: "hidden" }}
                 />
 
                 <h3>Ingredients</h3>
