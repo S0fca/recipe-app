@@ -72,10 +72,14 @@ const SearchPage = () => {
     return (
         <div>
             <h1>Search Recipes</h1>
-            <label>Title</label>
-            <input placeholder="Pancakes" value={title} onChange={e => setTitle(e.target.value)}/>
-            <label>Author</label>
-            <input placeholder="User1234" value={username} onChange={e => setUsername(e.target.value)}/>
+            <div>
+                <label>Title</label>
+                <input placeholder="Pancakes" value={title} onChange={e => setTitle(e.target.value)}/>
+            </div>
+            <div>
+                <label>Author</label>
+                <input placeholder="User1234" value={username} onChange={e => setUsername(e.target.value)}/>
+            </div>
 
             <h3>Tags</h3>
             <div style={styles.tagsContainer}>

@@ -69,6 +69,17 @@ button:hover {
   color: white;
 }
 
+
+input, textarea {
+    padding: 10px;
+    margin: 10px;
+    background: #f8e8d6;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
 @media (max-width: 1124px) {
     html {
         font-size: 95%;
@@ -76,6 +87,11 @@ button:hover {
     button {
         font-size: 0.95em;
         padding: 0.55em 1.1em;
+    }
+    input, textarea {
+        font-size: 0.95em;
+        padding: 8px;
+        margin: 8px;
     }
 }
 
@@ -86,5 +102,8 @@ button:hover {
     }
     h1 {
         font-size: 1.8em;
+    }
+    input, textarea {
+        font-size: 0.90em;
     }
 }

@@ -116,69 +116,6 @@ header nav div {
 }
 
 
-/*recipe card*/
-.recipe-card {
-  background-color: #f8e8d6;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgb(209, 200, 196);
-  text-align: left;
-  transition: transform 0.2s ease;
-  margin: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border: 1px solid #ddd;
-}
-
-.recipe-card-scrollbar {
-    background-color: #f8e8d6;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 12px rgb(209, 200, 196);
-    text-align: left;
-    transition: transform 0.2s ease;
-    margin: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid #ddd;
-
-    max-height: 600px;
-    overflow-y: auto;
-
-    scrollbar-width: thin;
-    scrollbar-color: #c4b5aa transparent;
-
-    word-break: break-word;
-    overflow-wrap: anywhere;
-    white-space: pre-wrap;
-}
-
-.recipe-card:hover {
-  transform: translateY(-2px);
-}
-
-.recipe-card small {
-  display: block;
-  text-align: right;
-  padding-right: 10px;
-}
-
-.favorites-button {
-    padding: 6px 12px;
-    background-color: #f8e8d6;
-    color: black;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.favorites-button:hover {
-    background-color: #f8e0d6;
-    color: black;
-}
-
-
 /*recipe container*/
 .recipes-container {
   display: grid;
@@ -207,16 +144,6 @@ header nav div {
   border-radius: 12px;
   margin: 10px;
   width: auto;
-}
-
-input, textarea {
-  padding: 10px;
-  margin: 10px;
-  background: #f8e8d6;
-  color: black;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
 }
 
 .show-password {

@@ -1,7 +1,10 @@
 import React, {useState} from "react";
 import type { Recipe } from "../types.ts";
+
 import {api} from "../api/axios.ts";
 import {AxiosError} from "axios";
+
+import "../RecipeCard.css"
 
 type PreviewCardProps = {
     recipe: Recipe;

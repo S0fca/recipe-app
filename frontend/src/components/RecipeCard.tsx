@@ -4,6 +4,8 @@ import type { Recipe } from "../types.ts";
 import {api} from "../api/axios";
 import { AxiosError } from "axios";
 
+import "../RecipeCard.css"
+
 type RecipeCardProps = {
     recipe: Recipe;
     onClick?: () => void;
