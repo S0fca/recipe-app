@@ -1,6 +1,7 @@
 package com.sofia.recipeapp.services;
 
 import com.sofia.recipeapp.dto.IngredientDTO;
+import com.sofia.recipeapp.dto.RecipeAdminDTO;
 import com.sofia.recipeapp.dto.RecipeDTO;
 import com.sofia.recipeapp.exception.ApiException;
 import com.sofia.recipeapp.model.Recipe;
@@ -10,7 +11,6 @@ import com.sofia.recipeapp.model.User;
 import com.sofia.recipeapp.repository.RecipeRepository;
 import com.sofia.recipeapp.repository.TagRepository;
 import com.sofia.recipeapp.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -109,28 +109,6 @@ public class RecipeService {
 
     }
 
-
-    /**
-     * Gets a recipe by id
-     * only if the recipe was created by a specific user
-     * @param user updating user
-     * @param id recipe id
-     * @return recipe DTO
-     * @throws ApiException when the recipe isn't created by specified user (403)
-     *                      or when recipe doesn't exist (404)
-     */
-    public RecipeDTO getUsersRecipeById(User user, Long id) throws ApiException {
-        Recipe recipe = recipeRepository.findById(id)
-                .orElseThrow(() -> new ApiException(
-                        "Recipe not found with id " + id,
-                        HttpStatus.NOT_FOUND
-                ));
-        if (!(recipe.getCreatedBy().getUsername().equals(user.getUsername()))) {
-            throw new ApiException("This recipe wasn't created by this user", HttpStatus.FORBIDDEN);
-        }
-        return RecipeDTO.GetRecipeDTO(recipe, user);
-    }
-
     /**
      * Gets a recipe by id
      * only if the recipe was created by a specific user
@@ -185,11 +163,11 @@ public class RecipeService {
      *  - remove ingredients not in updated
      *  - add ingredients from updated
      * @param updatedRecipe updated recipe
-     * @param user updating user
+     * @param username updating user name
      * @throws ResponseStatusException when the recipe isn't created by specified user
      */
     @Transactional
-    public void updateRecipe(RecipeDTO updatedRecipe, User user) throws ResponseStatusException {
+    public void updateRecipe(RecipeDTO updatedRecipe, String username) throws ResponseStatusException {
         // Find recipe in db
         Recipe recipe = recipeRepository.findById(updatedRecipe.getId())
                 .orElseThrow(() -> new ApiException(
@@ -197,7 +175,7 @@ public class RecipeService {
                         HttpStatus.NOT_FOUND
                 ));
 
-        if (!(recipe.getCreatedBy().getUsername().equals(user.getUsername()))) {
+        if (!(recipe.getCreatedBy().getUsername().equals(username))) {
             throw new ApiException("This recipe wasn't created by this user", HttpStatus.FORBIDDEN);
         }
 
@@ -256,5 +234,38 @@ public class RecipeService {
         recipeRepository.save(recipe);
     }
 
+    public void deleteRecipeAsAdmin(Long id) {
+        recipeRepository.findById(id)
+                .orElseThrow(() -> new ApiException("Recipe not found", HttpStatus.NOT_FOUND));
+
+        userRepository.deleteRecipeFromFavorites(id);
+        recipeRepository.deleteById(id);
+    }
+
+
+    public List<RecipeDTO> getAllRecipesForUser(User user) {
+        return recipeRepository.findAll().stream()
+                .map(recipe -> RecipeDTO.GetRecipeDTO(recipe, user))
+                .toList();
+    }
+
+    public List<RecipeAdminDTO> getAllRecipesAsAdmin() {
+        return recipeRepository.findAll().stream()
+                .map(r -> new RecipeAdminDTO(
+                        r.getId(),
+                        r.getTitle(),
+                        r.getDescription(),
+                        r.getInstructions(),
+                        r.getRecipeIngredients(),
+                        r.getCreatedBy().getUsername()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<RecipeDTO> getRecipesByUsername(User user) {
+        return recipeRepository.findByCreatedByUsername(user.getUsername()).stream()
+                .map(recipe -> RecipeDTO.GetRecipeDTO(recipe, user))
+                .toList();
+    }
 }
 

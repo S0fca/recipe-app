@@ -1,10 +1,9 @@
 package com.sofia.recipeapp.controller;
 
+import com.sofia.recipeapp.security.AuthenticatedUser;
 import com.sofia.recipeapp.dto.RecipeDTO;
-import com.sofia.recipeapp.dto.UserDTO;
 import com.sofia.recipeapp.exception.ApiException;
 import com.sofia.recipeapp.model.User;
-import com.sofia.recipeapp.repository.RecipeRepository;
 import com.sofia.recipeapp.repository.UserRepository;
 import com.sofia.recipeapp.services.RecipeService;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +16,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/recipes")
-@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class RecipeController {
 
-    private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final RecipeService recipeService;
 
@@ -33,9 +30,7 @@ public class RecipeController {
     @GetMapping
     public ResponseEntity<List<RecipeDTO>> getAllRecipes(Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
-        List<RecipeDTO> recipes = recipeRepository.findAll().stream()
-                .map(recipe -> RecipeDTO.GetRecipeDTO(recipe, user))
-                .toList();
+        List<RecipeDTO> recipes = recipeService.getAllRecipesForUser(user);
         return ResponseEntity.ok(recipes);
     }
 
@@ -60,11 +55,7 @@ public class RecipeController {
     @GetMapping("/user")
     public ResponseEntity<List<RecipeDTO>> getUserRecipes(Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
-
-        List<RecipeDTO> recipes = recipeRepository.findByCreatedByUsername(user.getUsername()).stream()
-                .map(recipe -> RecipeDTO.GetRecipeDTO(recipe, user))
-                .toList();
-
+        List<RecipeDTO> recipes =  recipeService.getRecipesByUsername(user);
         return ResponseEntity.ok(recipes);
     }
 
@@ -104,11 +95,11 @@ public class RecipeController {
      * @throws ApiException user not authenticated or not found
      */
     private User getAuthenticatedUser(Authentication authentication) throws ApiException{
-        if (authentication == null || !(authentication.getPrincipal() instanceof UserDTO userDTO)) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof AuthenticatedUser authenticatedUser)) {
             throw new ApiException("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
 
-        return userRepository.findByUsername(userDTO.getUsername())
+        return userRepository.findByUsername(authenticatedUser.getUsername())
                 .orElseThrow(() -> new ApiException("User not found", HttpStatus.UNAUTHORIZED));
     }
 
@@ -144,13 +135,10 @@ public class RecipeController {
     /**
      * Gets a recipe by id
      * @param id recipe id
-     * @param authentication authenticated user
      * @return HTTP 200 (OK) with the recipe DTO if found, or 404 (Not Found) if not found or not accessible
      */
     @GetMapping("/recipe/{id}")
-    public ResponseEntity<RecipeDTO> getUsersRecipeById(@PathVariable Long id, Authentication authentication) {
-//        User user = getAuthenticatedUser(authentication);
-//        RecipeDTO recipe = recipeService.getUsersRecipeById(user, id);
+    public ResponseEntity<RecipeDTO> getUsersRecipeById(@PathVariable Long id) {
         RecipeDTO recipe = recipeService.getRecipeDTOById(id);
         return ResponseEntity.ok(recipe);
     }
@@ -176,8 +164,8 @@ public class RecipeController {
      */
     @PutMapping
     public ResponseEntity<?> updateRecipe(@RequestBody RecipeDTO recipeDTO, Authentication authentication) {
-        User user = getAuthenticatedUser(authentication);
-        recipeService.updateRecipe(recipeDTO, user);
+        String username = getAuthenticatedUser(authentication).getUsername();
+        recipeService.updateRecipe(recipeDTO, username);
         return ResponseEntity.ok().build();
     }
 }

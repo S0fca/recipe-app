@@ -1,5 +1,7 @@
 package com.sofia.recipeapp.config;
 
+import com.sofia.recipeapp.security.JwtAuthFilter;
+import com.sofia.recipeapp.security.UserAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +45,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/users/register", "/api/users/login").permitAll() // Public endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/users/register", "/api/users/login", "/api/admin/login").permitAll() // Public endpoints
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated() // Others require authentication
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -60,12 +63,10 @@ public class SecurityConfig {
      *
      * @return CORS config source
      */
-    //CORS - Cross-Origin Resource Sharing, umožňuje webovým aplikacím běžícím v jednom doménovém původu (origin) komunikovat s backendem, který je na jiné doméně, portu nebo protokolu.
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(allowedOrigins.split(",")));
-//        config.addAllowedOriginPattern("*");
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

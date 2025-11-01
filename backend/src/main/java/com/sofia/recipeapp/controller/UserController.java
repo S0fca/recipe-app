@@ -1,5 +1,7 @@
 package com.sofia.recipeapp.controller;
 
+import com.sofia.recipeapp.dto.UserPasswordDTO;
+import com.sofia.recipeapp.security.AuthenticatedUser;
 import com.sofia.recipeapp.dto.RecipeDTO;
 import com.sofia.recipeapp.dto.UserDTO;
 import com.sofia.recipeapp.model.User;
@@ -13,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -32,8 +33,8 @@ public class UserController {
      */
     @GetMapping("/favourites")
     public ResponseEntity<List<RecipeDTO>> getUserFavouriteRecipes(Authentication authentication) {
-        UserDTO user = (UserDTO) authentication.getPrincipal();
-        List<RecipeDTO> recipeDTOs = userService.getUserFavouriteRecipes(user.getUsername());
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
+        List<RecipeDTO> recipeDTOs = userService.getUserFavouriteRecipes(authenticatedUser.getUsername());
         return ResponseEntity.ok(recipeDTOs);
     }
 
@@ -43,7 +44,7 @@ public class UserController {
      * @return registered user DTO
      */
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody User user) {
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserPasswordDTO user) {
         UserDTO registeredUser = userService.register(user);
         return ResponseEntity.ok(registeredUser);
     }
@@ -54,7 +55,7 @@ public class UserController {
      * @return registered user DTO
      */
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> loginUser(@RequestBody User user) {
+    public ResponseEntity<UserDTO> loginUser(@RequestBody UserPasswordDTO user) {
         return ResponseEntity.ok(userService.login(user));
     }
 

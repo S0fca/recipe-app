@@ -1,10 +1,9 @@
-package com.sofia.recipeapp.config;
+package com.sofia.recipeapp.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.sofia.recipeapp.dto.UserDTO;
 import com.sofia.recipeapp.model.User;
 import com.sofia.recipeapp.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -38,11 +38,13 @@ public class UserAuthProvider {
      * @param username users username
      * @return JWT token
      */
-    public String createToken(String username) {
+    public String createToken(String username, String role) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + 1000 * 60 * 60); //1000 * 60 * 60 = 1h
 
-        return JWT.create().withIssuer(username)
+        return JWT.create()
+                .withIssuer(username)
+                .withClaim("role", role)
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
                 .sign(Algorithm.HMAC256(secretKey));
@@ -59,13 +61,18 @@ public class UserAuthProvider {
                 .build();
         DecodedJWT decoded = verifier.verify(token);
 
-        User user = userRepository.findByUsername(decoded.getIssuer())
+        String username = decoded.getIssuer();
+        String role = decoded.getClaim("role").asString();
+
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
+
         return new UsernamePasswordAuthenticationToken(
-                new UserDTO(user.getId(), user.getUsername(), null),
+                new AuthenticatedUser(user.getId(), username, role),
                 null,
-                Collections.emptyList()
+                Collections.singletonList(authority)
         );
     }
 }

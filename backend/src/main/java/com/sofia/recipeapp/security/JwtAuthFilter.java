@@ -1,4 +1,4 @@
-package com.sofia.recipeapp.config;
+package com.sofia.recipeapp.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

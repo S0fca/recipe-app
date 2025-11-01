@@ -1,6 +1,6 @@
 import './App.css'
-import {BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -13,37 +13,51 @@ import ManageRecipesPage from "./pages/ManageRecipesPage.tsx";
 import ManageRecipePage from "./pages/ManageRecipePage.tsx";
 import RecipeDetailPage from "./pages/RecipeDetailPage";
 
-import { api } from "./api/axios";
+import LoginAdmin from "./admin/LoginAdmin";
+import DashboardAdmin from "./admin/DashboardAdmin";
 
+import { api } from "./api/axios";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+    const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean | null>(null);
 
-    //checks if the saved token is valid
+    // kontrola běžného uživatele
     async function isAuthenticated(): Promise<boolean> {
         const token = localStorage.getItem('token');
         if (!token) return false;
-
         try {
             const res = await api.get("/api/users/validate");
             return res.status === 200;
         } catch (err) {
-            console.error("Validation error:", err);
             return false;
         }
     }
 
-    // On component load, check auth and set isLoggedIn
+    // kontrola admina
+    async function isAdminAuthenticated(): Promise<boolean> {
+        const token = localStorage.getItem('token');
+        if (!token) return false;
+        try {
+            const res = await api.get("/api/admin/validate");
+            return res.status === 200;
+        } catch (err) {
+            return false;
+        }
+    }
+
     useEffect(() => {
         const checkAuth = async () => {
-            const valid = await isAuthenticated();
-            setIsLoggedIn(valid);
+            const userValid = await isAuthenticated();
+            setIsLoggedIn(userValid);
+
+            const adminValid = await isAdminAuthenticated();
+            setIsAdminLoggedIn(adminValid);
         };
         checkAuth();
     }, []);
 
-    //if logged in is null return message
-    if (isLoggedIn === null) {
+    if (isLoggedIn === null || isAdminLoggedIn === null) {
         return <div>Checking authentication...</div>;
     }
 
@@ -51,75 +65,84 @@ function App() {
         <Router>
             <Layout isLoggedIn={isLoggedIn} />
             <Routes>
-                    {!isLoggedIn ? (
-                        <>
-                            <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
-                            <Route path="/register" element={<RegisterPage />} />
-                            <Route path="/" element={<HomePage />} />
-                            <Route path="*" element={<Navigate to="/login" />} />
-                        </>
-                    ) : (
-                        <>
-                            <Route path="/" element={isLoggedIn ? <HomePage /> : <Navigate to="/login" />} />
-                            <Route path="/recipes" element={isLoggedIn ? <RecipesPage /> : <Navigate to="/login" />} />
-                            <Route path="/favorites" element={isLoggedIn ? <FavoritesPage /> : <Navigate to="/login" />} />
-                            <Route path="/search" element={isLoggedIn ? <SearchPage /> : <Navigate to="/login" />} />
-                            <Route path="/add-recipe" element={isLoggedIn ? <AddRecipePage /> : <Navigate to="/login" />} />
-                            <Route path="/manage-recipes" element={isLoggedIn ? <ManageRecipesPage /> : <Navigate to="/login" />} />
-                            <Route path="/edit/:id" element={isLoggedIn ? <ManageRecipePage /> : <Navigate to="/login" />} />
-                            <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
-                            <Route path="/register" element={<RegisterPage />} />
-                            <Route path="/recipes/:id" element={isLoggedIn ? <RecipeDetailPage /> : <Navigate to="/login" />} />
-                        </>
-                    )}
+                {/* Běžný uživatel */}
+                {!isLoggedIn ? (
+                    <>
+                        <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+                        <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="*" element={<Navigate to="/login" replace />} />
+                    </>
+                ) : (
+                    <>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/recipes" element={<RecipesPage />} />
+                        <Route path="/favorites" element={<FavoritesPage />} />
+                        <Route path="/search" element={<SearchPage />} />
+                        <Route path="/add-recipe" element={<AddRecipePage />} />
+                        <Route path="/manage-recipes" element={<ManageRecipesPage />} />
+                        <Route path="/edit/:id" element={<ManageRecipePage />} />
+                        <Route path="/recipes/:id" element={<RecipeDetailPage />} />
+                        <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+                        <Route path="/register" element={<RegisterPage />} />
+                    </>
+                )}
 
+                {/* Admin */}
+                <Route
+                    path="/admin/login"
+                    element={<LoginAdmin setIsAdminLoggedIn={setIsAdminLoggedIn} />}
+                />
+                <Route
+                    path="/admin/dashboard"
+                    element={isAdminLoggedIn ? <DashboardAdmin /> : <Navigate to="/" replace />}
+                />
             </Routes>
         </Router>
     );
 }
 
-//based on whether the user is logged in and which page they're on return different navigation
+// Layout navigace
 function Layout({ isLoggedIn }: { isLoggedIn: boolean }) {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const login = () => {
-        navigate('/login');
-    };
-
-    const register = () => {
-        navigate('/register');
-    };
-
+    const login = () => navigate('/login');
+    const register = () => navigate('/register');
     const logout = () => {
         localStorage.removeItem('token');
-        navigate('/login');
-        window.location.reload();
+        window.location.reload(); // obnoví všechny stavy
     };
 
-    if (location.pathname === "/login"){
+    if (location.pathname === "/login") {
         return (
-            <div style={{textAlign: "right"}}>
+            <div style={{ textAlign: "right" }}>
                 <button onClick={register}>Register</button>
             </div>
-        )
+        );
     }
 
-    if (location.pathname === "/register"){
+    if (location.pathname === "/register") {
         return (
-            <div style={{textAlign: "right"}}>
+            <div style={{ textAlign: "right" }}>
                 <button onClick={login}>Login</button>
             </div>
-        )
+        );
     }
 
     if (location.pathname === "/" && !isLoggedIn) {
         return (
-            <div style={{textAlign: "right"}}>
-                <button onClick={login} style={{margin: "4px"}}>Login</button>
-                <button onClick={register} style={{margin: "4px"}}>Register</button>
+            <div style={{ textAlign: "right" }}>
+                <button onClick={login} style={{ margin: "4px" }}>Login</button>
+                <button onClick={register} style={{ margin: "4px" }}>Register</button>
             </div>
-        )
+        );
+    }
+
+    if (location.pathname === "/admin/login") {
+        return (
+            <></>
+        );
     }
 
     return (

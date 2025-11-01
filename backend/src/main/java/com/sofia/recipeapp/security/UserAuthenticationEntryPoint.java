@@ -1,4 +1,4 @@
-package com.sofia.recipeapp.config;
+package com.sofia.recipeapp.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
