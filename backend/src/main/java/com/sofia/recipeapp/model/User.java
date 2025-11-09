@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,7 +16,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "users")
-@JsonIgnoreProperties({"recipes"})
+@JsonIgnoreProperties({"recipesCreated", "favoriteRecipes"})
 @Data
 @RequiredArgsConstructor
 public class User {
@@ -29,13 +31,11 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-//    @Email
-//    @NotBlank
-//    @Column(unique = true, nullable = false)
-//    private String email;
-
     @Column(nullable = false)
     private String role;
+
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Recipe> recipesCreated = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(

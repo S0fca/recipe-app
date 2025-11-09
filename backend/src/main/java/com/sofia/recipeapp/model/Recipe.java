@@ -1,9 +1,12 @@
 package com.sofia.recipeapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,7 +36,8 @@ public class Recipe {
 
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)
-    @JsonIgnoreProperties("user_favorite_recipes")
+    @JsonIgnoreProperties({"recipesCreated", "favoriteRecipes"})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User createdBy;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -47,6 +51,9 @@ public class Recipe {
     )
     private Set<Tag> tags = new HashSet<>();
 
+    @ManyToMany(mappedBy = "favoriteRecipes")
+    @JsonIgnore
+    private Set<User> usersWhoFavorited = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

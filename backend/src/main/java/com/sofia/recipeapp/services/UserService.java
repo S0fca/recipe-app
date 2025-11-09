@@ -1,6 +1,7 @@
 package com.sofia.recipeapp.services;
 
 import com.sofia.recipeapp.dto.UserPasswordDTO;
+import com.sofia.recipeapp.model.Recipe;
 import com.sofia.recipeapp.security.UserAuthProvider;
 import com.sofia.recipeapp.dto.RecipeDTO;
 import com.sofia.recipeapp.dto.UserDTO;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -78,18 +80,19 @@ public class UserService {
         return userOpt.map(user -> user.getFavoriteRecipes().stream().map(recipe -> RecipeDTO.GetRecipeDTO(recipe, user)).collect(Collectors.toList())).orElse(Collections.emptyList());
     }
 
+    @Transactional
     public void deleteUserById(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new ApiException("User not found", HttpStatus.NOT_FOUND);
-        }
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
+
+        userRepository.delete(user);
     }
 
     public UserDTO loginAdmin(UserPasswordDTO user) {
         User foundUser = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(() -> new ApiException("Invalid credentials", HttpStatus.UNAUTHORIZED));
         if (!foundUser.getRole().equals("ADMIN")) {
-            throw new ApiException("Invalid credentials", HttpStatus.UNAUTHORIZED);
+            throw new ApiException("Not admin", HttpStatus.UNAUTHORIZED);
         }
         if (!passwordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
             throw new ApiException("Invalid credentials", HttpStatus.UNAUTHORIZED);
