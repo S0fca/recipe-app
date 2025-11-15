@@ -288,9 +288,11 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
                         ingredients,
                         tags,
                         createdByUsername: "user",
+                        createdByUserId: 0,
                         favourite: false
                     }}
                     style={"recipe-card"}
+                    userLink={false}
                 />
             </div>
         </div>

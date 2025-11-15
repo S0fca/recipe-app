@@ -11,9 +11,10 @@ type RecipeCardProps = {
     recipe: Recipe;
     onClick?: () => void;
     style: string
+    userLink?: boolean
 };
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick, style }: RecipeCardProps) => {
+const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick, style, userLink = true }: RecipeCardProps) => {
     const [isFavourite, setIsFavourite] = useState(recipe.favourite);
     const navigate = useNavigate();
 
@@ -90,15 +91,20 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick, style }: Recip
                 </div>
             </div>
                 <div style={{marginTop: '12px'}}>
-                    <small
+                    {userLink?
+                        (<small
                         style={{ color: "#e76f51", cursor: "pointer" }}
                         onClick={(e) => {
                             e.stopPropagation(); // zastaví otevření receptu
                             navigate(`/users/${recipe.createdByUserId}`);
                         }}
-                    >
-                        Created by: {recipe.createdByUsername}
-                    </small>
+                        >
+                            Created by: {recipe.createdByUsername}
+                        </small>)
+                        :
+                        (<small>
+                            Created by: {recipe.createdByUsername}
+                        </small>)}
 
                     {Array.isArray(recipe.tags) && recipe.tags.length > 0 ? (
                         <div style={{ marginTop: '16px', display: 'flex', flexWrap: 'wrap', gap: '4px'}}>
