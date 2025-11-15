@@ -1,10 +1,11 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import type { Recipe } from "../types.ts";
 
 import {api} from "../api/axios";
 import { AxiosError } from "axios";
 
 import "../RecipeCard.css"
+import {useNavigate} from "react-router-dom";
 
 type RecipeCardProps = {
     recipe: Recipe;
@@ -14,6 +15,7 @@ type RecipeCardProps = {
 
 const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick, style }: RecipeCardProps) => {
     const [isFavourite, setIsFavourite] = useState(recipe.favourite);
+    const navigate = useNavigate();
 
     const handleAddToFavourites = async () => {
         try {
@@ -88,7 +90,15 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick, style }: Recip
                 </div>
             </div>
                 <div style={{marginTop: '12px'}}>
-                    <small>Created by: {recipe.createdByUsername}</small>
+                    <small
+                        style={{ color: "#e76f51", cursor: "pointer" }}
+                        onClick={(e) => {
+                            e.stopPropagation(); // zastaví otevření receptu
+                            navigate(`/users/${recipe.createdByUserId}`);
+                        }}
+                    >
+                        Created by: {recipe.createdByUsername}
+                    </small>
 
                     {Array.isArray(recipe.tags) && recipe.tags.length > 0 ? (
                         <div style={{ marginTop: '16px', display: 'flex', flexWrap: 'wrap', gap: '4px'}}>

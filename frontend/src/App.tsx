@@ -12,6 +12,8 @@ import RegisterPage from "./pages/RegisterPage.tsx";
 import ManageRecipesPage from "./pages/ManageRecipesPage.tsx";
 import ManageRecipePage from "./pages/ManageRecipePage.tsx";
 import RecipeDetailPage from "./pages/RecipeDetailPage";
+import UserProfilePage from "./pages/UserProfilePage.tsx";
+import ViewUserProfilePage from "./pages/ViewUserProfilePage.tsx";
 
 import LoginAdmin from "./admin/LoginAdmin";
 import DashboardAdmin from "./admin/DashboardAdmin";
@@ -85,6 +87,8 @@ function App() {
                         <Route path="/recipes/:id" element={<RecipeDetailPage />} />
                         <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
                         <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/profile" element={<UserProfilePage />} />
+                        <Route path="/users/:id" element={<ViewUserProfilePage />} />
                     </>
                 )}
 
@@ -153,7 +157,8 @@ function Layout({ isLoggedIn }: { isLoggedIn: boolean }) {
                     <Link to="/recipes">Recipes</Link> |{" "}
                     <Link to="/favorites">Favorites</Link> |{" "}
                     <Link to="/search">Search</Link> |{" "}
-                    <Link to="/manage-recipes">Manage Recipes</Link>
+                    <Link to="/manage-recipes">Manage Recipes</Link> |{" "}
+                    <Link to="/profile">My Profile</Link>
                 </div>
                 <button onClick={logout}>Logout</button>
             </nav>

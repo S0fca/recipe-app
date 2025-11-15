@@ -55,7 +55,18 @@ public class RecipeController {
     @GetMapping("/user")
     public ResponseEntity<List<RecipeDTO>> getUserRecipes(Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
-        List<RecipeDTO> recipes =  recipeService.getRecipesByUsername(user);
+        List<RecipeDTO> recipes =  recipeService.getRecipesByUser(user);
+        return ResponseEntity.ok(recipes);
+    }
+
+    /**
+     * gets recipes created by user id
+     * @return HTTP 200 (OK) with a list of users recipes as DTOs
+     */
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<RecipeDTO>> getUserRecipes(@PathVariable Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
+        List<RecipeDTO> recipes =  recipeService.getRecipesByUser(user);
         return ResponseEntity.ok(recipes);
     }
 

@@ -168,7 +168,6 @@ public class RecipeService {
      */
     @Transactional
     public void updateRecipe(RecipeDTO updatedRecipe, String username) throws ResponseStatusException {
-        // Find recipe in db
         Recipe recipe = recipeRepository.findById(updatedRecipe.getId())
                 .orElseThrow(() -> new ApiException(
                         "Recipe not found with id " + updatedRecipe.getId(),
@@ -179,19 +178,15 @@ public class RecipeService {
             throw new ApiException("This recipe wasn't created by this user", HttpStatus.FORBIDDEN);
         }
 
-        // Update recipe title, description and instructions
         recipe.setTitle(updatedRecipe.getTitle());
         recipe.setDescription(updatedRecipe.getDescription());
         recipe.setInstructions(updatedRecipe.getInstructions());
 
-        // Updated ingredients list
         List<RecipeIngredient> updatedIngredients = new ArrayList<>();
 
-        // For each updated recipe ingredient
         for (IngredientDTO dto : updatedRecipe.getIngredients()) {
             RecipeIngredient ingredient = null;
 
-            // When the ingredient already existed, set ingredient
             if (dto.getId() != null) {
                 ingredient = recipe.getRecipeIngredients().stream()
                         .filter(i -> dto.getId().equals(i.getId()))
@@ -199,35 +194,29 @@ public class RecipeService {
                         .orElse(null);
             }
 
-            // When new ingredient, create new, set recipe
             if (ingredient == null) {
                 ingredient = new RecipeIngredient();
                 ingredient.setRecipe(recipe);
             }
 
-            // Update ingredient
             ingredient.setIngredientName(dto.getName());
             ingredient.setQuantity(dto.getQuantity());
 
-            // Add to updated ingredients
             updatedIngredients.add(ingredient);
         }
 
-        // Remove existing ingredients if not in updated
         recipe.getRecipeIngredients().removeIf(existing ->
                 updatedIngredients.stream()
                         .noneMatch(updated -> existing.getId() != null &&
                                 existing.getId().equals(updated.getId()))
         );
 
-        // If recipe doesn't contain updated ingredient add it
         for (RecipeIngredient updated : updatedIngredients) {
             if (!recipe.getRecipeIngredients().contains(updated)) {
                 recipe.getRecipeIngredients().add(updated);
             }
         }
 
-        // Update tags
         Set<Tag> tags = tagRepository.findAllByNameIn(updatedRecipe.getTags());
         recipe.setTags(tags);
 
@@ -262,7 +251,7 @@ public class RecipeService {
                 .collect(Collectors.toList());
     }
 
-    public List<RecipeDTO> getRecipesByUsername(User user) {
+    public List<RecipeDTO> getRecipesByUser(User user) {
         return recipeRepository.findByCreatedByUsername(user.getUsername()).stream()
                 .map(recipe -> RecipeDTO.GetRecipeDTO(recipe, user))
                 .toList();

@@ -23,6 +23,7 @@ public class RecipeDTO {
     private String instructions;
     private List<IngredientDTO> ingredients;
     private String createdByUsername;
+    private Long createdByUserId;
     private List<String> tags;
     private boolean isFavourite;
 
@@ -34,6 +35,7 @@ public class RecipeDTO {
         dto.setDescription(recipe.getDescription());
         dto.setInstructions(recipe.getInstructions());
         dto.setCreatedByUsername(recipe.getCreatedBy().getUsername());
+        dto.setCreatedByUserId(recipe.getCreatedBy().getId());
 
         dto.setIngredients( //RecipeIngredients -> IngredientDTO
 

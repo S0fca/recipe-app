@@ -34,6 +34,16 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    @Column(length = 500)
+    private String bio;
+
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] profileImage;
+
+    @Column
+    private String profileImageType;
+
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Recipe> recipesCreated = new ArrayList<>();
 

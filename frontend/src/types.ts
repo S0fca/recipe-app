@@ -4,6 +4,7 @@ export type Recipe = {
     description: string;
     instructions: string;
     createdByUsername: string;
+    createdByUserId: number;
     tags: string[];
     ingredients: RecipeIngredient[];
     favourite: boolean;
@@ -18,4 +19,11 @@ export type RecipeIngredient = {
 export type Tag = {
     id: number;
     name: string;
+}
+
+export type UserProfile = {
+    id: number;
+    username: string;
+    bio: string;
+    profileImageUrl: string;
 }

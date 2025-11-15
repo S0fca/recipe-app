@@ -1,0 +1,34 @@
+img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+input[type="file"] {
+    display: block;
+    margin-bottom: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    color: black;
+    cursor: pointer;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    background-color: #f4a261;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #e76f51;
+}
+
+button {
+    margin: 5px;
+}
+
+

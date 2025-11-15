@@ -5,6 +5,7 @@ import {api} from "../api/axios.ts";
 import {AxiosError} from "axios";
 
 import "../RecipeCard.css"
+import {useNavigate} from "react-router-dom";
 
 type PreviewCardProps = {
     recipe: Recipe;
@@ -13,6 +14,7 @@ type PreviewCardProps = {
 
 const PreviewCard: React.FC<PreviewCardProps> = ({ recipe, onClick }) => {
     const [isFavourite, setIsFavourite] = useState(recipe.favourite);
+    const navigate = useNavigate();
 
     const handleAddToFavourites = async () => {
         try {
@@ -58,7 +60,15 @@ const PreviewCard: React.FC<PreviewCardProps> = ({ recipe, onClick }) => {
             <h2>{recipe.title}</h2>
             {recipe.description && <p>{recipe.description}</p>}
             <div style={{marginTop: '12px'}}>
-                <small>Created by: {recipe.createdByUsername}</small>
+                <small
+                    style={{ color: "#e76f51", cursor: "pointer" }}
+                    onClick={(e) => {
+                        e.stopPropagation(); // zastaví otevření receptu
+                        navigate(`/users/${recipe.createdByUserId}`);
+                    }}
+                >
+                    Created by: {recipe.createdByUsername}
+                </small>
 
                 {Array.isArray(recipe.tags) && recipe.tags.length > 0 ? (
                     <div style={{ marginTop: '16px', display: 'flex', flexWrap: 'wrap', gap: '4px'}}>
