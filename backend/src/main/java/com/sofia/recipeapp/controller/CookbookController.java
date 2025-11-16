@@ -115,4 +115,13 @@ public class CookbookController {
         return ResponseEntity.ok(cookbooks);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<CookbookDTO>> searchCookbooks(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String username
+    ) {
+        List<CookbookDTO> result = cookbookService.searchCookbooks(title, username);
+        return ResponseEntity.ok(result);
+    }
+
 }

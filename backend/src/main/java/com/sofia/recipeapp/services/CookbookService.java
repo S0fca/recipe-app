@@ -176,4 +176,16 @@ public class CookbookService {
                 .collect(Collectors.toList());
     }
 
+    public List<CookbookDTO> searchCookbooks(String title, String username) {
+
+        String titleFilter = (title == null || title.isBlank()) ? null : title.trim();
+        String usernameFilter = (username == null || username.isBlank()) ? null : username.trim();
+
+        List<Cookbook> list = cookbookRepository.searchCookbooks(titleFilter, usernameFilter);
+
+        return list.stream()
+                .map(CookbookDTO::fromEntity)
+                .toList();
+    }
+
 }

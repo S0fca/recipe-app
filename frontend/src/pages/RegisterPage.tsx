@@ -70,13 +70,12 @@ export default function RegisterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button
-                    type="button"
+                <p
                     onClick={() => setShowPassword(!showPassword)}
                     className="show-password"
                 >
                     {showPassword ? "Hide" : "Show"}
-                </button>
+                </p>
             </div>
             <br/>
 
@@ -87,13 +86,12 @@ export default function RegisterPage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                 />
-                <button
-                    type="button"
+                <p
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="show-password"
                 >
                     {showConfirmPassword ? "Hide" : "Show"}
-                </button>
+                </p>
             </div>
             <br/>
 

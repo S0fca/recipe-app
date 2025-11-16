@@ -35,7 +35,6 @@ export default function LoginPage({ setIsLoggedIn }: { setIsLoggedIn: (v: boolea
                 }
 
             } else {
-                // například chyba sítě
                 setError("Cannot connect to server.");
             }
         }
@@ -50,21 +49,22 @@ export default function LoginPage({ setIsLoggedIn }: { setIsLoggedIn: (v: boolea
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
             /><br/>
-            <div style={{ position: 'relative', display: 'inline-block' }}>
+            <div style={{ position: 'relative', display: 'inline-block' , alignItems: 'center'}}>
                 <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button
-                    type="button"
+
+                <p
                     onClick={() => setShowPassword(!showPassword)}
                     className="show-password"
                 >
                     {showPassword ? 'Hide' : 'Show'}
-                </button>
+                </p>
             </div>
+
             <br/>
             <button onClick={handleLogin}>Log In</button>
             {error && <p style={{color: 'red'}}>{error}</p>}

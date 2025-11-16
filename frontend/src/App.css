@@ -155,13 +155,15 @@ header nav div {
 
 .show-password {
     position: absolute;
-    right: 5px;
+    right: 30px;
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
     cursor: pointer;
     color: #e76f51;
+    height: 100%;
+    font-weight: 500;
 }
 
 .show-password:hover {
