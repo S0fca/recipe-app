@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import { api } from "../api/axios";
-import type {Recipe, UserProfile} from "../types.ts";
+import type {CookbookDTO, Recipe, UserProfile} from "../types.ts";
 import '../UserProfilePage.css'
 import PreviewCard from "../components/PreviewCard.tsx";
+import CookbookPreviewCard from "../components/CookbookPreviewCard.tsx";
 
 export default function ViewUserProfilePage() {
     const { id } = useParams<{ id: string }>();
@@ -11,7 +12,9 @@ export default function ViewUserProfilePage() {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const [cookbooks, setCookbooks] = useState<CookbookDTO[]>([]);
     const [loadingRecipes, setLoadingRecipes] = useState(true);
+    const [loadingCookbooks, setLoadingCookbooks] = useState(true);
 
     useEffect(() => {
         api.get(`/api/users/${id}`, { withCredentials: true })
@@ -48,6 +51,16 @@ export default function ViewUserProfilePage() {
             .finally(() => setLoadingRecipes(false));
     }, [id]);
 
+    useEffect(() => {
+        if (!id) return;
+
+        api.get(`/api/cookbooks/user/${id}`, { withCredentials: true })
+            .then(res => setCookbooks(res.data))
+            .catch(err => console.error(err))
+            .finally(() => setLoadingCookbooks(false));
+    }, [id]);
+
+
 
     if (!profile) return <p>Loading...</p>;
 
@@ -65,6 +78,18 @@ export default function ViewUserProfilePage() {
                 )}
             </div>
             <p>{profile.bio}</p>
+
+            {loadingCookbooks && <p>Loading...</p>}
+
+            <div className="recipes-container">
+                {cookbooks.map((cookbook) => (
+                    <CookbookPreviewCard
+                        key={cookbook.id}
+                        cookbook={cookbook}
+                        onClick={() => navigate(`/cookbooks/${cookbook.id}`)}
+                    />
+                ))}
+            </div>
 
             {loadingRecipes && <p>Loading...</p>}
 

@@ -14,11 +14,18 @@ import ManageRecipePage from "./pages/ManageRecipePage.tsx";
 import RecipeDetailPage from "./pages/RecipeDetailPage";
 import UserProfilePage from "./pages/UserProfilePage.tsx";
 import ViewUserProfilePage from "./pages/ViewUserProfilePage.tsx";
+import ManageCookbooks from "./pages/ManageCookbooks";
+
+import CookbookListPage from "./pages/CookbookListPage";
+import CreateCookbookPage from "./pages/CreateCookbookPage";
+import CookbookPage from "./pages/CookbookPage.tsx";
 
 import LoginAdmin from "./admin/LoginAdmin";
 import DashboardAdmin from "./admin/DashboardAdmin";
 
 import { api } from "./api/axios";
+import ManageCookbookPage from "./pages/ManageCookbookPage.tsx";
+import ManagePage from "./pages/ManagePage.tsx";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
@@ -82,13 +89,27 @@ function App() {
                         <Route path="/favorites" element={<FavoritesPage />} />
                         <Route path="/search" element={<SearchPage />} />
                         <Route path="/add-recipe" element={<AddRecipePage />} />
+
+
+                        <Route path="/manage" element={<ManagePage />} />
                         <Route path="/manage-recipes" element={<ManageRecipesPage />} />
                         <Route path="/edit/:id" element={<ManageRecipePage />} />
                         <Route path="/recipes/:id" element={<RecipeDetailPage />} />
+
+
                         <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
                         <Route path="/register" element={<RegisterPage />} />
                         <Route path="/profile" element={<UserProfilePage />} />
                         <Route path="/users/:id" element={<ViewUserProfilePage />} />
+
+
+                        <Route path="/cookbooks" element={<CookbookListPage />} />
+                        <Route path="/cookbooks/:id" element={<CookbookPage />} />
+                        <Route path="/cookbooks/manage" element={<ManageCookbooks />} />
+                        <Route path="/cookbooks/create" element={<CreateCookbookPage />} />
+                        <Route path="/cookbooks/edit/:id" element={<ManageCookbookPage />} />
+
+
                     </>
                 )}
 
@@ -155,12 +176,16 @@ function Layout({ isLoggedIn }: { isLoggedIn: boolean }) {
                 <div>
                     <Link to="/">Home</Link> |{" "}
                     <Link to="/recipes">Recipes</Link> |{" "}
+                    <Link to="/cookbooks">Cookbooks</Link> |{" "}
                     <Link to="/favorites">Favorites</Link> |{" "}
                     <Link to="/search">Search</Link> |{" "}
-                    <Link to="/manage-recipes">Manage Recipes</Link> |{" "}
-                    <Link to="/profile">My Profile</Link>
+                    <Link to="/manage">Manage</Link>
+
                 </div>
-                <button onClick={logout}>Logout</button>
+                <div>
+                    <Link to="/profile">My Profile</Link>
+                    <button onClick={logout}>Logout</button>
+                </div>
             </nav>
         </header>
     );

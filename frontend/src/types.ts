@@ -27,3 +27,33 @@ export type UserProfile = {
     bio: string;
     profileImageUrl: string;
 }
+
+export type UserBasic = {
+    id: number;
+    username: string;
+};
+
+export type Cookbook = {
+    id: number;
+    title: string;
+    description: string;
+    imageUrl?: string | null;
+    owner: UserBasic;
+    collaborators: UserBasic[];
+    recipes: Recipe[];
+};
+
+export type CreateCookbookRequest = {
+    title: string;
+    description: string;
+};
+
+export type CookbookDTO = {
+    id: number;
+    title: string;
+    description: string;
+    imageUrl?: string | null;
+    owner: UserBasic;
+    collaborators: UserBasic[];
+    recipes: Recipe[];
+};

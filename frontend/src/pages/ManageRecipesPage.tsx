@@ -44,12 +44,12 @@ const ManageRecipes = () => {
 
     return (
         <div>
-            <h1>Manage recipes</h1>
+            <h2>Recipes</h2>
             <nav>
                 <button onClick={() => navigate("/add-recipe")}>Add Recipe</button>
             </nav>
 
-            <h2>Your recipes</h2>
+            <h3>Your recipes</h3>
             {loading && <p>Loading...</p>}
             {error && <p style={{ color: "red" }}>{error}</p>}
             {!loading && !error && recipes.length === 0 && <p>You created no recipes yet.</p>}

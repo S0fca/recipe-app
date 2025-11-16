@@ -1,0 +1,64 @@
+.cookbook-card {
+    background-color: #fdf6ec;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1), 0 0 0 4px #f8e8d6 inset;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    font-family: "Georgia", serif;
+}
+
+.cookbook-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 100%;
+    background-color: #e76f51;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.cookbook-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15), 0 0 0 4px #f8e8d6 inset;
+}
+
+.cookbook-card h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    color: #bc4c2e;
+}
+
+/*.cookbook-card p {*/
+/*    color: #555;*/
+/*    line-height: 1.4;*/
+/*}*/
+
+.cookbook-page {
+    background-color: #fdf6ec;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1), 0 0 0 4px #f8e8d6 inset;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.cookbook-page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 100%;
+    background-color: #e76f51;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
