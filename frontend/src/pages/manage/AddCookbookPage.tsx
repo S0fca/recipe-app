@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { api } from "../api/axios";
+import { api } from "../../api/axios.ts";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateCookbookPage() {
+export default function AddCookbookPage() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const navigate = useNavigate();
@@ -23,7 +23,7 @@ export default function CreateCookbookPage() {
 
     return (
         <div>
-            <h1>Create Cookbook</h1>
+            <h1>Add Cookbook</h1>
             <h1>{title? title: "Title"}</h1>
             <div>
                 <label>

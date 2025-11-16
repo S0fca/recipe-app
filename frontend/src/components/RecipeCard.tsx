@@ -4,7 +4,7 @@ import type { Recipe } from "../types.ts";
 import {api} from "../api/axios";
 import { AxiosError } from "axios";
 
-import "../RecipeCard.css"
+import "../styles/RecipeCard.css"
 import {useNavigate} from "react-router-dom";
 
 type RecipeCardProps = {

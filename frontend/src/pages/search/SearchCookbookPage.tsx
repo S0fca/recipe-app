@@ -1,9 +1,9 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import type {CookbookDTO} from "../types.ts";
+import type {CookbookDTO} from "../../types.ts";
 import { AxiosError } from "axios";
-import { api } from "../api/axios";
-import CookbookPreviewCard from "../components/CookbookPreviewCard.tsx";
+import { api } from "../../api/axios.ts";
+import CookbookPreviewCard from "../../components/CookbookCard.tsx";
 
 const SearchCookbooksPage = () => {
     const [username, setUsername] = useState('');

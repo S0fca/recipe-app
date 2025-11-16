@@ -4,7 +4,7 @@ import RecipeCard from "./RecipeCard";
 import type { Recipe, RecipeIngredient, Tag } from "../types.ts";
 import {api} from "../api/axios";
 import { AxiosError } from "axios";
-import '../Form.css'
+import '../styles/Form.css'
 
 type RecipeFormProps = {
     recipe?: Recipe;

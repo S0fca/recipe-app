@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import type {Recipe, Tag} from "../types.ts";
-import PreviewCard from "../components/PreviewCard.tsx";
+import type {Recipe, Tag} from "../../types.ts";
+import PreviewCard from "../../components/PreviewCard.tsx";
 import { AxiosError } from "axios";
-import { api } from "../api/axios";
+import { api } from "../../api/axios.ts";
 
 
 

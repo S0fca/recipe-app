@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { CookbookDTO } from "../types";
-import { api } from "../api/axios";
-import CookbookPreviewCard from "../components/CookbookPreviewCard.tsx";
+import type { CookbookDTO } from "../../types.ts";
+import { api } from "../../api/axios.ts";
+import CookbookPreviewCard from "../../components/CookbookCard.tsx";
 
 const ManageCookbooks: React.FC = () => {
     const [cookbooks, setCookbooks] = useState<CookbookDTO[]>([]);

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import { api } from "../api/axios";
-import type {CookbookDTO, Recipe, UserProfile} from "../types.ts";
-import '../UserProfilePage.css'
-import PreviewCard from "../components/PreviewCard.tsx";
-import CookbookPreviewCard from "../components/CookbookPreviewCard.tsx";
+import { api } from "../../api/axios.ts";
+import type {CookbookDTO, Recipe, UserProfile} from "../../types.ts";
+import '../../styles/UserProfilePage.css'
+import PreviewCard from "../../components/PreviewCard.tsx";
+import CookbookPreviewCard from "../../components/CookbookCard.tsx";
 
-export default function ViewUserProfilePage() {
+export default function UserProfilePage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [profile, setProfile] = useState<UserProfile | null>(null);

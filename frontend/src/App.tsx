@@ -1,31 +1,31 @@
-import './App.css'
+import './styles/App.css'
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import RecipesPage from "./pages/RecipesPage";
+import LoginPage from "./pages/user/LoginPage.tsx";
+import RecipeListPage from "./pages/RecipeListPage.tsx";
 import FavoritesPage from "./pages/FavoritesPage";
-import SearchPage from "./pages/SearchPage";
-import AddRecipePage from "./pages/AddRecipePage";
-import RegisterPage from "./pages/RegisterPage.tsx";
-import ManageRecipesPage from "./pages/ManageRecipesPage.tsx";
-import ManageRecipePage from "./pages/ManageRecipePage.tsx";
-import RecipeDetailPage from "./pages/RecipeDetailPage";
-import UserProfilePage from "./pages/UserProfilePage.tsx";
-import ViewUserProfilePage from "./pages/ViewUserProfilePage.tsx";
-import ManageCookbooks from "./pages/ManageCookbooks";
+import SearchPage from "./pages/search/SearchPage.tsx";
+import AddRecipePage from "./pages/manage/AddRecipePage.tsx";
+import RegisterPage from "./pages/user/RegisterPage.tsx";
+import ManageRecipesPage from "./pages/manage/ManageRecipesPage.tsx";
+import ManageRecipePage from "./pages/manage/ManageRecipePage.tsx";
+import RecipePage from "./pages/RecipePage.tsx";
+import MyProfilePage from "./pages/user/MyProfilePage.tsx";
+import UserProfilePage from "./pages/user/UserProfilePage.tsx";
+import ManageCookbooks from "./pages/manage/ManageCookbooks.tsx";
 
 import CookbookListPage from "./pages/CookbookListPage";
-import CreateCookbookPage from "./pages/CreateCookbookPage";
+import AddCookbookPage from "./pages/manage/AddCookbookPage.tsx";
 import CookbookPage from "./pages/CookbookPage.tsx";
 
 import LoginAdmin from "./admin/LoginAdmin";
 import DashboardAdmin from "./admin/DashboardAdmin";
 
 import { api } from "./api/axios";
-import ManageCookbookPage from "./pages/ManageCookbookPage.tsx";
-import ManagePage from "./pages/ManagePage.tsx";
+import ManageCookbookPage from "./pages/manage/ManageCookbookPage.tsx";
+import ManagePage from "./pages/manage/ManagePage.tsx";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
@@ -85,7 +85,7 @@ function App() {
                 ) : (
                     <>
                         <Route path="/" element={<HomePage />} />
-                        <Route path="/recipes" element={<RecipesPage />} />
+                        <Route path="/recipes" element={<RecipeListPage />} />
                         <Route path="/favorites" element={<FavoritesPage />} />
                         <Route path="/search" element={<SearchPage />} />
                         <Route path="/add-recipe" element={<AddRecipePage />} />
@@ -94,19 +94,19 @@ function App() {
                         <Route path="/manage" element={<ManagePage />} />
                         <Route path="/manage-recipes" element={<ManageRecipesPage />} />
                         <Route path="/edit/:id" element={<ManageRecipePage />} />
-                        <Route path="/recipes/:id" element={<RecipeDetailPage />} />
+                        <Route path="/recipes/:id" element={<RecipePage />} />
 
 
                         <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
                         <Route path="/register" element={<RegisterPage />} />
-                        <Route path="/profile" element={<UserProfilePage />} />
-                        <Route path="/users/:id" element={<ViewUserProfilePage />} />
+                        <Route path="/profile" element={<MyProfilePage />} />
+                        <Route path="/users/:id" element={<UserProfilePage />} />
 
 
                         <Route path="/cookbooks" element={<CookbookListPage />} />
                         <Route path="/cookbooks/:id" element={<CookbookPage />} />
                         <Route path="/cookbooks/manage" element={<ManageCookbooks />} />
-                        <Route path="/cookbooks/create" element={<CreateCookbookPage />} />
+                        <Route path="/cookbooks/create" element={<AddCookbookPage />} />
                         <Route path="/cookbooks/edit/:id" element={<ManageCookbookPage />} />
 
 

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { api } from "../api/axios";
-import type { UserProfile } from "../types.ts";
-import '../UserProfilePage.css'
+import { api } from "../../api/axios.ts";
+import type { UserProfile } from "../../types.ts";
+import '../../styles/UserProfilePage.css'
 
-export default function UserProfilePage() {
+export default function MyProfilePage() {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [editMode, setEditMode] = useState(false);
     const [username, setUsername] = useState("");

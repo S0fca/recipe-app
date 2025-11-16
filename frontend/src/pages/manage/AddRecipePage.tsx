@@ -1,4 +1,4 @@
-import RecipeForm from "../components/RecipeForm.tsx";
+import RecipeForm from "../../components/RecipeForm.tsx";
 
 const AddRecipePage = () => {
     return (

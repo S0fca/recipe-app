@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import type { Recipe } from "../types.ts";
 import PreviewCard from "../components/PreviewCard";
 
-const RecipesPage = () => {
+const RecipeListPage = () => {
     const [recipes, setRecipes] = useState<Recipe[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -52,4 +52,4 @@ const RecipesPage = () => {
     );
 };
 
-export default RecipesPage;
+export default RecipeListPage;

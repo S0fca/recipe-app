@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
-import RecipeCard from "../components/RecipeCard.tsx";
+import RecipeCard from "../../components/RecipeCard.tsx";
 import {useNavigate} from "react-router-dom";
-import type {Recipe} from "../types.ts";
+import type {Recipe} from "../../types.ts";
 
-import {api} from "../api/axios";
+import {api} from "../../api/axios.ts";
 import { AxiosError } from "axios";
 
 const ManageRecipes = () => {

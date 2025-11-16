@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../api/axios.ts";
 import type { Cookbook } from "../types.ts";
 import RecipeCard from "../components/RecipeCard.tsx";
-import "../CookbookCard.css"
-import "../RecipeCard.css"
+import "../styles/CookbookCard.css"
+import "../styles/RecipeCard.css"
 
 
 export default function CookbookPage() {

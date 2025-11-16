@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/axios";
 import type { Cookbook } from "../types";
-import CookbookPreviewCard from "../components/CookbookPreviewCard.tsx";
+import CookbookPreviewCard from "../components/CookbookCard.tsx";
 import { useNavigate } from "react-router-dom";
 
 export default function CookbookListPage() {

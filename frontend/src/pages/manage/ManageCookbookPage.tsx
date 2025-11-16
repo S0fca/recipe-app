@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { api } from "../api/axios";
-import type { CookbookDTO, Recipe, CreateCookbookRequest } from "../types";
-import PreviewCard from "../components/PreviewCard";
-import '../Form.css'
+import { api } from "../../api/axios.ts";
+import type { CookbookDTO, Recipe, CreateCookbookRequest } from "../../types.ts";
+import PreviewCard from "../../components/PreviewCard.tsx";
+import '../../styles/Form.css'
 
 export default function ManageCookbookPage() {
     const { id } = useParams<{ id: string }>();

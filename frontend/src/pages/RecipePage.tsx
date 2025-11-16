@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import type { Recipe } from "../types.ts";
 import RecipeCard from "../components/RecipeCard";
 
-const RecipeDetailPage = () => {
+const RecipePage = () => {
     const { id } = useParams<{ id: string }>(); // vezme id z URL
     // const navigate = useNavigate();
     const [recipe, setRecipe] = useState<Recipe | null>(null);
@@ -44,4 +44,4 @@ const RecipeDetailPage = () => {
     );
 };
 
-export default RecipeDetailPage;
+export default RecipePage;

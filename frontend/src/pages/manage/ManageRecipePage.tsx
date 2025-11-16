@@ -1,9 +1,9 @@
 import {useParams} from 'react-router-dom';
 import {useEffect, useState} from "react";
-import type {Recipe} from "../types.ts";
-import RecipeForm from "../components/RecipeForm.tsx";
+import type {Recipe} from "../../types.ts";
+import RecipeForm from "../../components/RecipeForm.tsx";
 
-import {api} from "../api/axios";
+import {api} from "../../api/axios.ts";
 import { AxiosError } from "axios";
 
 const ManageRecipePage = () => {

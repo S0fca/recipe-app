@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import type { CookbookDTO } from "../types";
-import "../CookbookCard.css"
+import "../styles/CookbookCard.css"
 
 type CookbookCardProps = {
     cookbook: CookbookDTO;

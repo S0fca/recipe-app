@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from "../api/axios";
+import { api } from "../../api/axios.ts";
 import { AxiosError } from "axios";
 
 export default function RegisterPage() {
