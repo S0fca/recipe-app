@@ -127,8 +127,8 @@ export default function MyProfilePage() {
                     <div><input value={username} onChange={e => setUsername(e.target.value)} /></div>
                     <div><textarea value={bio} onChange={e => setBio(e.target.value)} /></div>
                     <div>
-                        <button onClick={handleUpdateProfile}>Save</button>
-                        <button onClick={() => setEditMode(false)}>Cancel</button>
+                        <button className={"cancel-button"} onClick={() => setEditMode(false)}>Cancel</button>
+                        <button className={"form-button"} onClick={handleUpdateProfile}>Save</button>
                     </div>
                 </form>
             )}

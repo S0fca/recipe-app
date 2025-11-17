@@ -19,12 +19,34 @@ const CookbookCard: React.FC<CookbookCardProps> = ({ cookbook, onClick }) => {
         >
             <h2>{cookbook.title}</h2>
             <p>{cookbook.description}</p>
-            <p>
-                Owner: <strong>{cookbook.owner.username}</strong>
-            </p>
-            <p>
-                Collaborators: {cookbook.collaborators.map(c => c.username).join(", ") || "None"}
-            </p>
+
+            <div style={{display: "flex", flexDirection: "row"}}>
+                <p>Owner:&nbsp;</p>
+                <p
+                    style={{ color: "#e76f51", cursor: "pointer" }}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/users/${cookbook.owner.id}`);
+                    }}
+                >
+                    {cookbook.owner.username}
+                </p></div>
+
+            <div style={{display: "flex", flexDirection: "row"}}>
+                <p>Collaborators:&nbsp;</p>
+                {cookbook.collaborators.map((c) => (
+                    <p
+                        style={{ color: "#e76f51", cursor: "pointer" }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/users/${c.id}`);
+                        }}
+                    >
+                        {c.username}&nbsp;
+                    </p>
+                    )
+                )}
+            </div>
             <p>Recipes: {cookbook.recipes.length}</p>
         </div>
     );

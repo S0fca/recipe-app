@@ -91,20 +91,23 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick, style, userLin
                 </div>
             </div>
                 <div style={{marginTop: '12px'}}>
-                    {userLink?
-                        (<small
-                        style={{ color: "#e76f51", cursor: "pointer" }}
-                        onClick={(e) => {
-                            e.stopPropagation(); // zastaví otevření receptu
-                            navigate(`/users/${recipe.createdByUserId}`);
-                        }}
-                        >
-                            Created by: {recipe.createdByUsername}
-                        </small>)
-                        :
-                        (<small>
-                            Created by: {recipe.createdByUsername}
-                        </small>)}
+                    <div className={"recipe-card-name"}>
+                        <small>Created by:&nbsp;</small>
+                        {userLink?
+                            (<small
+                                style={{ color: "#e76f51", cursor: "pointer" }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(`/users/${recipe.createdByUserId}`);
+                                }}
+                            >
+                                {recipe.createdByUsername}
+                            </small>)
+                            :
+                            (<small>
+                                {recipe.createdByUsername}
+                            </small>)}
+                    </div>
 
                     {Array.isArray(recipe.tags) && recipe.tags.length > 0 ? (
                         <div style={{ marginTop: '16px', display: 'flex', flexWrap: 'wrap', gap: '4px'}}>

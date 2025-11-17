@@ -26,12 +26,33 @@ export default function CookbookPage() {
                 <h1>{cookbook.title}</h1>
                 <p>{cookbook.description}</p>
 
-                <h3>Owner: {cookbook.owner.username}</h3>
+                <div style={{display: "flex", flexDirection: "row"}}>
+                    <h3>Owner:&nbsp;</h3>
+                    <h3
+                        style={{ color: "#e76f51", cursor: "pointer" }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/users/${cookbook.owner.id}`);
+                        }}
+                    >
+                        {cookbook.owner.username}
+                    </h3></div>
 
-                <h3>Collaborators:</h3>
-                {cookbook.collaborators.map(c => (
-                    <div key={c.id}>{c.username}</div>
-                ))}
+                <div style={{display: "flex", flexDirection: "row"}}>
+                    <h3>Collaborators:&nbsp;</h3>
+                    {cookbook.collaborators.map((c) => (
+                            <h3
+                                style={{ color: "#e76f51", cursor: "pointer" }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(`/users/${c.id}`);
+                                }}
+                            >
+                                {c.username}&nbsp;
+                            </h3>
+                        )
+                    )}
+                </div>
 
                 <h2>Recipes</h2>
             </div>

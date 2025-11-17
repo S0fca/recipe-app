@@ -60,15 +60,18 @@ const PreviewCard: React.FC<PreviewCardProps> = ({ recipe, onClick }) => {
             <h2>{recipe.title}</h2>
             {recipe.description && <p>{recipe.description}</p>}
             <div style={{marginTop: '12px'}}>
-                <small
-                    style={{ color: "#e76f51", cursor: "pointer" }}
-                    onClick={(e) => {
-                        e.stopPropagation(); // zastaví otevření receptu
-                        navigate(`/users/${recipe.createdByUserId}`);
-                    }}
-                >
-                    Created by: {recipe.createdByUsername}
-                </small>
+                <div className={"recipe-card-name"}>
+                    <small>Created by:&nbsp;</small>
+                    <small
+                        style={{ color: "#e76f51", cursor: "pointer" }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/users/${recipe.createdByUserId}`);
+                        }}
+                    >
+                        {recipe.createdByUsername}
+                    </small>
+                </div>
 
                 {Array.isArray(recipe.tags) && recipe.tags.length > 0 ? (
                     <div style={{ marginTop: '16px', display: 'flex', flexWrap: 'wrap', gap: '4px'}}>

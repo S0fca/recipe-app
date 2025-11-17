@@ -50,10 +50,11 @@
     transform: translateY(-2px);
 }
 
-.recipe-card small {
+.recipe-card-name {
     display: block;
     text-align: right;
     padding-right: 10px;
+
 }
 
 .favorites-button {
