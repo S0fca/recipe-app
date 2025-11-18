@@ -2,7 +2,7 @@
     background-color: #fdf6ec;
     border-radius: 12px;
     padding: 1.5rem;
-    margin: 1rem;
+    margin: 1vw;
     box-shadow: 0 6px 15px rgba(0,0,0,0.1), 0 0 0 4px #f8e8d6 inset;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;

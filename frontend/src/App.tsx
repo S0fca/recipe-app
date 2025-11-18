@@ -138,6 +138,7 @@ function Layout({ isLoggedIn }: { isLoggedIn: boolean }) {
         localStorage.removeItem('token');
         window.location.reload(); // obnoví všechny stavy
     };
+    const [open, setOpen] = useState(false);
 
     if (location.pathname === "/login") {
         return (
@@ -171,9 +172,9 @@ function Layout({ isLoggedIn }: { isLoggedIn: boolean }) {
     }
 
     return (
-        <header>
-            <nav>
-                <div>
+        <header className="header">
+            <nav >
+                <div className="nav-desktop">
                     <Link to="/">Home</Link> |{" "}
                     <Link to="/recipes">Recipes</Link> |{" "}
                     <Link to="/cookbooks">Cookbooks</Link> |{" "}
@@ -181,11 +182,33 @@ function Layout({ isLoggedIn }: { isLoggedIn: boolean }) {
                     <Link to="/search">Search</Link> |{" "}
                     <Link to="/manage">Manage</Link>
                 </div>
-                <div>
+
+                <div className="nav-desktop">
                     <Link to="/profile">My Profile</Link>
                     <button onClick={logout}>Logout</button>
                 </div>
+
+                <button
+                    className="hamburger"
+                    onClick={() => setOpen(!open)}
+                >
+                    ☰
+                </button>
             </nav>
+
+            {open && (
+                <div className="mobile-menu">
+                    <Link to="/" onClick={() => setOpen(false)}>Home</Link>
+                    <Link to="/recipes" onClick={() => setOpen(false)}>Recipes</Link>
+                    <Link to="/cookbooks" onClick={() => setOpen(false)}>Cookbooks</Link>
+                    <Link to="/favorites" onClick={() => setOpen(false)}>Favorites</Link>
+                    <Link to="/search" onClick={() => setOpen(false)}>Search</Link>
+                    <Link to="/manage" onClick={() => setOpen(false)}>Manage</Link>
+                    <Link to="/profile" onClick={() => setOpen(false)}>My Profile</Link>
+                    <a onClick={() => { logout(); setOpen(false); }}>Logout</a>
+                </div>
+            )}
+
         </header>
     );
 }

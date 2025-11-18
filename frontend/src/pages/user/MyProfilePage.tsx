@@ -99,10 +99,11 @@ export default function MyProfilePage() {
             <h1>My Profile</h1>
 
             <div>
-                <img
+                {preview || profileImage? (<img
                     src={preview || profileImage || "/placeholder.png"}
                     alt="Profile"
-                />
+                />):(<p>No profile image</p>)}
+
 
                 <div>
                     <input
