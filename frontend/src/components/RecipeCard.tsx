@@ -70,7 +70,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick, style, userLin
                     {recipe.ingredients.map((ri, index) =>
                             (ri.name || ri.quantity) ? (
                                 <li key={ri.id !== undefined && ri.id !== 0 ? ri.id : `new-${index}`}>
-                                    {ri.name} {(ri.quantity) ? "–" : null} {ri.quantity}
+                                    {ri.name} {(ri.quantity) ? "-" : null} {ri.quantity}
                                 </li>
                             ) : null
                         )

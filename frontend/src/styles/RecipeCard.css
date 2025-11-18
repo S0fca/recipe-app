@@ -1,31 +1,5 @@
 /*recipe card*/
-.recipe-card {
-    background-color: #f8e8d6;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 12px rgb(209, 200, 196);
-    text-align: left;
-    transition: transform 0.2s ease;
-    margin: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid #ddd;
-}
-
 .recipe-card-scrollbar {
-    background-color: #f8e8d6;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 12px rgb(209, 200, 196);
-    text-align: left;
-    transition: transform 0.2s ease;
-    margin: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid #ddd;
-
     max-height: 600px;
     overflow-y: auto;
 
@@ -39,6 +13,18 @@
 
 .recipe-card,
 .recipe-card-scrollbar {
+    background-color: #f8e8d6;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgb(209, 200, 196);
+    text-align: left;
+    transition: transform 0.2s ease;
+    margin: 1vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+
     word-break: break-word;
     overflow-wrap: anywhere;
     white-space: pre-wrap;

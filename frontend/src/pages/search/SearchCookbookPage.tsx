@@ -36,11 +36,11 @@ const SearchCookbooksPage = () => {
             <h1>Cookbooks</h1>
             <div>
                 <label>Title</label>
-                <input value={title} onChange={e => setTitle(e.target.value)}/>
+                <input placeholder={"title"} value={title} onChange={e => setTitle(e.target.value)}/>
             </div>
             <div>
                 <label>Username</label>
-                <input value={username} onChange={e => setUsername(e.target.value)}/>
+                <input placeholder={"username"} value={username} onChange={e => setUsername(e.target.value)}/>
             </div>
 
             <button onClick={handleSearch}>Search</button>

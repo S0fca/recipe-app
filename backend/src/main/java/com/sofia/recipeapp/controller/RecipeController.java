@@ -149,8 +149,9 @@ public class RecipeController {
      * @return HTTP 200 (OK) with the recipe DTO if found, or 404 (Not Found) if not found or not accessible
      */
     @GetMapping("/recipe/{id}")
-    public ResponseEntity<RecipeDTO> getUsersRecipeById(@PathVariable Long id) {
-        RecipeDTO recipe = recipeService.getRecipeDTOById(id);
+    public ResponseEntity<RecipeDTO> getUsersRecipeById(@PathVariable Long id, Authentication authentication) {
+        AuthenticatedUser user = (AuthenticatedUser) authentication.getPrincipal();
+        RecipeDTO recipe = recipeService.getRecipeDTOById(id,user.getId());
         return ResponseEntity.ok(recipe);
     }
 

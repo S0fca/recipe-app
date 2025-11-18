@@ -31,4 +31,7 @@ button {
     margin: 5px;
 }
 
-
+label {
+    display: block;
+    font-weight: 500;
+}

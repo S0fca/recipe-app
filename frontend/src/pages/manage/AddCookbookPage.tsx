@@ -9,12 +9,12 @@ export default function AddCookbookPage() {
 
     const handleCreate = async () => {
         try {
-            const res = await api.post("/api/cookbooks", {
+            await api.post("/api/cookbooks", {
                 title,
                 description
             });
 
-            navigate(`/cookbooks/${res.data.id}`);
+            navigate(`/manage`);
         } catch (err) {
             console.error(err);
             alert("Failed to create cookbook");

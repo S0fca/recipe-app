@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { api } from "../../api/axios.ts";
 import type { CookbookDTO, Recipe, CreateCookbookRequest } from "../../types.ts";
 import PreviewCard from "../../components/PreviewCard.tsx";
 import '../../styles/Form.css'
 
 export default function ManageCookbookPage() {
+    const navigate = useNavigate();
+
     const { id } = useParams<{ id: string }>();
 
     const [cookbook, setCookbook] = useState<CookbookDTO | null>(null);
@@ -207,7 +209,7 @@ export default function ManageCookbookPage() {
             </ul>
 
             <h2>Recipes in this Cookbook</h2>
-            <p>Click to remove</p>
+            <p>Click recipe to remove</p>
 
             {cookbook.recipes.length === 0 && <p>No recipes yet.</p>}
             <div className="recipes-container">
@@ -219,7 +221,10 @@ export default function ManageCookbookPage() {
             </div>
 
             <h2>Add Recipe to Cookbook</h2>
-            <p>Click to add</p>
+            <nav>
+                <button onClick={() => navigate("/add-recipe")}>Create new Recipe</button>
+            </nav>
+            <p>Click recipe to add</p>
 
             <div className="recipes-container">
                 {myRecipes

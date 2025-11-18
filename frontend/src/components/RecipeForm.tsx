@@ -77,7 +77,7 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
 
     //cancel button - back to manage recipes
     const handleCancel = () => {
-        navigate("/manage-recipes");
+        navigate("/manage");
     };
 
     //delete button - delete recipe based on id
@@ -88,7 +88,7 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
             await api.delete(`/api/recipes/recipe/${recipeId}`, {
                 withCredentials: true,
             });
-            navigate('/manage-recipes');
+            navigate('/manage');
         } catch (err) {
             if (err instanceof AxiosError) {
                 setError(err.response?.data?.error || 'Failed to delete recipe');
@@ -123,7 +123,7 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
             } else {
                 await api.post(`/api/recipes`, newRecipe, { withCredentials: true });
             }
-            navigate('/manage-recipes');
+            navigate('/manage');
         } catch (err) {
             if (err instanceof AxiosError) {
                 setError(err.response?.data?.error || 'Failed to save recipe');

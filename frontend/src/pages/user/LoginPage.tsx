@@ -43,29 +43,37 @@ export default function LoginPage({ setIsLoggedIn }: { setIsLoggedIn: (v: boolea
     return (
         <div className="login">
             <h1>Log in</h1>
-            <input
-                type="text"
-                placeholder="Enter your name"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            /><br/>
-            <div style={{ position: 'relative', display: 'inline-block' , alignItems: 'center'}}>
+            <div className="login-field">
+                <label htmlFor="username">Username:</label>
                 <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-
-                <p
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="show-password"
-                >
-                    {showPassword ? 'Hide' : 'Show'}
-                </p>
+                    id={"username"}
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                /><br/>
             </div>
 
-            <br/>
+            <div className="login-field">
+                <label htmlFor="password">Password:</label>
+                <div style={{ position: 'relative', display: 'inline-block' , alignItems: 'center'}}>
+                    <input
+                        id={"password"}
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+
+                    <p
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="show-password"
+                    >
+                        {showPassword ? 'Hide' : 'Show'}
+                    </p>
+                </div>
+            </div>
+
             <button onClick={handleLogin}>Log In</button>
             {error && <p style={{color: 'red'}}>{error}</p>}
             <p>Don't have an account? <Link to="/register">Register here</Link></p>

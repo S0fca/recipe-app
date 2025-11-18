@@ -56,44 +56,54 @@ export default function RegisterPage() {
         >
             <h1>Create Account</h1>
 
-            <input
-                type="text"
-                placeholder="Name"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            /><br/>
-
-            <div style={{ position: 'relative', display: 'inline-block' }}>
+            <div className="login-field">
+                <label htmlFor="username">Username:</label>
                 <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    id={"username"}
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                 />
-                <p
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="show-password"
-                >
-                    {showPassword ? "Hide" : "Show"}
-                </p>
             </div>
-            <br/>
 
-            <div style={{ position: 'relative', display: 'inline-block' }}>
-                <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-                <p
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="show-password"
-                >
-                    {showConfirmPassword ? "Hide" : "Show"}
-                </p>
+            <div className="login-field">
+                <label htmlFor="password">Password:</label>
+                <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <input
+                        id={"password"}
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <p
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="show-password"
+                    >
+                        {showPassword ? "Hide" : "Show"}
+                    </p>
+                </div>
             </div>
-            <br/>
+
+            <div className="login-field">
+                <label htmlFor="password-confirmation">Confirm password:</label>
+                <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <input
+                        id={"password-confirmation"}
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Confirm Password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <p
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="show-password"
+                    >
+                        {showConfirmPassword ? "Hide" : "Show"}
+                    </p>
+                </div>
+            </div>
 
             <button type="submit">Register</button>
 

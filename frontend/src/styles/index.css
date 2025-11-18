@@ -20,14 +20,14 @@ html, body, #root {
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 300px;
-  min-height: 100vh;
-  box-sizing: border-box;
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 300px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 2rem 1.5rem;
 }
-
 
 h1 {
   font-size: 3em;
@@ -84,6 +84,9 @@ input, textarea {
     html {
         font-size: 95%;
     }
+    body {
+        padding: 1.5rem 1rem;
+    }
     button {
         font-size: 0.95em;
         padding: 0.55em 1.1em;
@@ -106,4 +109,5 @@ input, textarea {
     input, textarea {
         font-size: 0.90em;
     }
+
 }

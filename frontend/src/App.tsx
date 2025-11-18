@@ -180,7 +180,6 @@ function Layout({ isLoggedIn }: { isLoggedIn: boolean }) {
                     <Link to="/favorites">Favorites</Link> |{" "}
                     <Link to="/search">Search</Link> |{" "}
                     <Link to="/manage">Manage</Link>
-
                 </div>
                 <div>
                     <Link to="/profile">My Profile</Link>

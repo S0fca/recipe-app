@@ -73,11 +73,11 @@ const SearchRecipesPage = () => {
             <h1>Recipes</h1>
             <div>
                 <label>Title</label>
-                <input value={title} onChange={e => setTitle(e.target.value)}/>
+                <input placeholder={"title"} value={title} onChange={e => setTitle(e.target.value)}/>
             </div>
             <div>
-                <label>Created by</label>
-                <input value={username} onChange={e => setUsername(e.target.value)}/>
+                <label>Username</label>
+                <input placeholder={"username"} value={username} onChange={e => setUsername(e.target.value)}/>
             </div>
 
             <h3>Tags</h3>

@@ -4,7 +4,7 @@ import '../styles/Homepage.css'
 export default function HomePage() {
     return (
         <div className="homepage-container">
-            <h1 className="homepage-title">Welcome to CookWorld</h1>
+            <h1 className="homepage-title">Welcome to Cookbook World</h1>
             <p className="homepage-subtitle">Build your own cookbook world. Your place to cook, collect and collaborate.</p>
 
             <div className="homepage-sections">
