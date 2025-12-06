@@ -176,7 +176,7 @@ export default function ManageCookbookPage() {
                         onClick={handleCancel}
                         className="form-button cancel-button"
                     >
-                        Cancel
+                        Exit
                     </button>
 
                     <button

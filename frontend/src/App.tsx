@@ -29,9 +29,7 @@ import ManagePage from "./pages/manage/ManagePage.tsx";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
-    const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean | null>(null);
 
-    // kontrola běžného uživatele
     async function isAuthenticated(): Promise<boolean> {
         const token = localStorage.getItem('token');
         if (!token) return false;
@@ -43,30 +41,15 @@ function App() {
         }
     }
 
-    // kontrola admina
-    async function isAdminAuthenticated(): Promise<boolean> {
-        const token = localStorage.getItem('token');
-        if (!token) return false;
-        try {
-            const res = await api.get("/api/admin/validate");
-            return res.status === 200;
-        } catch (err) {
-            return false;
-        }
-    }
-
     useEffect(() => {
         const checkAuth = async () => {
             const userValid = await isAuthenticated();
             setIsLoggedIn(userValid);
-
-            const adminValid = await isAdminAuthenticated();
-            setIsAdminLoggedIn(adminValid);
         };
         checkAuth();
     }, []);
 
-    if (isLoggedIn === null || isAdminLoggedIn === null) {
+    if (isLoggedIn === null) {
         return <div>Checking authentication...</div>;
     }
 
@@ -116,11 +99,11 @@ function App() {
                 {/* Admin */}
                 <Route
                     path="/admin/login"
-                    element={<LoginAdmin setIsAdminLoggedIn={setIsAdminLoggedIn} />}
+                    element={<LoginAdmin setIsLoggedIn={setIsLoggedIn} />}
                 />
                 <Route
                     path="/admin/dashboard"
-                    element={isAdminLoggedIn ? <DashboardAdmin /> : <Navigate to="/" replace />}
+                    element={<DashboardAdmin />}
                 />
             </Routes>
         </Router>

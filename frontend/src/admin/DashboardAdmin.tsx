@@ -16,6 +16,26 @@ export default function DashboardAdmin() {
     const [recipes, setRecipes] = useState<Recipe[]>([]);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean | null>(null);
+
+    async function isAdminAuthenticated(): Promise<boolean> {
+        const token = localStorage.getItem('token');
+        if (!token) return false;
+        try {
+            const res = await api.get("/api/admin/validate");
+            return res.status === 200;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            const adminValid = await isAdminAuthenticated();
+            setIsAdminLoggedIn(adminValid);
+        };
+        checkAuth();
+    }, []);
 
     const fetchUsers = async () => {
         try {
@@ -87,6 +107,12 @@ export default function DashboardAdmin() {
         fetchUsers();
         fetchRecipes();
     }, []);
+
+    if (!isAdminLoggedIn) {
+        return (
+            <p>Log in first.</p>
+        )
+    }
 
     return (
         <div>

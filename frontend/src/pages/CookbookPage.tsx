@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../api/axios.ts";
 import type { Cookbook } from "../types.ts";
-import RecipeCard from "../components/RecipeCard.tsx";
 import "../styles/CookbookCard.css"
 import "../styles/RecipeCard.css"
+import PreviewCard from "../components/PreviewCard.tsx";
 
 
 export default function CookbookPage() {
@@ -24,11 +24,11 @@ export default function CookbookPage() {
         <div className="cookbook-page">
             <div style={{ fontFamily: "Georgia, serif" }}>
                 <h1>{cookbook.title}</h1>
-                <p>{cookbook.description}</p>
+                <h2>{cookbook.description}</h2>
 
                 <div style={{display: "flex", flexDirection: "row"}}>
-                    <h3>Owner:&nbsp;</h3>
-                    <h3
+                    <p>Owner:&nbsp;</p>
+                    <p
                         style={{ color: "#e76f51", cursor: "pointer" }}
                         onClick={(e) => {
                             e.stopPropagation();
@@ -36,12 +36,15 @@ export default function CookbookPage() {
                         }}
                     >
                         {cookbook.owner.username}
-                    </h3></div>
+                    </p></div>
 
-                <div style={{display: "flex", flexDirection: "row"}}>
-                    <h3>Collaborators:&nbsp;</h3>
-                    {cookbook.collaborators.map((c) => (
-                            <h3
+                {cookbook.collaborators.length != 0 && (
+                    <div style={{ display: "flex", flexDirection: "row" }}>
+                        <p>Collaborators:&nbsp;</p>
+
+                        {cookbook.collaborators.map((c) => (
+                            <p
+                                key={c.id}
                                 style={{ color: "#e76f51", cursor: "pointer" }}
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -49,18 +52,18 @@ export default function CookbookPage() {
                                 }}
                             >
                                 {c.username}&nbsp;
-                            </h3>
-                        )
-                    )}
-                </div>
+                            </p>
+                        ))}
+                    </div>
+                )}
+
 
                 <h2>Recipes</h2>
             </div>
             <div className="recipes-container">
                 {cookbook.recipes.map(recipe => (
-                    <RecipeCard
+                    <PreviewCard
                         key={recipe.id}
-                        style={"recipe-card"}
                         recipe={recipe}
                         onClick={() => navigate(`/recipes/${recipe.id}`)}
                     />

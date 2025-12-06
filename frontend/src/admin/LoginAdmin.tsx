@@ -3,10 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { api } from "../api/axios.ts";
 
-export default function LoginAdmin({
-                                       setIsAdminLoggedIn,
-                                   }: {
-    setIsAdminLoggedIn: (v: boolean) => void;
+export default function LoginAdmin({setIsLoggedIn}: {
+    setIsLoggedIn: (v: boolean) => void;
 }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -22,7 +20,7 @@ export default function LoginAdmin({
 
             // uložíme token a nastavíme stav admina
             localStorage.setItem("token", res.data.token);
-            setIsAdminLoggedIn(true);
+            setIsLoggedIn(true);
             navigate("/admin/dashboard"); // správná cesta pro admin dashboard
 
         } catch (err) {
@@ -44,26 +42,35 @@ export default function LoginAdmin({
     return (
         <div className="login">
             <h1>Admin Login</h1>
-            <input
-                type="text"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            /><br />
-            <div style={{ position: 'relative', display: 'inline-block' }}>
+            <div className="login-field">
+                <label htmlFor="username">Username:</label>
                 <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="show-password"
-                >
-                    {showPassword ? 'Hide' : 'Show'}
-                </button>
+                    id={"username"}
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                /><br/>
+            </div>
+
+            <div className="login-field">
+                <label htmlFor="password">Password:</label>
+                <div style={{ position: 'relative', display: 'inline-block' , alignItems: 'center'}}>
+                    <input
+                        id={"password"}
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+
+                    <p
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="show-password"
+                    >
+                        {showPassword ? 'Hide' : 'Show'}
+                    </p>
+                </div>
             </div>
             <br />
             <button onClick={handleLogin}>Log In</button>

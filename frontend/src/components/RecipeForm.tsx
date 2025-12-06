@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import RecipeCard from "./RecipeCard";
 import type { Recipe, RecipeIngredient, Tag } from "../types.ts";
@@ -133,6 +133,14 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
         }
     };
 
+    const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+    useEffect(() => {
+        if (textAreaRef.current) {
+            textAreaRef.current.style.height = "auto";
+            textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+        }
+    }, [instructions]);
+
 
     return (
         <div className="recipe-form">
@@ -168,6 +176,7 @@ const RecipeForm = ({ recipe, recipeId, mode }: RecipeFormProps) => {
 
                 <label htmlFor="instructions">Instructions:</label>
                 <textarea
+                    ref={textAreaRef}
                     id="instructions"
                     placeholder={`1. Mix all the ingredients together.\n2. ...`}
                     value={instructions}

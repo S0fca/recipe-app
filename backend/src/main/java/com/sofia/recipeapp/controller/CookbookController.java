@@ -2,6 +2,7 @@ package com.sofia.recipeapp.controller;
 
 import com.sofia.recipeapp.dto.CookbookDTO;
 import com.sofia.recipeapp.dto.CreateCookbookDTO;
+import com.sofia.recipeapp.dto.RecipeDTO;
 import com.sofia.recipeapp.security.AuthenticatedUser;
 import com.sofia.recipeapp.services.CookbookService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -52,7 +56,9 @@ public class CookbookController {
 
     @GetMapping
     public ResponseEntity<List<CookbookDTO>> getAll() {
-        return ResponseEntity.ok(cookbookService.getAllCookbooks());
+        List<CookbookDTO> cookbooks = new ArrayList<>(cookbookService.getAllCookbooks());
+        Collections.shuffle(cookbooks);
+        return ResponseEntity.ok(cookbooks);
     }
 
 
@@ -102,10 +108,13 @@ public class CookbookController {
     }
 
 
-    @GetMapping("/mine")
+    @GetMapping("/user")
     public ResponseEntity<List<CookbookDTO>> getMyCookbooks(Authentication authentication) {
         AuthenticatedUser user = (AuthenticatedUser) authentication.getPrincipal();
-        List<CookbookDTO> cookbooks = cookbookService.getCookbooksForUser(user.getId());
+        List<CookbookDTO> cookbooks = new ArrayList<>(cookbookService.getCookbooksForUser(user.getId()));
+
+        cookbooks.sort(Comparator.comparing(CookbookDTO::getId).reversed());
+
         return ResponseEntity.ok(cookbooks);
     }
 

@@ -85,7 +85,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onClick, style, userLin
                 <div>
                     {recipe.instructions
                         ? recipe.instructions.split('\n').map((line, index) => (
-                            <p key={index}>{line.trim()}</p>
+                            <p key={index}>{line}</p>
                         ))
                         : <p>No instructions provided.</p>}
                 </div>

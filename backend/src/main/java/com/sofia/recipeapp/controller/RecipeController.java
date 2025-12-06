@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -30,7 +33,8 @@ public class RecipeController {
     @GetMapping
     public ResponseEntity<List<RecipeDTO>> getAllRecipes(Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
-        List<RecipeDTO> recipes = recipeService.getAllRecipesForUser(user);
+        List<RecipeDTO> recipes = new ArrayList<>(recipeService.getAllRecipesForUser(user));
+        Collections.shuffle(recipes);
         return ResponseEntity.ok(recipes);
     }
 
@@ -55,7 +59,10 @@ public class RecipeController {
     @GetMapping("/user")
     public ResponseEntity<List<RecipeDTO>> getUserRecipes(Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
-        List<RecipeDTO> recipes =  recipeService.getRecipesByUser(user);
+        List<RecipeDTO> recipes = new ArrayList<>(recipeService.getRecipesByUser(user));
+
+        recipes.sort(Comparator.comparing(RecipeDTO::getId).reversed());
+
         return ResponseEntity.ok(recipes);
     }
 

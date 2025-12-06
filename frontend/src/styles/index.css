@@ -91,11 +91,10 @@ input, textarea {
         font-size: 0.95em;
         padding: 0.55em 1.1em;
     }
-    input, textarea {
+    input, textarea, p {
         font-size: 0.95em;
-        padding: 8px;
-        margin: 8px;
     }
+
 }
 
 
@@ -106,7 +105,7 @@ input, textarea {
     h1 {
         font-size: 1.8em;
     }
-    input, textarea {
+    input, textarea, p {
         font-size: 0.90em;
     }
 

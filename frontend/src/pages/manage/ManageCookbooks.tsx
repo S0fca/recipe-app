@@ -13,7 +13,7 @@ const ManageCookbooks: React.FC = () => {
     useEffect(() => {
         const fetchCookbooks = async () => {
             try {
-                const res = await api.get<CookbookDTO[]>("/api/cookbooks/mine", { withCredentials: true });
+                const res = await api.get<CookbookDTO[]>("/api/cookbooks/user", { withCredentials: true });
                 setCookbooks(res.data);
             } catch (err) {
                 console.error(err);
