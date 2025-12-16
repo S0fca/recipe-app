@@ -7,9 +7,9 @@ import {Snowfall} from "react-snowfall";
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
       <Snowfall
-          snowflakeCount={250}
+          snowflakeCount={150}
           color={'#ffffff'}
-          speed={[1, 3]}
+          speed={[0.5, 2.5]}
           radius={[0.5, 3.5]}
           style={{
               position: "fixed",
