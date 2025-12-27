@@ -6,6 +6,8 @@ import '../../styles/UserProfilePage.css'
 import PreviewCard from "../../components/PreviewCard.tsx";
 import CookbookPreviewCard from "../../components/CookbookCard.tsx";
 
+type ManageTab = "recipes" | "cookbooks";
+
 export default function UserProfilePage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -15,6 +17,8 @@ export default function UserProfilePage() {
     const [cookbooks, setCookbooks] = useState<CookbookDTO[]>([]);
     const [loadingRecipes, setLoadingRecipes] = useState(true);
     const [loadingCookbooks, setLoadingCookbooks] = useState(true);
+
+    const [tab, setTab] = useState<ManageTab>("recipes");
 
     useEffect(() => {
         api.get(`/api/users/${id}`, { withCredentials: true })
@@ -79,29 +83,52 @@ export default function UserProfilePage() {
             </div>
             <p>{profile.bio}</p>
 
-            {loadingCookbooks && <p>Loading...</p>}
 
-            <div className="recipes-container">
-                {cookbooks.map((cookbook) => (
-                    <CookbookPreviewCard
-                        key={cookbook.id}
-                        cookbook={cookbook}
-                        onClick={() => navigate(`/cookbooks/${cookbook.id}`)}
-                    />
+            <nav style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
+                {["recipes", "cookbooks"].map((t) => (
+                    <button
+                        key={t}
+                        onClick={() => setTab(t as "recipes" | "cookbooks")}
+                        style={{
+                            backgroundColor: tab === t ? "#e76f51" : "#f4a261",
+                            cursor: tab === t ? "default" : "pointer",
+                        }}
+                        disabled={tab === t}
+                    >
+                        {t.charAt(0).toUpperCase() + t.slice(1)}
+                    </button>
                 ))}
-            </div>
+            </nav>
 
-            {loadingRecipes && <p>Loading...</p>}
+            {tab === "recipes" ? (
+                <>
+                    {loadingRecipes && <p>Loading...</p>}
 
-            <div className="recipes-container">
-                {recipes.map((recipe) => (
-                    <PreviewCard
-                        key={recipe.id}
-                        recipe={recipe}
-                        onClick={() => navigate(`/recipes/${recipe.id}`)}
-                    />
-                ))}
-            </div>
+                    <div className="recipes-container">
+                        {recipes.map((recipe) => (
+                            <PreviewCard
+                                key={recipe.id}
+                                recipe={recipe}
+                                onClick={() => navigate(`/recipes/${recipe.id}`)}
+                            />
+                        ))}
+                    </div>
+                </>
+            ) : (
+                <>
+                    {loadingCookbooks && <p>Loading...</p>}
+
+                    <div className="recipes-container">
+                        {cookbooks.map((cookbook) => (
+                            <CookbookPreviewCard
+                                key={cookbook.id}
+                                cookbook={cookbook}
+                                onClick={() => navigate(`/cookbooks/${cookbook.id}`)}
+                            />
+                        ))}
+                    </div>
+                </>
+            )}
 
         </div>
     );
