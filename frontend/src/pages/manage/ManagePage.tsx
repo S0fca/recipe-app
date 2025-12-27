@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import ManageCookbooks from "./ManageCookbooks.tsx";
+import ManageCookbooksPage from "./ManageCookbooksPage.tsx";
 import ManageRecipesPage from "./ManageRecipesPage.tsx";
 
 type ManageTab = "recipes" | "cookbooks";
@@ -42,7 +42,7 @@ const ManagePage = () => {
             {tab === "recipes" ? (
                 <ManageRecipesPage></ManageRecipesPage>
             ) : (
-                <ManageCookbooks></ManageCookbooks>
+                <ManageCookbooksPage></ManageCookbooksPage>
             )}
         </div>
     );

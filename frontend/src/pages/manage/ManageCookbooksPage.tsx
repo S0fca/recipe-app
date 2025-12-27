@@ -4,7 +4,7 @@ import type { CookbookDTO } from "../../types.ts";
 import { api } from "../../api/axios.ts";
 import CookbookPreviewCard from "../../components/CookbookCard.tsx";
 
-const ManageCookbooks: React.FC = () => {
+const ManageCookbooksPage: React.FC = () => {
     const [cookbooks, setCookbooks] = useState<CookbookDTO[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -48,4 +48,4 @@ const ManageCookbooks: React.FC = () => {
     );
 };
 
-export default ManageCookbooks;
+export default ManageCookbooksPage;

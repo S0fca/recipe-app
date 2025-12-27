@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { api } from "../../api/axios.ts";
-import type { UserProfile } from "../../types.ts";
+import type {CookbookDTO, Recipe, UserProfile} from "../../types.ts";
 import '../../styles/UserProfilePage.css'
+import CookbookPreviewCard from "../../components/CookbookCard.tsx";
+import PreviewCard from "../../components/PreviewCard.tsx";
+import {useNavigate} from "react-router-dom";
 
 export default function MyProfilePage() {
     const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -11,6 +14,13 @@ export default function MyProfilePage() {
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [profileImage, setProfileImage] = useState<string | null>(null);
+
+    const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const [cookbooks, setCookbooks] = useState<CookbookDTO[]>([]);
+    const [loadingRecipes, setLoadingRecipes] = useState(true);
+    const [loadingCookbooks, setLoadingCookbooks] = useState(true);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -92,6 +102,22 @@ export default function MyProfilePage() {
         }
     };
 
+
+    useEffect(() => {
+        api.get(`/api/recipes/user`, { withCredentials: true })
+            .then(res => setRecipes(res.data))
+            .catch(err => console.error(err))
+            .finally(() => setLoadingRecipes(false));
+    }, []);
+
+    useEffect(() => {
+        api.get(`/api/cookbooks/user`, { withCredentials: true })
+            .then(res => setCookbooks(res.data))
+            .catch(err => console.error(err))
+            .finally(() => setLoadingCookbooks(false));
+    }, []);
+
+
     if (!profile) return <p>Loading...</p>;
 
     return (
@@ -139,6 +165,30 @@ export default function MyProfilePage() {
                     </div>
                 </form>
             )}
+
+            {loadingCookbooks && <p>Loading...</p>}
+
+            <div className="recipes-container">
+                {cookbooks.map((cookbook) => (
+                    <CookbookPreviewCard
+                        key={cookbook.id}
+                        cookbook={cookbook}
+                        onClick={() => navigate(`/cookbooks/${cookbook.id}`)}
+                    />
+                ))}
+            </div>
+
+            {loadingRecipes && <p>Loading...</p>}
+
+            <div className="recipes-container">
+                {recipes.map((recipe) => (
+                    <PreviewCard
+                        key={recipe.id}
+                        recipe={recipe}
+                        onClick={() => navigate(`/recipes/${recipe.id}`)}
+                    />
+                ))}
+            </div>
         </div>
     );
 }

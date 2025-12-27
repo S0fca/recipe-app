@@ -14,7 +14,7 @@ import ManageRecipePage from "./pages/manage/ManageRecipePage.tsx";
 import RecipePage from "./pages/RecipePage.tsx";
 import MyProfilePage from "./pages/user/MyProfilePage.tsx";
 import UserProfilePage from "./pages/user/UserProfilePage.tsx";
-import ManageCookbooks from "./pages/manage/ManageCookbooks.tsx";
+import ManageCookbooksPage from "./pages/manage/ManageCookbooksPage.tsx";
 
 import CookbookListPage from "./pages/CookbookListPage";
 import AddCookbookPage from "./pages/manage/AddCookbookPage.tsx";
@@ -88,7 +88,7 @@ function App() {
 
                         <Route path="/cookbooks" element={<CookbookListPage />} />
                         <Route path="/cookbooks/:id" element={<CookbookPage />} />
-                        <Route path="/cookbooks/manage" element={<ManageCookbooks />} />
+                        <Route path="/cookbooks/manage" element={<ManageCookbooksPage />} />
                         <Route path="/cookbooks/create" element={<AddCookbookPage />} />
                         <Route path="/cookbooks/edit/:id" element={<ManageCookbookPage />} />
 
