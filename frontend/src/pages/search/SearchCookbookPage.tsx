@@ -53,7 +53,10 @@ const SearchCookbooksPage = () => {
                     </div>
                 ) : (
                     results.map((cookbook) => (
-                        <CookbookPreviewCard cookbook={cookbook}></CookbookPreviewCard>
+                        <CookbookPreviewCard
+                            cookbook={cookbook}
+                            onClick={() => navigate(`/cookbooks/${cookbook.id}`)}
+                        ></CookbookPreviewCard>
                     ))
                 )}
             </div>
