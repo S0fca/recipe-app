@@ -1,18 +1,23 @@
-# Recipe App
-A simple fullstack recipe application built with:
-- **Frontend**: React + TypeScript + Vite
-- **Backend**: Spring Boot (Java 21)
+# Cookbook World
+Full‑stack web application for sharing recipes and creating cookbooks.  
+
+**Tech stack**
+- **Frontend:** React + TypeScript + Vite
+- **Backend:** Spring Boot (Java 21), Spring Security + JWT
+- **Database:** MySQL
+
 ---
-## User Documentation
 
-This application allows users to share recipes. The main features include:
+## Features
 
-- Registration and login using JWT tokens  
-- Viewing all recipes 
-- Searching for recipes 
-- Adding, editing, and deleting recipes  
-
-Register or login if you have and account and navigate through the app using the menu bar at the top.
+- User registration and login (**JWT authentication**)
+- Browse recipes and open a **recipe detail**
+- Browse cookbooks and open a **cookbook detail**
+- Search recipes and cookbooks
+- Create, edit, and delete recipes/cookbooks
+- Add/remove recipes to/from cookbooks
+- User profile (username, bio, profile picture)
+- Cookbook collaboration (owner can manage collaborators)
 
 ---
 
@@ -53,3 +58,10 @@ java -jar recipe-app.jar
 1. Make sure your **database** is running
 2. Start the backend and fronend as described above
 3. Open your browser and go to http://localhost:5173 to use the application
+
+---
+
+## License
+
+PolyForm Noncommercial License 1.0.0 (see `LICENSE.md`).
+
