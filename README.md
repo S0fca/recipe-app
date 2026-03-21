@@ -27,7 +27,8 @@ Full‑stack web application for sharing recipes and creating cookbooks.
 
 1. Create a **MySQL database** named `recipe_app` (or another name if preferred).  
 2. Download the release package:  
-   - https://github.com/S0fca/recipe-app/releases/download/v0.1/release.zip
+   - [Release](https://github.com/S0fca/recipe-app/releases/tag/v2.0)
+   - [Download release.zip](https://github.com/S0fca/recipe-app/releases/download/v2.0/release.zip)
 3. Extract the contents of the zip file.
 
 ### 2. Backend
@@ -36,10 +37,10 @@ Full‑stack web application for sharing recipes and creating cookbooks.
 3. Open **application.properties** and fill in your database credentials:  
    - `username` and `password` for your MySQL user  
    - Update the database name if you used a different one  
-4. Set a `secret key` for encoding passwords (used for JWT tokens). 
+4. Set the JWT secret key:
+   - `security.jwt.token.secret-key`
    - This is a secret string used to sign JWT tokens and protect authentication.  
    - There is no strict minimum length, but for better security, use at least 8 characters (letters, numbers, and symbols).  
-   - Replace the placeholder in **application.properties** with your chosen key.  
    - Keep this key private and do not share it.
 5. **Run the backend jar file** by double-clicking it or by running the following command in a terminal:  
 ```bash
@@ -56,7 +57,7 @@ java -jar recipe-app.jar
 
 ### 4. Running the Application
 1. Make sure your **database** is running
-2. Start the backend and fronend as described above
+2. Start the backend and frontend as described above
 3. Open your browser and go to http://localhost:5173 to use the application
 
 ---
