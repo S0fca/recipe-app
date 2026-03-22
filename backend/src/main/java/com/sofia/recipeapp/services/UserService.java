@@ -1,7 +1,6 @@
 package com.sofia.recipeapp.services;
 
 import com.sofia.recipeapp.dto.*;
-import com.sofia.recipeapp.model.Recipe;
 import com.sofia.recipeapp.security.UserAuthProvider;
 import com.sofia.recipeapp.exception.ApiException;
 import com.sofia.recipeapp.model.User;
@@ -109,6 +108,13 @@ public class UserService {
 
     public void updateProfileImage(String username, MultipartFile file) {
         try {
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
+
+            if (!user.isVerified()){
+                throw new ApiException("Not verified", HttpStatus.UNAUTHORIZED);
+            }
+
             if (file.isEmpty()) {
                 throw new ApiException("File is empty", HttpStatus.BAD_REQUEST);
             }
@@ -125,9 +131,6 @@ public class UserService {
             if (file.getSize() > maxSize) {
                 throw new ApiException("File too large. Max size is 2 MB", HttpStatus.PAYLOAD_TOO_LARGE);
             }
-
-            User user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
 
             byte[] resizedImage = resizeImageIfNeeded(file.getBytes(), contentType);
 
@@ -178,18 +181,6 @@ public class UserService {
         }
     }
 
-
-    public byte[] getProfileImage(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (user.getProfileImage() == null) {
-            throw new RuntimeException("User has no profile image");
-        }
-
-        return user.getProfileImage();
-    }
-
     public UserProfileDTO getUserProfile(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
@@ -231,6 +222,24 @@ public class UserService {
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
+    }
+
+    public void verifyUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
+        user.setVerified(true);
+        userRepository.save(user);
+    }
+
+    public void unverifyUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
+        user.setVerified(false);
+        userRepository.save(user);
+    }
+
+    public void deleteProfileImage(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
+        user.setProfileImage(null);
+        userRepository.save(user);
     }
 }
 

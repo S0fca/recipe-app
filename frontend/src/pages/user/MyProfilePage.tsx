@@ -26,6 +26,8 @@ export default function MyProfilePage() {
 
     const [tab, setTab] = useState<ManageTab>("recipes");
 
+    const [message, setMessage] = useState<string>()
+
     useEffect(() => {
         const fetchProfile = async () => {
             try {
@@ -73,11 +75,11 @@ export default function MyProfilePage() {
 
         const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
         if (!allowedTypes.includes(file.type)) {
-            alert("Only JPG, PNG, WEBP allowed");
+            setMessage("Only JPG, PNG, WEBP allowed");
             return;
         }
         if (file.size > 2 * 1024 * 1024) {
-            alert("Max size is 2MB");
+            setMessage("Max size is 2MB");
             return;
         }
 
@@ -88,7 +90,7 @@ export default function MyProfilePage() {
             await api.post("/api/users/profile/image", formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-            alert("Profile image updated");
+            setMessage("Profile image updated");
 
             if (profile) {
                 const imgRes = await api.get(`/api/users/${profile.id}/image`, {
@@ -100,9 +102,12 @@ export default function MyProfilePage() {
 
             setFile(null);
             setPreview(null);
-        } catch (err) {
-            console.error(err);
-            alert("Failed to upload image");
+        } catch (err: any) {
+            let status = err?.response?.data.error;
+            if (status == "Not verified"){
+                status = "Your account is not verified yet. Please wait for admin verification."
+            }
+            setMessage(status? status : "Failed to upload image");
         }
     };
 
@@ -133,7 +138,6 @@ export default function MyProfilePage() {
                     src={preview || profileImage || "/placeholder.png"}
                     alt="Profile"
                 />):(<p>No profile image</p>)}
-
             </div>
 
             {!editMode ? (
@@ -153,6 +157,7 @@ export default function MyProfilePage() {
                             }}
                         />
                         {file && <button onClick={handleUploadImage}>Upload Image</button>}
+                        {message && <p>{message}</p>}
                     </div>
 
                     <form>

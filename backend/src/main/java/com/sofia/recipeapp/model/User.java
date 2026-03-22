@@ -55,4 +55,10 @@ public class User {
     )
     private Set<Recipe> favoriteRecipes = new HashSet<>();
 
+    @Column
+    private Boolean verified = false;
+
+    public boolean isVerified() {
+        return Boolean.TRUE.equals(this.verified);
+    }
 }

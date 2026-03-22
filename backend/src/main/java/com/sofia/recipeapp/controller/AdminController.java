@@ -3,7 +3,6 @@ package com.sofia.recipeapp.controller;
 import com.sofia.recipeapp.dto.RecipeAdminDTO;
 import com.sofia.recipeapp.dto.UserDTO;
 import com.sofia.recipeapp.dto.UserPasswordDTO;
-import com.sofia.recipeapp.model.Recipe;
 import com.sofia.recipeapp.model.User;
 import com.sofia.recipeapp.services.RecipeService;
 import com.sofia.recipeapp.services.UserService;
@@ -64,5 +63,16 @@ public class AdminController {
         return ResponseEntity.status(401).body("Unauthorized or invalid token");
     }
 
+    @PutMapping("/user/verify/{id}")
+    public ResponseEntity<?> verifyUser(@PathVariable Long id) {
+        userService.verifyUser(id);
+        return ResponseEntity.ok("User verified successfully");
+    }
 
+    @PutMapping("/user/unverify/{id}")
+    public ResponseEntity<?> unverifyUser(@PathVariable Long id) {
+        userService.unverifyUser(id);
+        userService.deleteProfileImage(id);
+        return ResponseEntity.ok("User unverify successfully");
+    }
 }

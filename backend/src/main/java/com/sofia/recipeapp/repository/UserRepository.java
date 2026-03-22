@@ -19,5 +19,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Query(value = "DELETE FROM user_favorite_recipes WHERE recipe_id = :recipeId", nativeQuery = true)
     void deleteRecipeFromFavorites(@Param("recipeId") Long recipeId);
-
 }

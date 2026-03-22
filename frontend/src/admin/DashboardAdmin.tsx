@@ -9,6 +9,8 @@ interface User {
     id: number;
     username: string;
     role: string;
+    verified: boolean | null;
+    profileImage: string | null;
 }
 
 export default function DashboardAdmin() {
@@ -114,6 +116,31 @@ export default function DashboardAdmin() {
         )
     }
 
+    async function handleVerification(userId: number) {
+        const user = users.find(u => u.id === userId);
+        if (!user) return;
+
+        const isVerified = user.verified === true;
+
+        const confirmText = isVerified
+            ? "Are you sure you want to unverify this user?"
+            : "Are you sure you want to verify this user?";
+
+        if (!window.confirm(confirmText)) return;
+
+        try {
+            if (isVerified) {
+                await api.put(`/api/admin/user/unverify/${userId}`);
+            } else {
+                await api.put(`/api/admin/user/verify/${userId}`);
+            }
+
+            await fetchUsers();
+        } catch (err) {
+            handleError(err);
+        }
+    }
+
     return (
         <div>
             <h1>Admin Dashboard</h1>
@@ -126,7 +153,9 @@ export default function DashboardAdmin() {
                     <th>ID</th>
                     <th>Username</th>
                     <th>Role</th>
+                    <th>Profile</th>
                     <th>Actions</th>
+                    <th>Verification</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -136,7 +165,25 @@ export default function DashboardAdmin() {
                         <td>{user.username}</td>
                         <td>{user.role}</td>
                         <td>
+                            <div>
+                                {user.profileImage? (<img
+                                    src={ user.profileImage
+                                        ? `data:image/jpeg;base64,${user.profileImage}`
+                                        : "/placeholder.png"
+                                    }
+                                    style={{
+                                        width: '50px',
+                                        height: '50px'
+                                    }}
+                                    alt="Profile"
+                                />):(<p>No profile image</p>)}
+                            </div>
+                        </td>
+                        <td>
                             <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
+                        </td>
+                        <td>
+                            <button onClick={() => handleVerification(user.id)}>{(user.verified === true)? "Unverify" : "Verify"}</button>
                         </td>
                     </tr>
                 ))}
